@@ -2,7 +2,7 @@ version: 2.1
 orbs:
   node: circleci/node@5
 jobs:
-  test-node:
+  test-node-server:
     # Install node dependencies and run tests
     executor: node/default
     working_directory: ~/project/server
@@ -28,7 +28,7 @@ jobs:
 workflows:
   build-and-test:
     jobs:
-      - test-node
+      - test-node-server
     # - deploy:
     #     requires:
-    #       - test-node
+    #       - test-node-server
