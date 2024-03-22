@@ -22,7 +22,7 @@ jobs:
         working_directory: ~/project/client
         steps:
             - checkout:
-                  path: ~/project/client
+                  path: ~/project
             - node/install-packages:
                   pkg-manager: npm
             - run:
