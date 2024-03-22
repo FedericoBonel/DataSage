@@ -12,10 +12,24 @@ jobs:
             - node/install-packages:
                   pkg-manager: npm
             - run:
+                  name: Install Server Dependencies
                   command: npm install
             - run:
                   name: Run tests
                   command: npm run test --ci --runInBand --reporters=default --reporters=jest-junit
+    build-react-client:
+        steps:
+            - checkout:
+                  path: ~/project/client
+            - node/install-packages:
+                  pkg-manager: npm
+            - run:
+                  name: Install Client Dependencies
+                  command: npm install
+            - run:
+                  name: Build Client
+                  command: npm run build
+
     deploy:
         # This is an example deploy job, not actually used by the workflow
         docker:
@@ -29,6 +43,7 @@ workflows:
     build-and-test:
         jobs:
             - test-node-server
+            - build-react-client
         # - deploy:
         #     requires:
         #       - test-node-server
