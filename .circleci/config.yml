@@ -19,7 +19,7 @@ jobs:
                   command: npm run test --ci --runInBand --reporters=default --reporters=jest-junit
     build-react-client:
         executor: node/default
-        working_directory: ~/project/server
+        working_directory: ~/project/client
         steps:
             - checkout:
                   path: ~/project/client
