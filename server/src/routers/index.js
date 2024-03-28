@@ -2,7 +2,7 @@ import openapiRouter from "./openapi/index.js";
 import { routes } from "../utils/constants/index.js";
 
 /**
- * Configures all routes in the server
+ * Configures and sets up all routes in the server
  * @param {*} app App returned by Express
  */
 const configRoutes = (app) => {
