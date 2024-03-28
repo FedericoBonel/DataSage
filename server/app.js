@@ -6,6 +6,7 @@ import rateLimitMiddleware from "./src/middleware/ratelimit.js";
 import securityMiddleware from "./src/middleware/security.js";
 import httpLoggerMiddleware from "./src/middleware/httpLogger.js";
 import { errorHandlingMiddleware } from "./src/middleware/errors/index.js";
+import configRoutes from "./src/routers/index.js";
 
 /** Configured server application */
 const app = express();
@@ -24,6 +25,9 @@ rateLimitMiddleware(app);
 
 // Security
 securityMiddleware(app);
+
+// Add all routes and handlers
+configRoutes(app);
 
 // Error Handling
 errorHandlingMiddleware(app);
