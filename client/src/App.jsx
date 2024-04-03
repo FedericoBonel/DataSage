@@ -1,41 +1,74 @@
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import { useState } from "react";
 import reactLogo from "./assets/react.svg";
 import viteLogo from "/vite.svg";
-import "./App.css";
 
-import { Button, Typography } from "@mui/material";
+import { Button, Typography, Container, Box, Link } from "@mui/material";
 
-function App() {
+/** Application provider, it routes all client side requests to diferent pages. */
+const router = createBrowserRouter([
+    {
+        path: "/*",
+        element: <SampleViteHome />,
+        children: [],
+    },
+]);
+
+function SampleViteHome() {
     const [count, setCount] = useState(0);
 
     return (
-        <>
-            <div>
-                <a href="https://vitejs.dev" target="_blank">
-                    <img src={viteLogo} className="logo" alt="Vite logo" />
-                </a>
-                <a href="https://react.dev" target="_blank">
-                    <img
+        <Container
+            maxWidth="sm"
+            sx={{
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+                justifyContent: "center",
+                height: "100vh",
+            }}
+        >
+            <Box display={"flex"} gap={2}>
+                <Link href="https://vitejs.dev" target="_blank">
+                    <Box
+                        component={"img"}
+                        height={"6em"}
+                        src={viteLogo}
+                        className="logo"
+                        alt="Vite logo"
+                    />
+                </Link>
+                <Link href="https://react.dev" target="_blank">
+                    <Box
+                        component={"img"}
+                        height={"6em"}
                         src={reactLogo}
                         className="logo react"
                         alt="React logo"
                     />
-                </a>
-            </div>
-            <h1>Vite + React</h1>
-            <div className="card">
+                </Link>
+            </Box>
+            <Typography variant="h2">Vite + React</Typography>
+            <Box
+                className="card"
+                display={"flex"}
+                flexDirection={"column"}
+                alignItems={"center"}
+            >
                 <Button onClick={() => setCount((count) => count + 1)}>
                     count is {count}
                 </Button>
                 <Typography>
                     Edit <code>src/App.jsx</code> and save to test HMR
                 </Typography>
-            </div>
+            </Box>
             <Typography variant="caption">
                 Click on the Vite and React logos to learn more
             </Typography>
-        </>
+        </Container>
     );
 }
+
+const App = () => <RouterProvider router={router} />;
 
 export default App;
