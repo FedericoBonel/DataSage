@@ -1,0 +1,20 @@
+{
+    "name": "DataSage",
+    "short_name": "DataSage",
+    "description": "DataSage is a question answering solution to have conversations with your PDFs in natural language. This allows you to augment LLMs knowledge with your own PDFs so that you can make questions about specific topics and get them answered in seconds.",
+    "icons": [
+        {
+            "src": "/android-chrome-192x192.png",
+            "sizes": "192x192",
+            "type": "image/png"
+        },
+        {
+            "src": "/android-chrome-512x512.png",
+            "sizes": "512x512",
+            "type": "image/png"
+        }
+    ],
+    "theme_color": "#ffffff",
+    "background_color": "#ffffff",
+    "display": "standalone"
+}
