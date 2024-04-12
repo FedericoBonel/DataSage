@@ -10,6 +10,7 @@ const permissionsSchema = new Schema(
             minlength: validation.permissions.allowedActions.MIN_LENGTH,
             maxlength: validation.permissions.allowedActions.MAX_LENGTH,
             required: [true, messages.errors.validation.permissions.allowedAction.INVALID_LENGTH],
+            unique: true,
         },
     },
     { timestamps: true }
