@@ -3,6 +3,14 @@ import infoMessages from "./messages/info.js";
 import errorMessages from "./messages/errors.js";
 import openapiMessages from "./messages/openapi.js";
 import swaggeruiRoutes from "./routes/swaggerui.js";
+import chatsRoutes from "./routes/chats.js";
+import chatValidation from "./validation/chat.js";
+import userValidation from "./validation/user.js";
+import documentValidation from "./validation/document.js";
+import pageValidation from "./validation/page.js";
+import colaboratorValidation from "./validation/colaborator.js";
+import permissionsValidation from "./validation/permissions.js";
+import colaboratorPermissions from "./permissions/colaborator.js";
 
 /** Object with all messages to be shown to the user */
 export const messages = Object.freeze({
@@ -17,4 +25,20 @@ export const messages = Object.freeze({
 /** Object with all the routes used in the application without "/" (i.g. the route in the api "/entity" would be in routes.entity as "entity") */
 export const routes = Object.freeze({
     swaggerUi: swaggeruiRoutes,
+    chats: chatsRoutes,
+});
+
+/** Object with all the validation values used in the application for each entity. */
+export const validation = Object.freeze({
+    chat: chatValidation,
+    user: userValidation,
+    document: documentValidation,
+    page: pageValidation,
+    colaborator: colaboratorValidation,
+    permissions: permissionsValidation,
+});
+
+/** Exports all application permissions (These should be stored in database as well) */
+export const permissions = Object.freeze({
+    colaborator: colaboratorPermissions,
 });

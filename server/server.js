@@ -1,11 +1,13 @@
 import { logger } from "./src/utils/loggers/index.js";
 import { messages } from "./src/utils/constants/index.js";
+import connectToDB from "./src/utils/db/connect.js";
 import config from "./src/config/index.js";
 import app from "./app.js";
 
 const startServer = async () => {
     let server;
     try {
+        await connectToDB(config.db.url);
         server = app.listen(config.server.port, () =>
             logger.info(messages.info.createServerRunningMessage(config.server.port))
         );

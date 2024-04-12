@@ -1,4 +1,18 @@
 /**
+ * @openapi
+ * components:
+ *   schemas:
+ *     ApiPayload:
+ *       type: Object
+ *       required:
+ *         - success
+ *       properties:
+ *         success:
+ *           type: boolean
+ *           description: Success status. If the request was successful this will be true, otherwise it will be false.
+ *           example: true
+ */
+/**
  * Abstracts the payload of a basic API response.
  */
 export default class ApiResponse {

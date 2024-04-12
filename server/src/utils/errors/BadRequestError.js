@@ -10,8 +10,8 @@ import ApiError from "./ApiError.js";
 export default class BadRequestError extends ApiError {
     /**
      * Constructs a new API error of type Bad Request to mark requests that were incorrect for some reason.
-     * @param {String} message Optional message explaining the error, if not provided it is set to "Bad Request" * @param {[*]} errors Optional attribute containing the fields of the request that are incorrect.
-     * @param {[*]} errors Optional attribute containing the fields of the request that are incorrect.
+     * @param {String} message Optional message explaining the error, if not provided it is set to "Bad Request" 
+     * @param {Array.<Object>} errors Optional attribute containing the fields of the request that are incorrect.
      */
     constructor(message = ReasonPhrases.BAD_REQUEST, errors = []) {
         super(message);
