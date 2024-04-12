@@ -3,6 +3,24 @@ import checkValidator from "../utils/checkValidation.js";
 import { validation, messages } from "../../../utils/constants/index.js";
 
 /**
+ * @openapi
+ * components:
+ *   schemas:
+ *     NewChatSchema:
+ *       type: object
+ *       required:
+ *         - name
+ *       properties:
+ *         name:
+ *           type: string
+ *         documents:
+ *           type: array
+ *           items:
+ *             type: string
+ *             format: binary
+ */
+
+/**
  * Creates a set of middlewares to validate chat creation and update payloads.
  * @param optionalFields Fields that could be optional, by default none are.
  * @returns The middleware that verifies the payload against the accepted schema.

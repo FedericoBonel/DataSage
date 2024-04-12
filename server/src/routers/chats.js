@@ -63,17 +63,7 @@ chatsRouter
      *       content:
      *         multipart/form-data:
      *           schema:
-     *             type: object
-     *             required:
-     *               - name
-     *             properties:
-     *               name:
-     *                 type: string
-     *               documents:
-     *                 type: array
-     *                 items:
-     *                   type: string
-     *                   format: binary
+     *             $ref: '#/components/schemas/NewChatSchema'
      *     responses:
      *       201:
      *         description: Returns the new chat.
