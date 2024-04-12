@@ -1,3 +1,4 @@
+import { colaboratorToChatDetailsOutputDTO, toChatPermissionDTO } from "./ColaboratorDetailsOutputDTO/index.js";
 import ColaboratorOutputDTO from "./ColaboratorOutputDTO/ColaboratorOutputDTO.js";
 import chatsDTO from "../chats/index.js";
 
@@ -20,9 +21,14 @@ const toColaboratorOutputDTO = (colaborator) => {
     const dto = new ColaboratorOutputDTO();
     dto._id = colaborator.chat._id;
     dto.name = colaborator.chat.name;
-    dto.createdAt = colaborator.chat.createdAt;
+    dto.createdAt = colaborator.chat.createdAt?.toISOString();
     dto.owner = chatsDTO.toChatOwnerDTO(colaborator.chat.owner);
     return dto;
 };
 
-export default { newChatToColaboratorModel, toColaboratorOutputDTO };
+export default {
+    newChatToColaboratorModel,
+    toColaboratorOutputDTO,
+    colaboratorToChatDetailsOutputDTO,
+    toChatPermissionDTO,
+};

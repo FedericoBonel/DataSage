@@ -45,4 +45,12 @@ const getAllBy = async (
         .lean();
 };
 
-export default { save, getAllBy };
+/**
+ * Gets a colaborator instance by id and colaborator user id.
+ * @param {string} chatId Id of the chat to retrieve.
+ * @param {string} userId Id of the colaborator user.
+ * @returns The saved chat with that id and that colaborator.
+ */
+const getByChatAndUser = async (chatId, userId) => colaborator.findOne({ "chat._id": chatId, "user._id": userId });
+
+export default { save, getAllBy, getByChatAndUser };

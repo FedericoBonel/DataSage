@@ -1,5 +1,6 @@
 import expressValidator from "express-validator";
-import { validation, messages } from "../../../utils/constants/index.js";
+import checkValidation from "./checkValidation.js";
+import { messages } from "../../../utils/constants/index.js";
 
 /**
  * @openapi
@@ -27,8 +28,8 @@ import { validation, messages } from "../../../utils/constants/index.js";
  * @param {string} idField Field to check for the id
  * @returns The middleware that checks for a valid id in that field
  */
-const entityIdValidator = (idField) =>
-    expressValidator.checkSchema(
+const entityIdValidator = (idField) => [
+    ...expressValidator.checkSchema(
         {
             [idField]: {
                 optional: false,
@@ -38,6 +39,8 @@ const entityIdValidator = (idField) =>
             },
         },
         ["params"]
-    );
+    ),
+    checkValidation,
+];
 
 export default entityIdValidator;

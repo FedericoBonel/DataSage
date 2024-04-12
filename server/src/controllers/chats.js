@@ -31,7 +31,17 @@ const updateById = async (req, res) => {
 
     const updatedChat = await chatsService.updateById(chatUpdates, chatId, user._id);
 
-    res.status(StatusCodes.OK).json(new SuccessPayload(updatedChat));
+    return res.status(StatusCodes.OK).json(new SuccessPayload(updatedChat));
 };
 
-export default { create, get, updateById };
+/** Controller that handles all requests related to getting chats by id */
+const getById = async (req, res) => {
+    const { chatId } = req.params;
+    const user = req.user;
+
+    const savedChat = await chatsService.getById(chatId, user._id);
+
+    return res.status(StatusCodes.OK).json(new SuccessPayload(savedChat));
+}
+
+export default { create, get, updateById, getById };

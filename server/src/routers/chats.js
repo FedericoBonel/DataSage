@@ -100,6 +100,40 @@ chatsRouter
     /**
      * @openapi
      * /chats/{chatId}:
+     *   get:
+     *     tags: [Chats]
+     *     summary: Obtains a chat by id.
+     *     description: Retrieves a chat by its id. Can be used to show more details about a chat and get a user's permissions in a chat.
+     *     parameters:
+     *       - in: path
+     *         name: chatId
+     *         description: Id of the chat to be retrieved.
+     *         example: 65154ed674410acd535bc0d3
+     *         schema:
+     *           type: string
+     *     responses:
+     *       200:
+     *         description: Returns the chat with that id.
+     *         content:
+     *           application/json:
+     *             schema:
+     *               allOf:
+     *                 - $ref: '#/components/schemas/SuccessApiPayload'
+     *                 - type: object
+     *                   required:
+     *                     - data
+     *                   properties:
+     *                     data:
+     *                       $ref: '#/components/schemas/ChatDetailsOutputDTO'
+     *       400:
+     *         $ref: '#/components/responses/400Response'
+     *       404:
+     *         $ref: '#/components/responses/404Response'
+     */
+    .get(entityIdValidator("chatId"), chatsController.getById)
+    /**
+     * @openapi
+     * /chats/{chatId}:
      *   put:
      *     tags: [Chats]
      *     summary: Updates a chat by id.

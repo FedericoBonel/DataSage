@@ -110,4 +110,21 @@ const updateById = async (updatedChat, chatId, userId) => {
     return chatDTO.toChatOutputDTO(savedChat);
 };
 
-export default { create, get, updateById };
+/**
+ * Gets a chat by id with all the details.
+ * @param {string} chatId Id of the chat to retrieve.
+ * @param {string} userId Id of the logged in user.
+ * @returns The saved chat with that id.
+ */
+const getById = async (chatId, userId) => {
+    // Get the colaborator instance for the user and check that it exists.
+    const savedChatForUser = await colaboratorRepository.getByChatAndUser(chatId, userId);
+    if (!savedChatForUser) {
+        throw new NotFoundError(messages.errors.ROUTE_NOT_FOUND);
+    }
+
+    // Transform and return the colaborator as chat
+    return colaboratorDTO.colaboratorToChatDetailsOutputDTO(savedChatForUser, userId);
+};
+
+export default { create, get, updateById, getById };
