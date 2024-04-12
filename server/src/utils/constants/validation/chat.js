@@ -10,4 +10,8 @@ export default Object.freeze({
         /** Maximum number of documents per chat */
         MAX_AMOUNT: 10,
     },
+    filtering: {
+        /** Allowed filter values for chat ownership filtering in queries. Index 0 contains self, index 1 contains shared */
+        OWNERSHIP_ALLOWED: ["self", "shared"],
+    }
 });

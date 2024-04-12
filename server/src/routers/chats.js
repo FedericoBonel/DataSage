@@ -18,6 +18,42 @@ chatsRouter
     /**
      * @openapi
      * /chats:
+     *   get:
+     *     tags: [Chats]
+     *     summary: Gets the list of chats for the logged in user.
+     *     description: Gets the list of chats for the logged in user by date in descending order. It can be used in a client to show the shared chats with the user or the chats created by the user in a list.
+     *     parameters:
+     *       - $ref: '#/components/parameters/page'
+     *       - $ref: '#/components/parameters/limit'
+     *       - $ref: '#/components/parameters/ownership'
+     *       - $ref: '#/components/parameters/textSearch'
+     *     responses:
+     *       200:
+     *         description: Returns a list with all the chats that match the provided search params. The list is always ordered by date in descending order.
+     *         content:
+     *           application/json:
+     *             schema:
+     *               allOf:
+     *                 - $ref: '#/components/schemas/SuccessApiPayload'
+     *                 - type: object
+     *                   required:
+     *                     - data
+     *                   properties:
+     *                     data:
+     *                       type: array
+     *                       items:
+     *                         $ref: '#/components/schemas/ChatOutputDTO'
+     *       400:
+     *         $ref: '#/components/responses/400Response'
+     *       401:
+     *         $ref: '#/components/responses/401Response'
+     *       403:
+     *         $ref: '#/components/responses/403Response'
+     */
+    .get(chatValidators.chatFilterValidator, chatsController.get)
+    /**
+     * @openapi
+     * /chats:
      *   post:
      *     tags: [Chats]
      *     summary: Creates a new chat to solve question answering problems about a set of documents.

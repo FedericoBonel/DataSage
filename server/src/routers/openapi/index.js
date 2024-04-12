@@ -48,7 +48,12 @@ const openAPIConfig = {
         security: [],
     },
     // Files containing API Specs
-    apis: ["./src/routers/**/*.js", "./src/dtos/**/*.js", "./src/utils/responsebodies/**/*.js"],
+    apis: [
+        "./src/routers/**/*.js",
+        "./src/dtos/**/*.js",
+        "./src/utils/responsebodies/**/*.js",
+        "./src/middleware/validators/**/*.js",
+    ],
 };
 
 const openApiSpecs = swaggerJs(openAPIConfig);

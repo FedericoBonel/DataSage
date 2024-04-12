@@ -18,4 +18,8 @@ export default Object.freeze({
         /** Message to be shown when the amount of documents per chat is invalid */
         REPEATED_NAMES: "The documents uploaded for a chat at once must have unique names.",
     },
+    filtering: {
+        /** Message to be shown when an ownership field is incorrect while querying */
+        INVALID_OWNERSHIP: `The allowed ownership filters are the following: ${chatValues.filtering.OWNERSHIP_ALLOWED}`,
+    }
 });

@@ -9,7 +9,7 @@ import { saveFilesInS3 } from "../../lib/amazonS3.js";
  */
 const getByNameAndOwner = async (name, ownerId) => chat.findOne({ name, "owner._id": ownerId }).lean();
 
-/** 
+/**
  * Stores all documents in the cloud store and formats them to how they should be stored and returns them.
  * @param {Array.<{originalname: string, size: number}>} documents Array of documents to be stored
  * @returns An array with all the documents and their ids in the cloud store.
@@ -27,7 +27,7 @@ const storeAllDocs = (documents) =>
             })
         )
     );
-    
+
 /**
  * Saves a new chat in the database and all its documents in the cloud store.
  * @param {*} newChat The chat to be saved
@@ -44,6 +44,5 @@ const save = async (newChat) => {
     // Create chat and documents in database
     return chat.create(formattedChat);
 };
-
 
 export default { save, getByNameAndOwner };

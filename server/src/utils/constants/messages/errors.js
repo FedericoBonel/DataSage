@@ -4,6 +4,8 @@ import documentValidationErrorMessages from "./validation/document.js";
 import pageValidationErrorMessages from "./validation/page.js";
 import colaboratorValidationErrorMessages from "./validation/colaborator.js";
 import permissionsValidationErrorMessages from "./validation/permissions.js";
+import paginationValidationErrorMessages from "./validation/pagination.js";
+import textSearchValidationErrorMessages from "./validation/textSearch.js";
 
 /** Contains all error messages to be sent to the user. */
 export default Object.freeze({
@@ -22,6 +24,8 @@ export default Object.freeze({
         page: pageValidationErrorMessages,
         colaborator: colaboratorValidationErrorMessages,
         permissions: permissionsValidationErrorMessages,
+        pagination: paginationValidationErrorMessages,
+        textSearch: textSearchValidationErrorMessages,
         BODY_VALIDATION_FAILED: "The request payload failed validation. Check the fields you are providing and try again.",
         ID_PROVIDED: "You have provided an '_id' field for a resource that does not accepts id fields. Please remove it and try again."
     },

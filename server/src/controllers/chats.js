@@ -13,4 +13,14 @@ const create = async (req, res) => {
     return res.status(StatusCodes.CREATED).json(new SuccessPayload(savedChat));
 };
 
-export default { create };
+/** Controller that handles all requests related to chat listing and searching */
+const get = async (req, res) => {
+    const { ownership, textSearch, limit, page } = req.query;
+    const user = req.user;
+
+    const savedChats = await chatsService.get(user._id, { ownership, textSearch }, { limit, page });
+
+    return res.status(StatusCodes.OK).json(new SuccessPayload(savedChats));
+};
+
+export default { create, get };
