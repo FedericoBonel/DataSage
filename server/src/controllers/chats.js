@@ -23,4 +23,15 @@ const get = async (req, res) => {
     return res.status(StatusCodes.OK).json(new SuccessPayload(savedChats));
 };
 
-export default { create, get };
+/** Controller that handles all requests related to updating chats by id. */
+const updateById = async (req, res) => {
+    const { chatId } = req.params;
+    const user = req.user;
+    const chatUpdates = req.body;
+
+    const updatedChat = await chatsService.updateById(chatUpdates, chatId, user._id);
+
+    res.status(StatusCodes.OK).json(new SuccessPayload(updatedChat));
+};
+
+export default { create, get, updateById };

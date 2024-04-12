@@ -1,4 +1,5 @@
 import { chat } from "../../models/chat/chat.js";
+import { colaborator } from "../../models/colaborator/colaborator.js";
 import { saveFilesInS3 } from "../../lib/amazonS3.js";
 
 /**
@@ -45,4 +46,31 @@ const save = async (newChat) => {
     return chat.create(formattedChat);
 };
 
-export default { save, getByNameAndOwner };
+/**
+ * Updates a chat in the database by id and owner id
+ * @param {*} updates The updates to be made on the chat
+ * @param {string} chatId The chat id to update
+ * @param {string} ownerId The chat owners id
+ * @returns The updated chat
+ */
+const updateByIdAndOwner = async (updates, chatId, ownerId) => {
+    if (!chatId || !ownerId) throw Error("Missing parameters");
+    const oldChat = await chat.findOneAndUpdate({ _id: chatId, "owner._id": ownerId }, updates).lean();
+
+    // If nothing was found return it as undefined;
+    if (!oldChat) {
+        return oldChat;
+    }
+
+    // Simulate the new data returned by database
+    const updatedChat = { ...oldChat, ...updates, updatedAt: Date.now() };
+
+    // Keep redundancies up to date
+    if (updates.name && oldChat.name !== updates.name) {
+        await colaborator.updateMany({ "chat._id": chatId, "chat.owner._id": ownerId }, { chat: updatedChat });
+    }
+
+    return updatedChat;
+};
+
+export default { save, getByNameAndOwner, updateByIdAndOwner };

@@ -1,5 +1,6 @@
 import { Router } from "express";
 import { documentUploadValidator } from "../middleware/validators/documents/index.js";
+import entityIdValidator from "../middleware/validators/utils/entityIdValidator.js";
 import chatValidators from "../middleware/validators/chats/index.js";
 import chatsController from "../controllers/chats.js";
 import { validation } from "../utils/constants/index.js";
@@ -93,5 +94,48 @@ chatsRouter
         chatValidators.newChatValidator,
         chatsController.create
     );
+
+chatsRouter
+    .route("/:chatId")
+    /**
+     * @openapi
+     * /chats/{chatId}:
+     *   put:
+     *     tags: [Chats]
+     *     summary: Updates a chat by id.
+     *     description: Updates a chat by id. It's used to update chat metadata like its name or other related information. To upload documents use the other resources.
+     *     parameters:
+     *       - in: path
+     *         name: chatId
+     *         description: Id of the chat to be updated.
+     *         example: 65154ed674410acd535bc0d3
+     *         schema:
+     *           type: string
+     *     requestBody:
+     *       required: true
+     *       content:
+     *         application/json:
+     *           schema:
+     *             $ref: '#/components/schemas/UpdateChatSchema'
+     *     responses:
+     *       200:
+     *         description: Returns the updated chat.
+     *         content:
+     *           application/json:
+     *             schema:
+     *               allOf:
+     *                 - $ref: '#/components/schemas/SuccessApiPayload'
+     *                 - type: object
+     *                   required:
+     *                     - data
+     *                   properties:
+     *                     data:
+     *                       $ref: '#/components/schemas/ChatOutputDTO'
+     *       400:
+     *         $ref: '#/components/responses/400Response'
+     *       404:
+     *         $ref: '#/components/responses/404Response'
+     */
+    .put(entityIdValidator("chatId"), chatValidators.updateChatValidator, chatsController.updateById);
 
 export default chatsRouter;

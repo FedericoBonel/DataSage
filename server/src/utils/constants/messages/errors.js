@@ -27,7 +27,8 @@ export default Object.freeze({
         pagination: paginationValidationErrorMessages,
         textSearch: textSearchValidationErrorMessages,
         BODY_VALIDATION_FAILED: "The request payload failed validation. Check the fields you are providing and try again.",
-        ID_PROVIDED: "You have provided an '_id' field for a resource that does not accepts id fields. Please remove it and try again."
+        ID_PROVIDED: "You have provided an '_id' field for a resource that does not accepts id fields. Please remove it and try again.",
+        INVALID_ID: "You have provided an invalid id."
     },
     /** Errors related to authentication */
     auth: {

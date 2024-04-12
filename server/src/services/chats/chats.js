@@ -5,7 +5,7 @@ import colaboratorRepository from "../../repositories/colaborators/colaborators.
 import chatDTO from "../../dtos/chats/index.js";
 import colaboratorDTO from "../../dtos/colaborator/index.js";
 import { parseDocumentsInPages } from "./utils/index.js";
-import { BadRequestError, UnauthorizedError } from "../../utils/errors/index.js";
+import { BadRequestError, NotFoundError, UnauthorizedError } from "../../utils/errors/index.js";
 import { validation, messages } from "../../utils/constants/index.js";
 import calculateSkip from "../../utils/db/calculateSkip.js";
 
@@ -55,7 +55,7 @@ const create = async (chat, documents, userId) => {
 
 /**
  * Retrieves a list of chats based on provided parameters.
- * @param {string} userId The user that Id that is logged in.
+ * @param {string} userId The Id of the user that is logged in.
  * @param {Object} [filtering={}] Filtering options. This will filter out values in the result.
  * @param {string} [filtering.textSearch=undefined] Text search query. Filters values to only those that match this text search.
  * @param {string} [filtering.ownership=undefined] Ownership filter. Can be either "self" or "shared" filters out results to those owned by the user or shared to them.
@@ -83,8 +83,31 @@ const get = async (
         { textSearch: filtering.textSearch, chatOwnerId, userId },
         { skip, limit: pagination.limit, sort: "-createdAt" }
     );
-    
+
     return savedChatsForUser.map((colaborator) => colaboratorDTO.toColaboratorOutputDTO(colaborator));
 };
 
-export default { create, get };
+/**
+ * Updates a chat by id.
+ * @param {{name: String}} updatedChat The updated chat
+ * @param {string} chatId The id of the chat to update.
+ * @param {string} userId The user Id of the user that is logged in.
+ * @returns The updated chat.
+ */
+const updateById = async (updatedChat, chatId, userId) => {
+    // Check that no chat with the same name exists for the user
+    const sameNameChat = await chatsRepository.getByNameAndOwner(updatedChat.name, userId);
+    if (sameNameChat && sameNameChat._id.toString() !== chatId) {
+        throw new BadRequestError(messages.errors.validation.chat.name.INVALID_LENGTH);
+    }
+
+    // Update the chat by id
+    const savedChat = await chatsRepository.updateByIdAndOwner(updatedChat, chatId, userId);
+    if (!savedChat) {
+        throw new NotFoundError(messages.errors.ROUTE_NOT_FOUND);
+    }
+
+    return chatDTO.toChatOutputDTO(savedChat);
+};
+
+export default { create, get, updateById };
