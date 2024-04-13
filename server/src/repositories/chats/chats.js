@@ -1,6 +1,6 @@
 import { chat } from "../../models/chat/chat.js";
 import { colaborator } from "../../models/colaborator/colaborator.js";
-import { saveFilesInS3 } from "../../lib/amazonS3.js";
+import { saveFilesInS3, getSignedURLById } from "../../lib/amazonS3.js";
 
 /**
  * Gets a chat by its name and its owner id and returns it
@@ -28,6 +28,13 @@ const storeAllDocs = (documents) =>
             })
         )
     );
+
+/**
+ * Transforms all document's store ids to signed urls
+ * @param {{storeId: string}} documents Documents as they are stored in database
+ * @returns {Promise.<string>} An array with all the urls for those documents in order
+ */
+const docsToUrls = (documents) => Promise.all(documents.map((doc) => getSignedURLById(doc.storeId)));
 
 /**
  * Saves a new chat in the database and all its documents in the cloud store.
@@ -73,4 +80,11 @@ const updateByIdAndOwner = async (updates, chatId, ownerId) => {
     return updatedChat;
 };
 
-export default { save, getByNameAndOwner, updateByIdAndOwner };
+/**
+ * Gets a chat by id
+ * @param {string} id Id of the chat to get
+ * @returns The found chat or undefined otherwise
+ */
+const getById = async (id) => chat.findById(id).lean();
+
+export default { save, getByNameAndOwner, updateByIdAndOwner, getById, docsToUrls };

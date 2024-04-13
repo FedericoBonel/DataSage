@@ -1,9 +1,10 @@
 import { Router } from "express";
+import documentsRouter from "./documents.js";
+import chatsController from "../controllers/chats.js";
 import { documentUploadValidator } from "../middleware/validators/documents/index.js";
 import entityIdValidator from "../middleware/validators/utils/entityIdValidator.js";
 import chatValidators from "../middleware/validators/chats/index.js";
-import chatsController from "../controllers/chats.js";
-import { validation } from "../utils/constants/index.js";
+import { validation, routes } from "../utils/constants/index.js";
 import chatDTO from "../dtos/chats/index.js";
 
 const chatsRouter = Router();
@@ -46,10 +47,6 @@ chatsRouter
      *                         $ref: '#/components/schemas/ChatOutputDTO'
      *       400:
      *         $ref: '#/components/responses/400Response'
-     *       401:
-     *         $ref: '#/components/responses/401Response'
-     *       403:
-     *         $ref: '#/components/responses/403Response'
      */
     .get(chatValidators.chatFilterValidator, chatsController.get)
     /**
@@ -171,5 +168,7 @@ chatsRouter
      *         $ref: '#/components/responses/404Response'
      */
     .put(entityIdValidator("chatId"), chatValidators.updateChatValidator, chatsController.updateById);
+
+chatsRouter.use(`/:chatId/${routes.documents.DOCUMENTS}`, entityIdValidator("chatId"), documentsRouter);
 
 export default chatsRouter;

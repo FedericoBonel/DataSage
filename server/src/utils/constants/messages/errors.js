@@ -26,13 +26,16 @@ export default Object.freeze({
         permissions: permissionsValidationErrorMessages,
         pagination: paginationValidationErrorMessages,
         textSearch: textSearchValidationErrorMessages,
-        BODY_VALIDATION_FAILED: "The request payload failed validation. Check the fields you are providing and try again.",
-        ID_PROVIDED: "You have provided an '_id' field for a resource that does not accepts id fields. Please remove it and try again.",
-        INVALID_ID: "You have provided an invalid id."
+        BODY_VALIDATION_FAILED:
+            "The request payload failed validation. Check the fields you are providing and try again.",
+        ID_PROVIDED:
+            "You have provided an '_id' field for a resource that does not accepts id fields. Please remove it and try again.",
+        INVALID_ID: "You have provided an invalid id.",
     },
     /** Errors related to authentication */
     auth: {
         /** Error to be shown when a request had an invalid token attached to it. */
-        INVALID_CREDENTIALS: "The token provided is invalid. Please authenticate and try again."
-    }
+        INVALID_CREDENTIALS: "The token provided is invalid. Please authenticate and try again.",
+        FORBIDDEN: "You do not have the permissions to take this action.",
+    },
 });
