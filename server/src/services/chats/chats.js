@@ -38,16 +38,28 @@ const create = async (chat, documents, userId) => {
         throw new UnauthorizedError(messages.errors.auth.INVALID_CREDENTIALS);
     }
 
+    // Parse the documents into pages and check that they dont have more than the allowed amount of pages
+    const parsedPagesPerDocument = await parseDocumentsInPages(documents, {
+        maxPages: validation.document.pages.MAX_PAGES,
+    });
+
     // Save the chat and its documents
     const savedChat = await chatsRepository.save(chatDTO.toChatModel(chat, documents, user));
 
     // Save the colaborator instance for this chat owner
     await colaboratorRepository.save(colaboratorDTO.newChatToColaboratorModel(user, savedChat));
 
-    // Extract all pages from the documents, add metadata and save them
-    const pages = await parseDocumentsInPages(documents, savedChat.documents, {
-        maxPages: validation.document.pages.MAX_PAGES,
+    // Append the ids of the documents to the pages of each document and save them
+    const docsWithIds = {};
+    savedChat.documents.forEach((doc) => {
+        docsWithIds[doc.name] = doc;
     });
+    const pages = Object.keys(parsedPagesPerDocument).flatMap((docName) =>
+        parsedPagesPerDocument[docName].map((doc) => ({
+            ...doc,
+            metadata: { ...doc.metadata, document: docsWithIds[docName]._id },
+        }))
+    );
     await pagesRepository.saveAll(pages);
 
     return chatDTO.toChatOutputDTO(savedChat);
