@@ -4,7 +4,7 @@ import pagesRepository from "../../repositories/pages/pages.js";
 import colaboratorRepository from "../../repositories/colaborators/colaborators.js";
 import chatDTO from "../../dtos/chats/index.js";
 import colaboratorDTO from "../../dtos/colaborator/index.js";
-import { parseDocumentsInPages } from "./utils/index.js";
+import { parseDocumentsInPages, flatPagesByDocuments } from "./utils/index.js";
 import { BadRequestError, NotFoundError, UnauthorizedError } from "../../utils/errors/index.js";
 import { validation, messages } from "../../utils/constants/index.js";
 import calculateSkip from "../../utils/db/calculateSkip.js";
@@ -50,17 +50,7 @@ const create = async (chat, documents, userId) => {
     await colaboratorRepository.save(colaboratorDTO.newChatToColaboratorModel(user, savedChat));
 
     // Append the ids of the documents to the pages of each document and save them
-    const docsWithIds = {};
-    savedChat.documents.forEach((doc) => {
-        docsWithIds[doc.name] = doc;
-    });
-    const pages = Object.keys(parsedPagesPerDocument).flatMap((docName) =>
-        parsedPagesPerDocument[docName].map((doc) => ({
-            ...doc,
-            metadata: { ...doc.metadata, document: docsWithIds[docName]._id },
-        }))
-    );
-    await pagesRepository.saveAll(pages);
+    await pagesRepository.saveAll(flatPagesByDocuments(parsedPagesPerDocument, savedChat.documents));
 
     return chatDTO.toChatOutputDTO(savedChat);
 };
