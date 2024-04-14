@@ -15,4 +15,12 @@ const toChatModel = (chatInputDTO, documents, user) => ({
     owner: user,
 });
 
-export default { toChatOwnerDTO, toChatOutputDTO, toChatModel, DOCS_INPUT_KEY };
+/**
+ * Transforms a chat as it is exposed in the api for chat update to how it should be stored in the database.
+ * @param {*} chatInputDTO The chat as it is exposed for update
+ */
+const updateToChatModel = (chatInputDTO) => ({
+    name: chatInputDTO.name,
+});
+
+export default { toChatOwnerDTO, toChatOutputDTO, toChatModel, updateToChatModel, DOCS_INPUT_KEY };

@@ -104,7 +104,7 @@ const updateById = async (updatedChat, chatId, userId) => {
     }
 
     // Update the chat by id
-    const savedChat = await chatsRepository.updateByIdAndOwner(updatedChat, chatId, userId);
+    const savedChat = await chatsRepository.updateByIdAndOwner(chatDTO.updateToChatModel(updatedChat), chatId, userId);
     if (!savedChat) {
         throw new NotFoundError(messages.errors.ROUTE_NOT_FOUND);
     }
