@@ -6,6 +6,7 @@ import colaboratorValidationErrorMessages from "./validation/colaborator.js";
 import permissionsValidationErrorMessages from "./validation/permissions.js";
 import paginationValidationErrorMessages from "./validation/pagination.js";
 import textSearchValidationErrorMessages from "./validation/textSearch.js";
+import messageValidationErrorMessages from "./validation/messages.js";
 
 /** Contains all error messages to be sent to the user. */
 export default Object.freeze({
@@ -26,6 +27,7 @@ export default Object.freeze({
         permissions: permissionsValidationErrorMessages,
         pagination: paginationValidationErrorMessages,
         textSearch: textSearchValidationErrorMessages,
+        message: messageValidationErrorMessages,
         BODY_VALIDATION_FAILED:
             "The request payload failed validation. Check the fields you are providing and try again.",
         ID_PROVIDED:

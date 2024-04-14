@@ -13,6 +13,7 @@ import colaboratorValidation from "./validation/colaborator.js";
 import permissionsValidation from "./validation/permissions.js";
 import paginationValidation from "./validation/pagination.js";
 import textSearchValidation from "./validation/textSearch.js";
+import messagesValidation from "./validation/messages.js";
 import colaboratorPermissions from "./permissions/colaborator.js";
 
 /** Object with all messages to be shown to the user */
@@ -42,6 +43,7 @@ export const validation = Object.freeze({
     permissions: permissionsValidation,
     pagination: paginationValidation,
     textSearch: textSearchValidation,
+    messages: messagesValidation,
 });
 
 /** Exports all application permissions (These should be stored in database as well) */

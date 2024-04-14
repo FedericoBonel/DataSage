@@ -5,6 +5,7 @@ import { page } from "../../../models/page/page.js";
 import { chat } from "../../../models/chat/chat.js";
 import { colaborator } from "../../../models/colaborator/colaborator.js";
 import { permission } from "../../../models/permission/permission.js";
+import { message } from "../../../models/message/message.js";
 import { permissions } from "../../constants/index.js";
 
 if (!config.node_environment === "development") {
@@ -19,6 +20,7 @@ await page.createCollection();
 await chat.createCollection();
 await colaborator.createCollection();
 await permission.createCollection();
+await message.createCollection();
 
 // Check if there is a user already and create one for testing otherwise
 const userExists = await user.findOne({ isAdmin: true }).lean();
