@@ -1,5 +1,6 @@
 import { Router } from "express";
 import { chatPermissionsValidator } from "../middleware/auth/chats/index.js";
+import entityIdValidator from "../middleware/validators/utils/entityIdValidator.js";
 import documentsController from "../controllers/documents.js";
 import { permissions } from "../utils/constants/index.js";
 
@@ -51,5 +52,48 @@ documentsRouter
      *         $ref: '#/components/responses/404Response'
      */
     .get(chatPermissionsValidator([permissions.colaborator.readDocs]), documentsController.getByChatId);
+
+documentsRouter
+    .route("/:documentId")
+    /**
+     * @openapi
+     * /chats/{chatId}/documents/{documentId}:
+     *   delete:
+     *     tags: [Documents]
+     *     summary: Deletes a document from a chat by id.
+     *     description: Deletes a document from a chat by id. It can be used to allow the chat owner to delete documents from the knowledge base of the chat.
+     *     parameters:
+     *       - in: path
+     *         name: chatId
+     *         description: Id of the chat from which remove the document.
+     *         example: 65154ed674410acd535bc0d3
+     *         schema:
+     *           type: string
+     *       - in: path
+     *         name: documentId
+     *         description: Id of the document to remove from the chat.
+     *         example: 65154ed674410acd535bc0d3
+     *         schema:
+     *           type: string
+     *     responses:
+     *       200:
+     *         description: The document removal was succesful and the deleted document is returned.
+     *         content:
+     *           application/json:
+     *             schema:
+     *               allOf:
+     *                 - $ref: '#/components/schemas/SuccessApiPayload'
+     *                 - type: object
+     *                   required:
+     *                     - data
+     *                   properties:
+     *                     data:
+     *                       $ref: '#/components/schemas/DocumentOutputDTO'
+     *       400:
+     *         $ref: '#/components/responses/400Response'
+     *       404:
+     *         $ref: '#/components/responses/404Response'
+     */
+    .delete(entityIdValidator("documentId"), documentsController.deleteById);
 
 export default documentsRouter;

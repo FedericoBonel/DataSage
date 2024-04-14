@@ -17,6 +17,8 @@ export default Object.freeze({
         INVALID_AMOUNT: `The number of documents must be between ${1} and ${chatValues.documents.MAX_AMOUNT}`,
         /** Message to be shown when the amount of documents per chat is invalid */
         REPEATED_NAMES: "The documents uploaded for a chat at once must have unique names.",
+        /** Message to be shown when the amount of documents is the minimum and a document cant be removed from the chat. */
+        MINIMUM_REACHED: `The chat already has its minimum amount of documents of ${1}. You can't delete the document from this chat.`
     },
     filtering: {
         /** Message to be shown when an ownership field is incorrect while querying */

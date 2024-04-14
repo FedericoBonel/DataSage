@@ -11,4 +11,14 @@ const getByChatId = async (req, res) => {
     return res.status(StatusCodes.OK).json(new SuccessPayload(foundDocs));
 };
 
-export default { getByChatId };
+/** Controller that handles all requests that ask for a deletion of a document from a chat */
+const deleteById = async (req, res) => {
+    const { chatId, documentId } = req.params;
+    const user = req.user;
+
+    const deletedDoc = await docsServices.deleteById(chatId, documentId, user._id);
+
+    return res.status(StatusCodes.OK).json(new SuccessPayload(deletedDoc));
+};
+
+export default { getByChatId, deleteById };

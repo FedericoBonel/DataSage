@@ -1,5 +1,5 @@
 import { Schema, Types, model } from "mongoose";
-import { MODEL_NAME as COLAB_MO DEL_NAME } from "../colaborator/colaborator.js";
+import { MODEL_NAME as COLAB_MODEL_NAME } from "../colaborator/colaborator.js";
 import { messagesPagesSchema } from "./messagePages.js";
 import { validation, messages } from "../../utils/constants/index.js";
 
