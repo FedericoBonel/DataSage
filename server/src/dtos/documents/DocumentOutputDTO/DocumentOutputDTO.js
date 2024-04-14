@@ -11,7 +11,6 @@ import EntityDTO from "../../utils/EntityDTO.js";
  *         - type: Object
  *           required:
  *             - name
- *             - url
  *           properties:
  *             name:
  *               type: string
