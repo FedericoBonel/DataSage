@@ -21,7 +21,8 @@ const getAllBy = (
         .find(filters)
         .sort(`${resultsProcessing.sort} _id`)
         .skip(resultsProcessing.skip)
-        .limit(resultsProcessing.limit);
+        .limit(resultsProcessing.limit)
+        .lean();
 };
 
 /**
