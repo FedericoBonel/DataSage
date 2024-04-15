@@ -74,9 +74,9 @@ const get = async (
     // Check if the list needs to be filtered by ownership
     let chatOwnerId;
     if (filtering.ownership === validation.chat.filtering.OWNERSHIP_ALLOWED[0]) {
-        chatOwnerId = userId;
+        chatOwnerId = userId; // self
     } else if (filtering.ownership === validation.chat.filtering.OWNERSHIP_ALLOWED[1]) {
-        chatOwnerId = validation.chat.filtering.OWNERSHIP_ALLOWED[1];
+        chatOwnerId = validation.chat.filtering.OWNERSHIP_ALLOWED[1]; // shared
     }
 
     const skip = calculateSkip(pagination.page, pagination.limit);

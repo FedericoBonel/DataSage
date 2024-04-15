@@ -6,6 +6,7 @@ import messagesDTO from "../../dtos/messages/index.js";
 import { chatMemoryFrom, getQAChain } from "./utils/index.js";
 import { NotFoundError } from "../../utils/errors/index.js";
 import { messages, validation } from "../../utils/constants/index.js";
+import calculateSkip from "../../utils/db/calculateSkip.js";
 
 /**
  * Generate an AI response for a user prompt message.
@@ -59,4 +60,28 @@ const generateResponse = async (prompt, chatId, userId) => {
     );
 };
 
-export default { generateResponse };
+/**
+ * Retrieves a chat history based on provided parameters.
+ * @param {string} userId The Id of the user that is logged in.
+ * @param {string} chatId The Id of the chat from where to retrieve message history.
+ * @param {Object} [pagination={}] Pagination options.
+ * @param {number} [pagination.page=undefined] Page number.
+ * @param {number} [pagination.limit=undefined] Limit per page.
+ * @returns The chat history that match the parameters.
+ */
+const getByChatId = async (userId, chatId, pagination = { page: 1, limit: 10 }) => {
+    const foundColaborator = await colaboratorsRepository.getByChatAndUser(chatId, userId);
+    if (!foundColaborator) {
+        throw new NotFoundError(messages.errors.ROUTE_NOT_FOUND);
+    }
+
+    const skip = calculateSkip(pagination.page, pagination.limit);
+    const chatHistory = await messagesRepository.getAllBy(
+        { colaboratorId: foundColaborator._id },
+        { skip, limit: pagination.limit, sort: "-createdAt" }
+    );
+
+    return chatHistory.map((message) => messagesDTO.toMessageOutputDTO(message));
+};
+
+export default { generateResponse, getByChatId };

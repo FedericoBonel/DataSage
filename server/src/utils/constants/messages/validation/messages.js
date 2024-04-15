@@ -9,5 +9,5 @@ export default Object.freeze({
     /** Message to be shown when the length of a message to be saved in DATABASE is invalid */
     INVALID_LENGTH_DB: `The length of the message to store in database is invalid. It must be a string between ${chatMessageValidation.MIN_LENGTH} and ${chatMessageValidation.MAX_LENGTH_DB} characters`,
     /** Message to be shown when there are too many sources being provided for a message */
-    TOO_MANY_SOURCES: `You can only provide up to ${chatMessageValidation.sources} sources for a message.`,
+    TOO_MANY_SOURCES: `You can only provide up to ${chatMessageValidation.sources.LIMIT} sources for a message.`,
 });

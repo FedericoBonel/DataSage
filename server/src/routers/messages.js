@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { newMessageValidator } from "../middleware/validators/message/index.js";
+import { newMessageValidator, messageFilterValidator } from "../middleware/validators/message/index.js";
 import messagesController from "../controllers/messages.js";
 
 const messagesRouter = Router({ mergeParams: true });
@@ -12,6 +12,44 @@ const messagesRouter = Router({ mergeParams: true });
  */
 messagesRouter
     .route("/")
+    /**
+     * @openapi
+     * /chats/{chatId}/messages:
+     *   get:
+     *     tags: [Chat Messages]
+     *     summary: Gets a chat history for the logged in user.
+     *     description: Gets a list of chat messages for the logged in user by date in descending order. It can be used in a client to show chat messages to the user when they open a chat to have a conversation.
+     *     parameters:
+     *       - in: path
+     *         name: chatId
+     *         description: Id of the chat from wich you want to retrieve the messages.
+     *         example: 65154ed674410acd535bc0d3
+     *         schema:
+     *           type: string
+     *       - $ref: '#/components/parameters/page'
+     *       - $ref: '#/components/parameters/limit'
+     *     responses:
+     *       200:
+     *         description: Returns a list with all the chat messages that match the provided search params. The list is always ordered by date in descending order.
+     *         content:
+     *           application/json:
+     *             schema:
+     *               allOf:
+     *                 - $ref: '#/components/schemas/SuccessApiPayload'
+     *                 - type: object
+     *                   required:
+     *                     - data
+     *                   properties:
+     *                     data:
+     *                       type: array
+     *                       items:
+     *                         $ref: '#/components/schemas/MessageOutputDTO'
+     *       400:
+     *         $ref: '#/components/responses/400Response'
+     *       404:
+     *         $ref: '#/components/responses/404Response'
+     */
+    .get(messageFilterValidator, messagesController.get)
     /**
      * @openapi
      * /chats/{chatId}/messages:

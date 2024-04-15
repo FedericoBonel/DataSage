@@ -21,7 +21,7 @@ const saveAll = async (pages) => insertPagesIntoVectorStore(pages);
  */
 const getRetrieverByDocs = async (documents) =>
     getPagesVectorStore.asRetriever({
-        k: validation.page.generation.MAX_TO_USE,
+        k: validation.messages.sources.LIMIT,
         filter: { preFilter: { documentStr: { $in: documents } } },
     });
 

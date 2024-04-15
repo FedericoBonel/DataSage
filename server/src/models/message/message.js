@@ -38,11 +38,19 @@ const messageSchema = new Schema(
             validate: {
                 validator: (pages) =>
                     (pages?.length && pages.length <= validation.messages.sources.LIMIT) || !pages?.length,
-                message: messages.errors.validation.message.TOO_MANY_SOURCES
+                message: messages.errors.validation.message.TOO_MANY_SOURCES,
+            },
+        },
+        createdAt: {
+            type: Date,
+            // eslint-disable-next-line
+            default: function () {
+                // Add some miliseconds to AI to show the messages correctly when listing them by date
+                return this.from === validation.messages.actors.AI ? new Date(Date.now() + 5) : new Date();
             },
         },
     },
-    { timestamps: true }
+    { timestamps: { createdAt: false, updatedAt: true } }
 );
 
 const message = model(MODEL_NAME, messageSchema);
