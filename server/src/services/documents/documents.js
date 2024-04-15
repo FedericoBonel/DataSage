@@ -1,7 +1,9 @@
 import chatsRepository from "../../repositories/chats/chats.js";
+import pagesRepository from "../../repositories/pages/pages.js";
 import documentDTO from "../../dtos/documents/index.js";
 import { BadRequestError, NotFoundError } from "../../utils/errors/index.js";
-import { messages } from "../../utils/constants/index.js";
+import { messages, validation } from "../../utils/constants/index.js";
+import { parseDocumentsInPages, flatPagesByDocuments } from "./utils/index.js";
 
 /**
  * Gets ALL the documents for a chat by id with all their details.
@@ -51,4 +53,37 @@ const deleteById = async (chatId, documentId, userId) => {
     return documentDTO.toDocumentOutputDTO(deletedDocument);
 };
 
-export default { getByChatId, deleteById };
+/**
+ *
+ */
+const addToChatById = async (documents, chatId) => {
+    // Check if the chat has reached its limit of uploaded documents after uploading documents
+    const savedNumberDocs = await chatsRepository.countDocumentsById(chatId);
+    if (savedNumberDocs === undefined) {
+        throw new NotFoundError(messages.errors.ROUTE_NOT_FOUND);
+    } else if (savedNumberDocs + documents.length > validation.chat.documents.MAX_AMOUNT) {
+        throw new BadRequestError(messages.errors.validation.chat.documents.MAXIMUM_REACHED);
+    }
+
+    // Parse the documents into pages and check that they dont have more than the allowed amount of pages
+    const parsedPagesPerDocument = await parseDocumentsInPages(documents, {
+        maxPages: validation.document.pages.MAX_PAGES,
+    });
+
+    // Add the documents to the chat and save them
+    const savedChat = await chatsRepository.addDocsById(documents, chatId);
+
+    // Append the ids of the documents to the pages of each document and save them
+    await pagesRepository.saveAll(flatPagesByDocuments(parsedPagesPerDocument, savedChat.documents));
+
+    const newDocs = savedChat.documents
+        .sort((docA, docB) => docB.createdAt.getTime() - docA.createdAt.getTime())
+        .slice(0, documents.length);
+
+    // Generate urls for each document
+    const signedUrls = await chatsRepository.docsToUrls(newDocs);
+
+    return newDocs.map((doc, index) => documentDTO.toDocumentOutputDTO(doc, signedUrls[index]));
+};
+
+export default { getByChatId, deleteById, addToChatById };

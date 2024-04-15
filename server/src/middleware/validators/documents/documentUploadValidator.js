@@ -3,6 +3,22 @@ import multer from "multer";
 import { messages } from "../../../utils/constants/index.js";
 import { BadRequestError } from "../../../utils/errors/index.js";
 
+/**
+ * @openapi
+ * components:
+ *   schemas:
+ *     AddDocumentSchema:
+ *       type: object
+ *       required:
+ *         - documents
+ *       properties:
+ *         documents:
+ *           type: array
+ *           items:
+ *             type: string
+ *             format: binary
+ */
+
 const memoryStorage = multer.memoryStorage();
 
 /**

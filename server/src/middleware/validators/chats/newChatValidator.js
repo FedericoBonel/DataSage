@@ -8,6 +8,7 @@ import createInputBodyValidator from "./createInputBodyValidator.js";
  *       type: object
  *       required:
  *         - name
+ *         - documents
  *       properties:
  *         name:
  *           type: string

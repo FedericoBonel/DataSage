@@ -63,6 +63,19 @@ const save = async (newChat) => {
 };
 
 /**
+ * Adds a list of documents to a chat and saves them in the cloud store
+ * @param {*} documents List of documents to save
+ * @param {*} chatId The id of the chat where the documents will be added
+ * @returns The updated chat with all its information
+ */
+const addDocsById = async (documents, chatId) => {
+    // Save all documents into the store and add them to the chat
+    const savedDocs = await storeAllDocs(documents);
+
+    return chat.findByIdAndUpdate(chatId, { $push: { documents: { $each: savedDocs } } }, { new: true }).lean();
+};
+
+/**
  * Updates a chat in the database by id and owner id
  * @param {*} updates The updates to be made on the chat
  * @param {string} chatId The chat id to update
@@ -149,12 +162,33 @@ const countDocumentsByIdAndOwner = async (chatId, ownerId) => {
     return numberOfDocuments.length ? numberOfDocuments[0].documentCount : undefined;
 };
 
+/**
+ * Obtains the number of documents for a chat by chat id
+ *
+ * NOTE: This function could return a number 0 or undefined, the value undefined means nothing
+ * was found with those ids, the number 0 means a 0 count. Proper checking should be done.
+ * @param {string} chatId Id of the chat where the documents should be counted
+ * @returns Number of documents for that chat, if nothing was found it returns undefined.
+ */
+const countDocumentsById = async (chatId) => {
+    if (!chatId) throw new Error("Missing parameters");
+
+    const numberOfDocuments = await chat
+        .aggregate()
+        .match({ _id: new Types.ObjectId(chatId) })
+        .project({ _id: 0, documentCount: { $size: "$documents" } });
+
+    return numberOfDocuments.length ? numberOfDocuments[0].documentCount : undefined;
+};
+
 export default {
     save,
+    addDocsById,
     getByNameAndOwner,
     updateByIdAndOwner,
     getById,
     docsToUrls,
     removeDocumentByIdAndOwner,
     countDocumentsByIdAndOwner,
+    countDocumentsById,
 };

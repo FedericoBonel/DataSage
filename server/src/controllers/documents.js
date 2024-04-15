@@ -21,4 +21,14 @@ const deleteById = async (req, res) => {
     return res.status(StatusCodes.OK).json(new SuccessPayload(deletedDoc));
 };
 
-export default { getByChatId, deleteById };
+/** Controller that handles all requests that ask for the upload of documents to a chat by Id */
+const addToChatById = async (req, res) => {
+    const { chatId } = req.params;
+    const documents = req.files;
+
+    const addedDocuments = await docsServices.addToChatById(documents, chatId);
+
+    return res.status(StatusCodes.CREATED).json(addedDocuments);
+};
+
+export default { getByChatId, deleteById, addToChatById };

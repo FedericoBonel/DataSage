@@ -18,10 +18,12 @@ export default Object.freeze({
         /** Message to be shown when the amount of documents per chat is invalid */
         REPEATED_NAMES: "The documents uploaded for a chat at once must have unique names.",
         /** Message to be shown when the amount of documents is the minimum and a document cant be removed from the chat. */
-        MINIMUM_REACHED: `The chat already has its minimum amount of documents of ${1}. You can't delete the document from this chat.`
+        MINIMUM_REACHED: `The chat already has its minimum amount of documents of ${1}. You can't delete the document from this chat.`,
+        /** Message to be shown when the amount of documents is at its maximum amount and the document can't be appended to it. */
+        MAXIMUM_REACHED: `The chat already has its maximum amount of documents of ${chatValues.documents.MAX_AMOUNT} or would overpass it with this action. You can't add these documents to this chat.`,
     },
     filtering: {
         /** Message to be shown when an ownership field is incorrect while querying */
         INVALID_OWNERSHIP: `The allowed ownership filters are the following: ${chatValues.filtering.OWNERSHIP_ALLOWED}`,
-    }
+    },
 });

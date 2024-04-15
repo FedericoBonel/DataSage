@@ -4,7 +4,7 @@ import pagesRepository from "../../repositories/pages/pages.js";
 import colaboratorRepository from "../../repositories/colaborators/colaborators.js";
 import chatDTO from "../../dtos/chats/index.js";
 import colaboratorDTO from "../../dtos/colaborator/index.js";
-import { parseDocumentsInPages, flatPagesByDocuments } from "./utils/index.js";
+import { parseDocumentsInPages, flatPagesByDocuments } from "../documents/utils/index.js";
 import { BadRequestError, NotFoundError, UnauthorizedError } from "../../utils/errors/index.js";
 import { validation, messages } from "../../utils/constants/index.js";
 import calculateSkip from "../../utils/db/calculateSkip.js";
