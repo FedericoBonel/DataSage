@@ -4,6 +4,7 @@ import { page } from "../../models/page/page.js";
 import { message } from "../../models/message/message.js";
 import { colaborator } from "../../models/colaborator/colaborator.js";
 import { saveFilesInS3, getSignedURLById, deleteFileInS3 } from "../../lib/amazonS3.js";
+import { getLLMChat } from "../../lib/langchain.js";
 
 /**
  * Gets a chat by its name and its owner id and returns it
@@ -181,6 +182,13 @@ const countDocumentsById = async (chatId) => {
     return numberOfDocuments.length ? numberOfDocuments[0].documentCount : undefined;
 };
 
+/**
+ * Gets the LLM instance to generate AI responses in the application.
+ *
+ * @returns The LLM instance to get responses for user queries.
+ */
+const getLLM = () => getLLMChat();
+
 export default {
     save,
     addDocsById,
@@ -191,4 +199,5 @@ export default {
     removeDocumentByIdAndOwner,
     countDocumentsByIdAndOwner,
     countDocumentsById,
+    getLLM,
 };

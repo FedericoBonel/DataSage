@@ -23,4 +23,15 @@ const insertPagesIntoVectorStore = async (pages) => {
     return vectorStore;
 };
 
-export { insertPagesIntoVectorStore };
+/** Gets the vector store for the pages of each document to make semantic searches. */
+const getPagesVectorStore = new VectorStore(
+    getEmbeddings(),
+    {
+        collection: page.collection,
+        indexName: vectorIndex.NAME,
+        embeddingKey: vectorIndex.INDEXED_FIELD,
+        textKey: vectorIndex.EMBEDDED_CONTENT_FIELD,
+    }
+);
+
+export { insertPagesIntoVectorStore, getPagesVectorStore };

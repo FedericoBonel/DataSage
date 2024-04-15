@@ -30,8 +30,8 @@ const messageSchema = new Schema(
         content: {
             type: String,
             minlength: validation.messages.MIN_LENGTH,
-            maxlength: validation.messages.MAX_LENGTH,
-            required: [true, messages.errors.validation.message.INVALID_LENGTH],
+            maxlength: validation.messages.MAX_LENGTH_DB,
+            required: [true, messages.errors.validation.message.INVALID_LENGTH_DB],
         },
         sources: {
             type: [messagesPagesSchema],

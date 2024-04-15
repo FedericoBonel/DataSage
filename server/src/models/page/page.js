@@ -11,6 +11,7 @@ const vectorIndex = Object.freeze({
 const pageSchema = new Schema(
     {
         document: { type: Types.ObjectId, required: [true] },
+        documentStr: { type: String, required: [true] },
         content: {
             type: String,
             required: [true, messages.errors.validation.page.content.INVALID],

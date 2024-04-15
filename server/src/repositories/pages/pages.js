@@ -1,4 +1,5 @@
-import { insertPagesIntoVectorStore } from "./utils/vectorStore.js";
+import { insertPagesIntoVectorStore, getPagesVectorStore } from "./utils/vectorStore.js";
+import { validation } from "../../utils/constants/index.js";
 
 /**
  * @typedef {Object} PageData
@@ -13,4 +14,15 @@ import { insertPagesIntoVectorStore } from "./utils/vectorStore.js";
  */
 const saveAll = async (pages) => insertPagesIntoVectorStore(pages);
 
-export default { saveAll };
+/**
+ * Gets the page retriever to search for documents content semantically.
+ * @param {Array.<string>} documents Ids of the documents for which to filter the pages by.
+ * @returns The pages retriever. This can be used in chains as context providers.
+ */
+const getRetrieverByDocs = async (documents) =>
+    getPagesVectorStore.asRetriever({
+        k: validation.page.generation.MAX_TO_USE,
+        filter: { preFilter: { documentStr: { $in: documents } } },
+    });
+
+export default { saveAll, getRetrieverByDocs };

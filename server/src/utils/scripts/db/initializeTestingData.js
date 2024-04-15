@@ -8,7 +8,7 @@ import { permission } from "../../../models/permission/permission.js";
 import { message } from "../../../models/message/message.js";
 import { permissions } from "../../constants/index.js";
 
-if (!config.node_environment === "development") {
+if (config.node_environment !== "development") {
     process.exit(); // Only run in development mode
 }
 

@@ -5,6 +5,7 @@ import openapiMessages from "./messages/openapi.js";
 import swaggeruiRoutes from "./routes/swaggerui.js";
 import chatsRoutes from "./routes/chats.js";
 import docsRoutes from "./routes/documents.js";
+import messagesRoutes from "./routes/messages.js";
 import chatValidation from "./validation/chat.js";
 import userValidation from "./validation/user.js";
 import documentValidation from "./validation/document.js";
@@ -31,6 +32,7 @@ export const routes = Object.freeze({
     swaggerUi: swaggeruiRoutes,
     chats: chatsRoutes,
     documents: docsRoutes,
+    messages: messagesRoutes,
 });
 
 /** Object with all the validation values used in the application for each entity. */

@@ -14,7 +14,12 @@ const flatPagesByDocuments = (pagesByDocument, savedDocuments) => {
     return Object.keys(pagesByDocument).flatMap((docName) =>
         pagesByDocument[docName].map((doc) => ({
             ...doc,
-            metadata: { ...doc.metadata, document: docsWithIds[docName]._id },
+            metadata: {
+                ...doc.metadata,
+                document: docsWithIds[docName]._id,
+                // This is required for now to do filtering when vector searching, MongoDB Atlas does not support filtering by ids yet.
+                documentStr: docsWithIds[docName]._id.toString(),
+            },
         }))
     );
 };
