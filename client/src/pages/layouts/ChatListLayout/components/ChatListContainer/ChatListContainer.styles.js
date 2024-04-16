@@ -5,6 +5,7 @@ export const ChatListDrawerStyles = {
         width: 220,
         boxSizing: "border-box",
         left: "inherit",
+        bgcolor: "neutralBg.dark"
     },
     display: "flex",
     flexDirection: "column",

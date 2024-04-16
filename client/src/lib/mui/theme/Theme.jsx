@@ -2,17 +2,33 @@ import "@fontsource/roboto/300.css";
 import "@fontsource/roboto/400.css";
 import "@fontsource/roboto/500.css";
 import "@fontsource/roboto/700.css";
-
 import CssBaseline from "@mui/material/CssBaseline";
 import { ThemeProvider as MUIThemeProvider, createTheme } from "@mui/material";
+import { alpha, getContrastRatio } from "@mui/material/styles";
 import { propTypes } from "./theme.props";
 
 const defaultTheme = "dark";
 
+const baseNeutralBg = "#363636";
+const neutralBgMain = alpha(baseNeutralBg, 0.7);
+
 const getDesignTokens = (mode) => ({
     palette: {
         mode,
-        ...(mode === "dark" ? { background: { default: "#40334D" } } : {}),
+        ...(mode === "dark"
+            ? {
+                  background: { default: "#40334D" },
+                  neutralBg: {
+                      main: neutralBgMain,
+                      light: alpha(neutralBgMain, 0.5),
+                      dark: alpha(neutralBgMain, 1),
+                      contrastText:
+                          getContrastRatio(neutralBgMain, "#fff") > 4.5
+                              ? "#fff"
+                              : "#111",
+                  },
+              }
+            : {}),
     },
     components: {
         MuiButton: {
