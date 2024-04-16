@@ -5,12 +5,15 @@ import "./index.css";
 
 import { ThemeProvider } from "@/lib/mui";
 import { QueryClientProvider } from "@/lib/react-query";
+import { AuthProvider } from "@/contexts/auth";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
     <React.StrictMode>
         <QueryClientProvider>
             <ThemeProvider>
-                <App />
+                <AuthProvider>
+                    <App />
+                </AuthProvider>
             </ThemeProvider>
         </QueryClientProvider>
     </React.StrictMode>
