@@ -21,6 +21,17 @@ export const messages = Object.freeze({
             LOAD_MORE: "Load more items",
         },
     },
+    chats: {
+        filtering: {
+            ownership: {
+                OWNED: "owned",
+                SHARED: "shared",
+            },
+            textSearch: {
+                label: "Search by chat name",
+            },
+        },
+    },
 });
 
 /** Object with all the routes used in the application */
@@ -39,4 +50,18 @@ export const routes = Object.freeze({
         ERROR: "error",
     },
     chats: chatsRoutes,
+});
+
+export const api = Object.freeze({
+    /** Holds all values that can be used for searching in back end */
+    searching: {
+        /** Search parameters values for chats */
+        chats: {
+            /** Allowed values for ownership filtering. ["self", "shared"] */
+            owner: ["self", "shared"],
+        },
+        textSearch: {
+            MAX_LENGTH: 255,
+        },
+    },
 });

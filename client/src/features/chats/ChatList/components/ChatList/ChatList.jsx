@@ -1,6 +1,10 @@
+import { useState } from "react";
 import { PaginatedList } from "@/components/list";
+import { TextField } from "@/components/fields";
+import { messages, api } from "@/utils/constants";
 import propTypes from "./ChatList.proptypes";
 import ChatListItem from "../ChatListItem/ChatListItem";
+import ChatListTabs from "../ChatListTabs/ChatListTabs";
 
 const dummyData = {
     pages: [
@@ -43,6 +47,11 @@ const dummyData = {
 
 /** Renders the list of chats for the logged in user. */
 const ChatList = ({ selectedChat }) => {
+    const [searchParams, setSearchParams] = useState({
+        owned: "self",
+        textSearch: "",
+    });
+
     // TODO implement service that fetches this
     const chatQuery = {
         isLoading: false,
@@ -61,9 +70,30 @@ const ChatList = ({ selectedChat }) => {
     );
 
     return (
-        <PaginatedList>
-            {items}
-        </PaginatedList>
+        <>
+            <ChatListTabs
+                value={searchParams.owned}
+                onClickTab={(e, newValue) =>
+                    setSearchParams((prev) => ({ ...prev, owned: newValue }))
+                }
+            />
+            <TextField
+                label={messages.chats.filtering.textSearch.label}
+                type="search"
+                variant="filled"
+                inputProps={{ maxLength: api.searching.textSearch.MAX_LENGTH }}
+                value={searchParams.textSearch}
+                onChange={(e) =>
+                    setSearchParams((prev) => ({
+                        ...prev,
+                        textSearch: e.target.value,
+                    }))
+                }
+            />
+            <PaginatedList onLoadMore={() => console.log("loaded more")}>
+                {items}
+            </PaginatedList>
+        </>
     );
 };
 
