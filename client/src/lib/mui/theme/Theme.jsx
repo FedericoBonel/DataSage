@@ -7,7 +7,13 @@ import CssBaseline from "@mui/material/CssBaseline";
 import { ThemeProvider as MUIThemeProvider, createTheme } from "@mui/material";
 import { propTypes } from "./theme.props";
 
-const theme = createTheme({
+const defaultTheme = "dark";
+
+const getDesignTokens = (mode) => ({
+    palette: {
+        mode,
+        ...(mode === "dark" ? { background: { default: "#40334D" } } : {}),
+    },
     components: {
         MuiButton: {
             defaultProps: {
@@ -17,9 +23,11 @@ const theme = createTheme({
     },
 });
 
+const theme = createTheme(getDesignTokens(defaultTheme));
+
 /**
  * Theme provider for the application. Makes the theme available down the react tree.
- * 
+ *
  * It should preferably be used at the root of your component tree.
  */
 const ThemeProvider = ({ children }) => {
