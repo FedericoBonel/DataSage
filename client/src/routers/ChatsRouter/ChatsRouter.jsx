@@ -1,6 +1,6 @@
 import { NewChat } from "@/pages/chats/components";
 import { routes } from "@/utils/constants";
-import { NavbarLayout } from "@/pages/layouts";
+import { ChatListLayout, NavbarLayout } from "@/pages/layouts";
 
 /** Router that routes all requests associated with chats */
 const ChatsRouter = {
@@ -8,8 +8,14 @@ const ChatsRouter = {
     element: <NavbarLayout />,
     children: [
         {
-            index: true,
-            element: <NewChat />,
+            path: "*",
+            element: <ChatListLayout />,
+            children: [
+                {
+                    index: true,
+                    element: <NewChat />,
+                },
+            ],
         },
     ],
 };

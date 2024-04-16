@@ -4,7 +4,7 @@ import { routes, messages } from "@/utils/constants";
 import logo from "@/assets/logo.svg";
 import NavbarLink from "../NavbarLink/NavbarLink";
 import NavbarLinks from "../NavbarLinks/NavbarLinks";
-import proptypes from "./Navbar.proptypes";
+import proptypes from "./Navbar.props";
 import {
     NavbarDrawerStyles,
     NavbarDrawerListMenusStyles,
@@ -26,6 +26,7 @@ const Navbar = ({ selectedMenu }) => {
                     selected={selectedMenu === routes.chats.CHATS}
                     icon={<Chat fontSize="inherit" />}
                     label={messages.navbar.CHATS_OPTION}
+                    href={`/${routes.chats.CHATS}`}
                 />
             </NavbarLinks>
             <Divider />

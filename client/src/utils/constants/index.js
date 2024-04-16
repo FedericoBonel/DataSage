@@ -11,6 +11,16 @@ export const messages = Object.freeze({
         CHATS_OPTION: "Chats",
         SETTINGS_OPTION: "Settings",
     },
+    info: {
+        pagination: {
+            NO_MORE: "No more items",
+        },
+    },
+    actions: {
+        pagination: {
+            LOAD_MORE: "Load more items",
+        },
+    },
 });
 
 /** Object with all the routes used in the application */
