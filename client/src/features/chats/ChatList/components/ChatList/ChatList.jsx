@@ -83,12 +83,13 @@ const ChatList = ({ selectedChat }) => {
                 variant="filled"
                 inputProps={{ maxLength: api.searching.textSearch.MAX_LENGTH }}
                 value={searchParams.textSearch}
-                onChange={(e) =>
+                isDebounced
+                onChange={(value) => {
                     setSearchParams((prev) => ({
                         ...prev,
-                        textSearch: e.target.value,
-                    }))
-                }
+                        textSearch: value,
+                    }));
+                }}
             />
             <PaginatedList onLoadMore={() => console.log("loaded more")}>
                 {items}

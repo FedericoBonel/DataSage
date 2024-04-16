@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { InputAdornment, TextField as TextFieldMUI } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
+import useDebouncedSideEffect from "@/utils/hooks/useDebouncedSideEffect";
 import { propTypes } from "./TextField.props";
 
 /**
@@ -17,16 +18,24 @@ const TextField = ({
     value,
     label,
     type,
+    isDebounced = false,
+    onChange,
     ...props
 }) => {
     // Handle blur event for detecting when field was touched
     const onBlur = () => setTouched(true);
     const [touched, setTouched] = useState(false);
 
+    // Handle debouncing if needed
+    const [debouncedState, setDebouncedState] = useDebouncedSideEffect(
+        isDebounced ? value : undefined,
+        isDebounced ? onChange : undefined
+    );
+
     const isValid = validator(value);
     return (
         <TextFieldMUI
-            value={value}
+            value={isDebounced ? debouncedState : value}
             error={touched && !isValid}
             onBlur={onBlur}
             helperText={touched && !isValid ? helperText : ""}
@@ -43,6 +52,11 @@ const TextField = ({
                           ),
                       }
                     : {}
+            }
+            onChange={
+                isDebounced
+                    ? (e) => setDebouncedState(e.target.value)
+                    : onChange
             }
             {...props}
         />
