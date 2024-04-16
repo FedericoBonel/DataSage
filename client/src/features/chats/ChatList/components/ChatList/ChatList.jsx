@@ -2,9 +2,10 @@ import { useState } from "react";
 import { PaginatedList } from "@/components/list";
 import { TextField } from "@/components/fields";
 import { messages, api } from "@/utils/constants";
-import propTypes from "./ChatList.proptypes";
 import ChatListItem from "../ChatListItem/ChatListItem";
 import ChatListTabs from "../ChatListTabs/ChatListTabs";
+import propTypes from "./ChatList.proptypes";
+import { ListStyles } from "./ChatList.styles";
 
 const dummyData = {
     pages: [
@@ -91,7 +92,10 @@ const ChatList = ({ selectedChat }) => {
                     }));
                 }}
             />
-            <PaginatedList onLoadMore={() => console.log("loaded more")}>
+            <PaginatedList
+                listContainerStyles={ListStyles}
+                onLoadMore={() => console.log("loaded more")}
+            >
                 {items}
             </PaginatedList>
         </>
