@@ -11,7 +11,7 @@ import { routes } from "@/utils/constants";
 const Private = () => {
     const isLoggedIn = useToken();
 
-    return isLoggedIn ? <Outlet /> : <Navigate to={routes.LOGIN} />;
+    return isLoggedIn ? <Outlet /> : <Navigate to={routes.auth.LOGIN} />;
 };
 
 export default Private;

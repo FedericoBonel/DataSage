@@ -1,6 +1,6 @@
 /** Imports and exports all constants in an encapsulated manner */
-import errors from "./messages/en/errors"
-import warnings from "./messages/en/warnings"
+import errors from "./messages/en/errors";
+import warnings from "./messages/en/warnings";
 
 /** Object with all messages to be shown to the user */
 export const messages = Object.freeze({
@@ -14,6 +14,13 @@ export const routes = Object.freeze({
     HOME: "",
     /** Route to error pages */
     ERROR: "error",
-    /** Route to login page */
     LOGIN: "login",
+    auth: {
+        /** Route to login page */
+        LOGIN: "login",
+    },
+    error: {
+        /** Route to error pages */
+        ERROR: "error",
+    },
 });

@@ -14,7 +14,7 @@ const router = createBrowserRouter([
             /** Public routes */
             {
                 element: <Public />,
-                children: [{ path: routes.LOGIN, element: <p>Login</p> }],
+                children: [{ path: routes.auth.LOGIN, element: <p>Login</p> }],
             },
             /** Private routes */
             {
@@ -22,7 +22,7 @@ const router = createBrowserRouter([
                 children: [{ path: routes.HOME, element: <SampleViteHome /> }],
             },
             /** Common routes */
-            { path: routes.ERROR, children: [ErrorRouter] },
+            { path: routes.error.ERROR, children: [ErrorRouter] },
         ],
     },
 ]);
