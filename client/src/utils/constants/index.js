@@ -22,6 +22,10 @@ export const messages = Object.freeze({
         pagination: {
             LOAD_MORE: "Load more items",
         },
+        form: {
+            SUBMIT: "Submit",
+            CANCEL: "Cancel",
+        },
     },
     chats: {
         filtering: {
@@ -34,8 +38,23 @@ export const messages = Object.freeze({
             },
         },
         create: {
-            LABEL: "New chat"
-        }
+            LABEL: "New chat",
+            form: {
+                /** The title of the form */
+                TITLE: "Start a new chat",
+                /** The subtitle of the chat creation form */
+                SUB_TITLE:
+                    "Upload the PDF files you want to make questions about.",
+                /** The label to be shown in the file selection field */
+                FILE_FIELD:
+                    "Select or drag and drop your files\n(only up to 10 PDF files are allowed for now)",
+                /** The label to be shown in the name field */
+                NAME_FIELD: "Chat Name",
+                /** Creates the message to show to the user when more than one file is selected */
+                createFilesSelectedFeedback: (numberFiles) =>
+                    `${numberFiles} files selected`,
+            },
+        },
     },
 });
 
@@ -45,7 +64,6 @@ export const routes = Object.freeze({
     HOME: `${chatsRoutes.CHATS}`,
     /** Route to error pages */
     ERROR: "error",
-    LOGIN: "login",
     auth: {
         /** Route to login page */
         LOGIN: "login",
