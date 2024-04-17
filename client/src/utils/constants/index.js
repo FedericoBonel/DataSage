@@ -33,6 +33,9 @@ export const messages = Object.freeze({
                 label: "Search by chat name",
             },
         },
+        create: {
+            LABEL: "New chat"
+        }
     },
 });
 
