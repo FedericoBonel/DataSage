@@ -5,6 +5,9 @@ import { api } from "@/utils/constants";
 const apiInstance = axios.create({
     baseURL: api.urls.BASE,
     withCredentials: true,
+    formSerializer: {
+        indexes: null,
+    },
 });
 
 /**

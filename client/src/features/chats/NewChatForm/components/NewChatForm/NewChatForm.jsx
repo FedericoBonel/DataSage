@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import {
     Card,
     CardHeader,
@@ -9,20 +10,24 @@ import {
     ListItemText,
 } from "@mui/material";
 import { Upload } from "@mui/icons-material";
-import { Form } from "@/components/forms";
+import { chatsServices } from "@/services/chats";
+import { Form, FormAlert } from "@/components/forms";
 import { TextField, FileField } from "@/components/fields";
-import { messages, api } from "@/utils/constants";
+import { messages, api, routes } from "@/utils/constants";
 import { chatsValidator } from "@/utils/validators";
 
 /** Initial state of the form */
 const initialFormState = {
     name: "",
-    files: [],
+    documents: [],
 };
 
 /** Renders a new chat form for creating chats */
 const NewChatForm = () => {
+    const navigate = useNavigate();
     const [newChat, setNewChat] = useState(initialFormState);
+
+    const createQuery = chatsServices.useCreateChat();
 
     // Updates state when text fields changes
     const onChangeTextField = (e) =>
@@ -32,30 +37,39 @@ const NewChatForm = () => {
         }));
 
     // Updates state when files are selected
-    const onFileSelection = (files) => {
-        setNewChat((prev) => ({ ...prev, files }));
+    const onFileSelection = (documents) => {
+        setNewChat((prev) => ({ ...prev, documents }));
     };
 
     const resetForm = () => setNewChat(initialFormState);
 
     const onSubmit = (e) => {
         e.preventDefault();
-        console.log("Submitted!");
+
+        createQuery.mutate(newChat, {
+            onSuccess: ({ data }) =>
+                navigate(`/${routes.chats.CHATS}/${data._id}`),
+        });
     };
 
     // Feedback of file selection
-    const fileList = Boolean(newChat.files.length) && (
+    const fileList = Boolean(newChat.documents.length) && (
         <ListItem>
             <ListItemText
                 secondary={
-                    newChat.files.length < 2
-                        ? newChat.files[0].name
+                    newChat.documents.length < 2
+                        ? newChat.documents[0].name
                         : messages.chats.create.form.createFilesSelectedFeedback(
-                              newChat.files.length
+                              newChat.documents.length
                           )
                 }
             />
         </ListItem>
+    );
+
+    // If submition was unsuccessful show the corresponding errors
+    const errors = createQuery.isError && (
+        <FormAlert error={createQuery.error?.response?.data} />
     );
 
     return (
@@ -66,6 +80,7 @@ const NewChatForm = () => {
             onSubmit={onSubmit}
             canSubmit={chatsValidator.newChat(newChat)}
             onCancel={resetForm}
+            isSubmitting={createQuery.isPending}
         >
             <CardHeader
                 title={messages.chats.create.form.TITLE}
@@ -100,6 +115,7 @@ const NewChatForm = () => {
                     onChange={onChangeTextField}
                 />
             </CardContent>
+            {errors}
         </Form>
     );
 };

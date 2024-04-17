@@ -27,4 +27,22 @@ const getChats = async (filtering, pagination) => {
     });
 };
 
-export default { getChats };
+/** 
+ * Registers a new chat in the back end and returns the saved version.
+ * @param {object} newChat The new chat to be saved
+ * @param {string} newChat.name Name of the chat
+ * @param {Array.<File>} newChat.files Files to be used as the chat knowledge base
+ * @returns The promise that resolves to the new created chat
+ */
+const createChat = async (newChat) => {
+    return makeRequest({
+        url: api.urls.chats.CREATE,
+        method: "post",
+        data: newChat,
+        headers: {
+            "Content-Type": "multipart/form-data",
+        },
+    });
+};
+
+export default { getChats, createChat };

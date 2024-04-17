@@ -7,4 +7,6 @@ export default Object.freeze({
     RESOURCE: CHATS_RESOURCE,
     /** Endpoint to get all chats */
     GET_ALL: `${config.api.BASE_URL}/${CHATS_RESOURCE}`,
+    /** Endpoint to create a chat */
+    CREATE: `${config.api.BASE_URL}/${CHATS_RESOURCE}`,
 });

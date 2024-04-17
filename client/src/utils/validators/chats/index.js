@@ -6,12 +6,12 @@ export default Object.freeze({
      * Validates contents of a new chat. 
      * @returns True if valid, false otherwise
      */
-    newChat: ({ name, files }) =>
+    newChat: ({ name, documents }) =>
         isLength(name, {
             min: api.validation.chats.MIN_NAME_LENGTH,
             max: api.validation.chats.MAX_NAME_LENGTH,
         }) &&
-        isInt(String(files.length), {
+        isInt(String(documents.length), {
             min: api.validation.chats.MIN_FILES_UPLOAD,
             max: api.validation.chats.MAX_FILES_UPLOAD,
         }),
