@@ -18,7 +18,7 @@ const Button = ({ children, isLoading, isLink, href, disabled, ...props }) => {
             disabled={isLoading ? true : disabled}
             {...props}
         >
-            {isLoading ? <CircularProgress size={32} /> : children}
+            {isLoading ? <CircularProgress size={28} /> : children}
         </MUIButton>
     );
 };

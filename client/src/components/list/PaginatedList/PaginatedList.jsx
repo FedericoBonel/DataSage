@@ -45,7 +45,7 @@ const PaginatedList = ({
             textAlign="center"
             sx={endTypographyStyles}
         >
-            {messages.MENUS_LIST_EMPTY}
+            {messages.info.pagination.NO_ITEMS}
         </Typography>
     );
 

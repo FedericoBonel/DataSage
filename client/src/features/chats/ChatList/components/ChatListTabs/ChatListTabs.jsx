@@ -3,10 +3,17 @@ import { Verified, Share } from "@mui/icons-material";
 import { api, messages } from "@/utils/constants";
 import propTypes from "./ChatListTabs.props";
 
+import { TabsStyles } from "./ChatListTabs.styles";
+
 /** Component that renders the chat list tabs for filtering the list by shared and owned chats. */
 const ChatListTabs = ({ value, onClickTab }) => {
     return (
-        <Tabs onChange={onClickTab} variant="fullWidth" value={value}>
+        <Tabs
+            onChange={onClickTab}
+            variant="fullWidth"
+            value={value}
+            sx={TabsStyles}
+        >
             <Tab
                 icon={<Share />}
                 value={api.searching.chats.owner[1]}

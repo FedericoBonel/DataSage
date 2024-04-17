@@ -21,6 +21,7 @@ const Navbar = ({ selectedMenu }) => {
                 loading="lazy"
                 padding={1}
             />
+            <Divider />
             <NavbarLinks>
                 <NavbarLink
                     selected={selectedMenu === routes.chats.CHATS}

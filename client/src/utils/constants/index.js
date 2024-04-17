@@ -2,6 +2,7 @@
 import errors from "./messages/en/errors";
 import warnings from "./messages/en/warnings";
 import chatsRoutes from "./routes/chats";
+import apiConsts from "./api";
 
 /** Object with all messages to be shown to the user */
 export const messages = Object.freeze({
@@ -14,6 +15,7 @@ export const messages = Object.freeze({
     info: {
         pagination: {
             NO_MORE: "No more items",
+            NO_ITEMS: "There are no items to show",
         },
     },
     actions: {
@@ -52,16 +54,4 @@ export const routes = Object.freeze({
     chats: chatsRoutes,
 });
 
-export const api = Object.freeze({
-    /** Holds all values that can be used for searching in back end */
-    searching: {
-        /** Search parameters values for chats */
-        chats: {
-            /** Allowed values for ownership filtering. ["self", "shared"] */
-            owner: ["self", "shared"],
-        },
-        textSearch: {
-            MAX_LENGTH: 255,
-        },
-    },
-});
+export const api = apiConsts;
