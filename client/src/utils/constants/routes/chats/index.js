@@ -1,6 +1,8 @@
 export default Object.freeze({
     /** Chats route */
     CHATS: "chats",
-    /** Chats new route */
+    /** New chat route */
     NEW: "new",
+    /** Participants management route */
+    PARTICIPANTS: "participants",
 });

@@ -1,26 +1,17 @@
 import { memo } from "react";
 import { Link } from "react-router-dom";
-import {
-    ListItem,
-    ListItemButton,
-    ListItemText,
-    IconButton,
-} from "@mui/material";
-import { MoreHoriz } from "@mui/icons-material";
+import { ListItem, ListItemButton, ListItemText } from "@mui/material";
 import toLocaleString from "@/utils/dates/toLocaleString";
-import propTypes from "./ChatListItem.props";
 import { routes } from "@/utils/constants";
+import { ChatListItemMenu } from "../ChatListItemMenu";
+import propTypes from "./ChatListItem.props";
 
 /** Renders a chat in a list of chats */
 const ChatListItem = ({ chatItem, selected }) => {
     return (
         <ListItem
             disableGutters
-            secondaryAction={
-                <IconButton>
-                    <MoreHoriz />
-                </IconButton>
-            }
+            secondaryAction={<ChatListItemMenu chatId={chatItem._id} />}
             disablePadding
         >
             <ListItemButton

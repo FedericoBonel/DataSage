@@ -55,6 +55,9 @@ export const messages = Object.freeze({
                     `${numberFiles} files selected`,
             },
         },
+        list: {
+            SETTINGS_LABEL: "Chat settings"
+        }
     },
 });
 
@@ -64,6 +67,8 @@ export const routes = Object.freeze({
     HOME: `${chatsRoutes.CHATS}`,
     /** Route to error pages */
     ERROR: "error",
+    /** Route to settings */
+    SETTINGS: "settings",
     auth: {
         /** Route to login page */
         LOGIN: "login",
