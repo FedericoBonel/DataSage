@@ -55,9 +55,31 @@ export const messages = Object.freeze({
                     `${numberFiles} files selected`,
             },
         },
+        update: {
+            form: {
+                /** The title of the form */
+                TITLE: "Chat Information",
+                /** The subtitle of the chat creation form */
+                SUB_TITLE: "Manage how your chat is seen.",
+                /** The label to be shown in the name field */
+                NAME_FIELD: "Chat Name",
+                /** The helper text of the name field */
+                NAME_HELPER_TEXT:
+                    "This is how your chat is shown to you and other participants.",
+                /** Form buttons labels */
+                buttons: {
+                    ACCEPT: "Save changes",
+                    CANCEL: "Reset changes"
+                },
+            },
+        },
+        settings: {
+            /** Title to be shown in the chat settings page */
+            PAGE_TITLE: "Chat Settings",
+        },
         list: {
-            SETTINGS_LABEL: "Chat settings"
-        }
+            SETTINGS_LABEL: "Chat settings",
+        },
     },
 });
 

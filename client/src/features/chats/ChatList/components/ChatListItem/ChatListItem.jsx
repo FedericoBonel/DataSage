@@ -34,7 +34,7 @@ const memoizedComponent = memo(
     ChatListItem,
     (prevProps, newProps) =>
         prevProps.chatItem._id === newProps.chatItem._id &&
-        prevProps.name === newProps.name &&
+        prevProps.chatItem.name === newProps.chatItem.name &&
         prevProps.selected === newProps.selected
 );
 export default memoizedComponent;

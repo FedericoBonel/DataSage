@@ -8,7 +8,7 @@ import ChatListContainer from "./components/ChatListContainer/ChatListContainer"
 /** The layout that provides a list of chats to subroutes. */
 const ChatListLayout = () => {
     // Get the selected chat id from url
-    const match = useMatch(`/${routes.chats.CHATS}/:selectedChat`);
+    const match = useMatch(`/${routes.chats.CHATS}/:selectedChat/*`);
     const selectedChat = match?.params?.selectedChat;
 
     return (

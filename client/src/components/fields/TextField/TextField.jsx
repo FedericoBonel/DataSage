@@ -20,6 +20,7 @@ const TextField = ({
     type,
     isDebounced = false,
     onChange,
+    showHelperText,
     ...props
 }) => {
     // Handle blur event for detecting when field was touched
@@ -38,7 +39,9 @@ const TextField = ({
             value={isDebounced ? debouncedState : value}
             error={touched && !isValid}
             onBlur={onBlur}
-            helperText={touched && !isValid ? helperText : ""}
+            helperText={
+                (touched && !isValid) || showHelperText ? helperText : ""
+            }
             label={label ? label : undefined}
             id={label ? label : undefined}
             type={type}

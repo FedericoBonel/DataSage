@@ -2,8 +2,8 @@ import { isLength, isInt } from "validator";
 import api from "../../constants/api";
 
 export default Object.freeze({
-    /** 
-     * Validates contents of a new chat. 
+    /**
+     * Validates contents of a new chat.
      * @returns True if valid, false otherwise
      */
     newChat: ({ name, documents }) =>
@@ -14,5 +14,14 @@ export default Object.freeze({
         isInt(String(documents.length), {
             min: api.validation.chats.MIN_FILES_UPLOAD,
             max: api.validation.chats.MAX_FILES_UPLOAD,
+        }),
+    /**
+     * Validates contents of an update to a chat.
+     * @returns True if valid, false otherwise
+     */
+    updateChat: ({ name }) =>
+        isLength(name, {
+            min: api.validation.chats.MIN_NAME_LENGTH,
+            max: api.validation.chats.MAX_NAME_LENGTH,
         }),
 });

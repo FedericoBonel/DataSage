@@ -1,4 +1,4 @@
-import { NewChat } from "@/pages/chats/components";
+import { NewChat, ChatSettings } from "@/pages/chats/components";
 import { ChatListLayout, NavbarLayout } from "@/pages/layouts";
 import { routes } from "@/utils/constants";
 
@@ -14,6 +14,10 @@ const ChatsRouter = {
                 {
                     index: true,
                     element: <NewChat />,
+                },
+                {
+                    path: `:chatId/${routes.SETTINGS}`,
+                    element: <ChatSettings />,
                 },
             ],
         },

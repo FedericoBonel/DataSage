@@ -23,4 +23,6 @@ export const propTypes = {
      * But if isDebounced is true then it will receive the new value without receiving the event after a delay.
      */
     onChange: PropTypes.func,
+    /** If true the helper text will always be shown. This is useful if your design requires you to provide information to your user always. */
+    showHelperText: PropTypes.bool,
 };

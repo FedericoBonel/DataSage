@@ -27,7 +27,7 @@ const getChats = async (filtering, pagination) => {
     });
 };
 
-/** 
+/**
  * Registers a new chat in the back end and returns the saved version.
  * @param {object} newChat The new chat to be saved
  * @param {string} newChat.name Name of the chat
@@ -45,4 +45,30 @@ const createChat = async (newChat) => {
     });
 };
 
-export default { getChats, createChat };
+/**
+ * Gets a chat by id
+ * @param {string} chatId The id of the chat
+ * @returns The server response payload with the chat with that id
+ */
+const getChatById = async (chatId) => {
+    return await makeRequest({
+        url: `${api.urls.chats.GET_ALL}/${chatId}`,
+        method: "get",
+    });
+};
+
+/**
+ * Updates a chat by id.
+ * @param {object} updatedChat The updated chat to be saved
+ * @param {string} updatedChat.name Name of the chat
+ * @returns The promise that resolves to the updated chat
+ */
+const updateChatById = async (updatedChat, chatId) => {
+    return makeRequest({
+        url: `${api.urls.chats.GET_ALL}/${chatId}`,
+        method: "put",
+        data: updatedChat,
+    });
+};
+
+export default { getChats, createChat, getChatById, updateChatById };

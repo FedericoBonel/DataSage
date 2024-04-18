@@ -61,6 +61,7 @@ const Menu = ({
                 id={`menu-${label}`}
                 anchorEl={anchorEl}
                 open={open}
+                onClick={handleClose}
                 onClose={handleClose}
                 MenuListProps={{
                     "aria-labelledby": `menu-button-${label}`,
