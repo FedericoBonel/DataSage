@@ -8,7 +8,7 @@ import DocumentListItem from "./components/DocumentListItem/DocumentListItem";
 import { ListStyles } from "./DocumentList.styles";
 import propTypes from "./DocumentList.props";
 
-/** Renders the list of documents by chat id. */
+/** Renders the list of documents by chat id and handles their delete dialog. */
 const DocumentList = ({ chatId }) => {
     const { selected, open, isOpen, close } = useDialog();
 
