@@ -37,6 +37,23 @@ export const messages = Object.freeze({
                 label: "Search by chat name",
             },
         },
+        formSections: {
+            metadata: {
+                /** Label of the name field */
+                NAME_FIELD_LABEL: "Chat Name",
+                /** The helper text of the name field */
+                NAME_FIELD_HELPER:
+                    "This is how your chat is shown to you and other participants.",
+            },
+            documents: {
+                /** The label to be shown in the file selection field */
+                FILE_FIELD:
+                    "Select or drag and drop your files\n(only up to 10 PDF files are allowed for now)",
+                /** Creates the message to show to the user when more than one file is selected */
+                createFilesSelectedFeedback: (numberFiles) =>
+                    `${numberFiles} files selected`,
+            },
+        },
         create: {
             LABEL: "New chat",
             form: {
@@ -45,14 +62,6 @@ export const messages = Object.freeze({
                 /** The subtitle of the chat creation form */
                 SUB_TITLE:
                     "Upload the PDF files you want to make questions about.",
-                /** The label to be shown in the file selection field */
-                FILE_FIELD:
-                    "Select or drag and drop your files\n(only up to 10 PDF files are allowed for now)",
-                /** The label to be shown in the name field */
-                NAME_FIELD: "Chat Name",
-                /** Creates the message to show to the user when more than one file is selected */
-                createFilesSelectedFeedback: (numberFiles) =>
-                    `${numberFiles} files selected`,
             },
         },
         update: {
@@ -61,15 +70,10 @@ export const messages = Object.freeze({
                 TITLE: "Chat Information",
                 /** The subtitle of the chat creation form */
                 SUB_TITLE: "Manage how your chat is seen.",
-                /** The label to be shown in the name field */
-                NAME_FIELD: "Chat Name",
-                /** The helper text of the name field */
-                NAME_HELPER_TEXT:
-                    "This is how your chat is shown to you and other participants.",
                 /** Form buttons labels */
                 buttons: {
                     ACCEPT: "Save changes",
-                    CANCEL: "Reset changes"
+                    CANCEL: "Reset changes",
                 },
             },
         },

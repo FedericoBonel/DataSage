@@ -3,8 +3,8 @@ import { chatsServices } from "@/services/chats";
 import { PaginatedList } from "@/components/list";
 import { TextField } from "@/components/fields";
 import { messages, api } from "@/utils/constants";
-import ChatListItem from "../ChatListItem/ChatListItem";
-import ChatListTabs from "../ChatListTabs/ChatListTabs";
+import ChatListItem from "./components/ChatListItem/ChatListItem";
+import ChatListTabs from "./components/ChatListTabs/ChatListTabs";
 import propTypes from "./ChatList.proptypes";
 import { ListStyles } from "./ChatList.styles";
 

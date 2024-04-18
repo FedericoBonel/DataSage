@@ -1,20 +1,12 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import {
-    Card,
-    CardHeader,
-    CardContent,
-    CardActions,
-    Typography,
-    ListItem,
-    ListItemText,
-} from "@mui/material";
-import { Upload } from "@mui/icons-material";
+import { Card, CardHeader, CardContent, CardActions } from "@mui/material";
 import { chatsServices } from "@/services/chats";
 import { Form, FormAlert } from "@/components/forms";
-import { TextField, FileField } from "@/components/fields";
-import { messages, api, routes } from "@/utils/constants";
+import { messages, routes } from "@/utils/constants";
 import { chatsValidator } from "@/utils/validators";
+import { DocumentsChatForm } from "../components/DocumentsChatForm";
+import { MetadataChatForm } from "../components/MetadataChatForm";
 
 /** Initial state of the form */
 const initialFormState = {
@@ -52,21 +44,6 @@ const NewChatForm = () => {
         });
     };
 
-    // Feedback of file selection
-    const fileList = Boolean(newChat.documents.length) && (
-        <ListItem>
-            <ListItemText
-                secondary={
-                    newChat.documents.length < 2
-                        ? newChat.documents[0].name
-                        : messages.chats.create.form.createFilesSelectedFeedback(
-                              newChat.documents.length
-                          )
-                }
-            />
-        </ListItem>
-    );
-
     // If submition was unsuccessful show the corresponding errors
     const errors = createQuery.isError && (
         <FormAlert error={createQuery.error?.response?.data} />
@@ -87,32 +64,18 @@ const NewChatForm = () => {
                 subheader={messages.chats.create.form.SUB_TITLE}
             />
             {/* PDF selection field */}
-            <FileField
-                sx={{ height: 200 }}
-                acceptedTypes={api.validation.chats.ACCEPTED_FORMATS}
-                maxFiles={api.validation.chats.MAX_FILES_UPLOAD}
-                maxSize={api.validation.chats.MAX_FILE_SIZE}
-                onChange={onFileSelection}
-            >
-                <Upload fontSize="large" />
-                <Typography variant="subtitle2">
-                    {messages.chats.create.form.FILE_FIELD}
-                </Typography>
-            </FileField>
-            {fileList}
+            <DocumentsChatForm
+                documentsField={{
+                    onChange: onFileSelection,
+                    documents: newChat.documents,
+                }}
+            />
             <CardContent>
-                {/* Chat name field */}
-                <TextField
-                    value={newChat.name}
-                    variant="standard"
-                    label={messages.chats.create.form.NAME_FIELD}
-                    inputProps={{
-                        required: true,
-                        maxLength: api.validation.chats.MAX_NAME_LENGTH,
+                <MetadataChatForm
+                    nameField={{
+                        onChange: onChangeTextField,
+                        value: newChat.name,
                     }}
-                    fullWidth
-                    name="name"
-                    onChange={onChangeTextField}
                 />
             </CardContent>
             {errors}

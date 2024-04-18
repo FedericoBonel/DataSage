@@ -3,9 +3,9 @@ import { Card, CardHeader, CardContent, CardActions } from "@mui/material";
 import { chatsServices } from "@/services/chats";
 import { Form, FormAlert } from "@/components/forms";
 import { ShowLoader } from "@/components/informational";
-import { TextField } from "@/components/fields";
-import { messages, api } from "@/utils/constants";
+import { messages } from "@/utils/constants";
 import { chatsValidator } from "@/utils/validators";
+import { MetadataChatForm } from "../components/MetadataChatForm";
 import propTypes from "./UpdateChatForm.props";
 
 /** Initial state of the form */
@@ -71,20 +71,11 @@ const UpdateChatForm = ({ chatId }) => {
                     subheader={messages.chats.update.form.SUB_TITLE}
                 />
                 <CardContent>
-                    {/* Chat name field */}
-                    <TextField
-                        value={updatedChat.name}
-                        variant="standard"
-                        label={messages.chats.update.form.NAME_FIELD}
-                        inputProps={{
-                            required: true,
-                            maxLength: api.validation.chats.MAX_NAME_LENGTH,
+                    <MetadataChatForm
+                        nameField={{
+                            onChange: onChangeTextField,
+                            value: updatedChat.name,
                         }}
-                        fullWidth
-                        name="name"
-                        onChange={onChangeTextField}
-                        showHelperText
-                        helperText={messages.chats.update.form.NAME_HELPER_TEXT}
                     />
                 </CardContent>
                 {errors}
