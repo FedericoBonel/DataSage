@@ -1,7 +1,7 @@
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import { ErrorRouter, NotFoundRouter, ChatsRouter } from "@/routers";
-import { ErrorHandler } from "@/routers/utils";
 import { Public, Private } from "@/routers/layouts";
+import { ErrorHandler } from "@/routers/utils";
 import { routes } from "@/utils/constants";
 
 /** Application provider, it routes all client side requests to diferent pages. */

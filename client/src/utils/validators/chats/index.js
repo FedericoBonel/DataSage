@@ -24,4 +24,11 @@ export default Object.freeze({
             min: api.validation.chats.MIN_NAME_LENGTH,
             max: api.validation.chats.MAX_NAME_LENGTH,
         }),
+    /**
+     * Validates if the user has reached the maximum amount of uploaded documents allowed in a chat.
+     * @param {Array.<*>} documents Array of saved documents
+     * @returns True if it has reached the doc limit, false otherwise.
+     */
+    isUnderDocsLimit: (documents) =>
+        documents.length < api.validation.chats.MAX_FILE,
 });

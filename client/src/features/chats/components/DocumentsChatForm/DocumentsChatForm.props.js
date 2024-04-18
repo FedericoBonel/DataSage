@@ -7,5 +7,7 @@ export default {
         onChange: PropTypes.func.isRequired,
         /** List of selected documents */
         documents: PropTypes.arrayOf(PropTypes.instanceOf(File)).isRequired,
+        /** True if the field should be disabled. False otherwise */
+        disabled: PropTypes.bool,
     }),
 };

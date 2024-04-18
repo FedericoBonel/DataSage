@@ -93,9 +93,43 @@ const useUpdateByIdChat = () => {
     return queryState;
 };
 
+/** It makes a back end request to get the list of documents of a chat by id returns the state of the query. */
+const useChatDocsData = (chatId) => ({
+    // TODO Implement this
+    chatID: chatId,
+    isSuccess: true,
+    isLoading: false,
+    data: {
+        data: [
+            {
+                _id: "6618a91b05de85271bf01b2a",
+                createdAt: "2024-04-12T03:23:07.810Z",
+                name: "mydocs.pdf",
+                url: "https://hdr.undp.org/system/files/documents/global-report-document/hdr2023-24reporten.pdf",
+            },
+            {
+                _id: "6618a91b05de85271bf01b2b",
+                createdAt: "2024-04-12T03:23:07.810Z",
+                name: "docs.pdf",
+                url: "https://hdr.undp.org/system/files/documents/global-report-document/hdr2023-24reporten.pdf",
+            },
+        ],
+    },
+});
+
+/** It creates and provides the state to upload documents to chats. */
+const useAddDocToChatById = () => ({
+    // TODO Implement this
+    mutate: () => console.log("Hehe"),
+    isError: false,
+    error: {},
+});
+
 export default {
     useInfiniteChatData,
     useCreateChat,
     useUpdateByIdChat,
     useChatById,
+    useAddDocToChatById,
+    useChatDocsData,
 };

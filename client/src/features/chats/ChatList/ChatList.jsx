@@ -5,7 +5,7 @@ import { TextField } from "@/components/fields";
 import { messages, api } from "@/utils/constants";
 import ChatListItem from "./components/ChatListItem/ChatListItem";
 import ChatListTabs from "./components/ChatListTabs/ChatListTabs";
-import propTypes from "./ChatList.proptypes";
+import propTypes from "./ChatList.props";
 import { ListStyles } from "./ChatList.styles";
 
 /** Renders the list of chats for the logged in user. */

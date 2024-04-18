@@ -1,8 +1,13 @@
 import { useMatch } from "react-router-dom";
 import { Unstable_Grid2 as Grid, Typography } from "@mui/material";
-import { UpdateChatForm } from "@/features/chats";
+import {
+    UpdateChatForm,
+    AddDocumentsForm,
+    DocumentList,
+} from "@/features/chats";
 import { messages, routes } from "@/utils/constants";
 import { UpdateChatFormContainerStyles } from "./ChatSettings.styles";
+import ChatFileSection from "./components/ChatFilesSection/ChatFileSection";
 
 /** Component that renders the settings page for a chat. */
 const ChatSettings = () => {
@@ -17,8 +22,16 @@ const ChatSettings = () => {
                     {messages.chats.settings.PAGE_TITLE}
                 </Typography>
             </Grid>
+            {/* Update chat information */}
             <Grid sm={12}>
                 <UpdateChatForm chatId={chatId} />
+            </Grid>
+            {/* Update and manage uploaded documents */}
+            <Grid sm={12}>
+                <ChatFileSection>
+                    <AddDocumentsForm chatId={chatId} />
+                    <DocumentList chatId={chatId} />
+                </ChatFileSection>
             </Grid>
         </Grid>
     );

@@ -32,6 +32,7 @@ const DocumentsChatForm = ({ documentsField }) => {
                 maxFiles={api.validation.chats.MAX_FILES_UPLOAD}
                 maxSize={api.validation.chats.MAX_FILE_SIZE}
                 onChange={documentsField.onChange}
+                disabled={documentsField.disabled}
             >
                 <Upload fontSize="large" />
                 <Typography variant="subtitle2">
