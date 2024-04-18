@@ -1,5 +1,6 @@
-import { NewChat, ChatSettings } from "@/pages/chats/components";
-import { ChatListLayout, NavbarLayout } from "@/pages/layouts";
+import { NavbarLayout } from "@/pages/layouts";
+import { NewChat, ChatSettings } from "@/pages/chats";
+import { ChatListLayout } from "@/pages/chats/layouts";
 import { routes } from "@/utils/constants";
 
 /** Router that routes all requests associated with chats */
