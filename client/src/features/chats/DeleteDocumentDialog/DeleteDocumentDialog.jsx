@@ -15,11 +15,8 @@ const DeleteDocumentDialog = ({ chatId, documentId, isOpen, onClose }) => {
     };
 
     useEffect(() => {
-        if (
-            deleteDocQuery.isSuccess &&
-            deleteDocQuery.data.data?._id !== documentId
-        ) {
-            onClose();
+        if (deleteDocQuery.isSuccess) {
+            if (deleteDocQuery.data.data?._id === documentId) onClose();
             deleteDocQuery.reset();
         }
     }, [deleteDocQuery, documentId, onClose]);
