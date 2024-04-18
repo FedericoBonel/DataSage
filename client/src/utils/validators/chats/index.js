@@ -25,6 +25,15 @@ export default Object.freeze({
             max: api.validation.chats.MAX_NAME_LENGTH,
         }),
     /**
+     * Validates contents of a document upload to a chat
+     * @returns True if valid, false otherwise
+     */
+    uploadDocs: ({ documents }) =>
+        isInt(String(documents.length), {
+            min: api.validation.chats.MIN_FILES_UPLOAD,
+            max: api.validation.chats.MAX_FILES_UPLOAD,
+        }),
+    /**
      * Validates if the user has reached the maximum amount of uploaded documents allowed in a chat.
      * @param {Array.<*>} documents Array of saved documents
      * @returns True if it has reached the doc limit, false otherwise.

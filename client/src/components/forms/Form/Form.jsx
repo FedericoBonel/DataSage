@@ -1,7 +1,8 @@
 import { Box } from "@mui/material";
 import { Button } from "@/components/actions";
-import propTypes from "./Form.props";
 import { messages } from "@/utils/constants";
+import { ActionButtonWrapperStyles } from "./Form.styles";
+import propTypes from "./Form.props";
 
 /**
  * Component of a form. It renders the children and the accept and cancel buttons and handles their disable state
@@ -23,6 +24,9 @@ const Form = ({
     ...componentProps
 }) => {
     const ComponentToRender = Component || Box;
+    const actionButtonsStyles = buttonsWrapper
+        ? undefined
+        : ActionButtonWrapperStyles;
 
     return (
         <ComponentToRender
@@ -31,7 +35,7 @@ const Form = ({
             onSubmit={onSubmit}
         >
             {children}
-            <Box component={buttonsWrapper}>
+            <Box sx={actionButtonsStyles} component={buttonsWrapper}>
                 <Button
                     type="submit"
                     isLoading={isSubmitting}

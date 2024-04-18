@@ -8,6 +8,7 @@ import {
 } from "@mui/material";
 import { InsertDriveFile, Delete, OpenInNew } from "@mui/icons-material";
 import toLocaleString from "@/utils/dates/toLocaleString";
+import { ListItemStyles } from "./DocumentListItem.styles";
 import propTypes from "./DocumentListItem.props";
 
 /** Renders a chat document in a list of documents */
@@ -28,9 +29,9 @@ const DocumentListItem = ({ documentItem }) => {
             </IconButton>
         </>
     );
-    
+
     return (
-        <ListItem secondaryAction={actionButtons} divider>
+        <ListItem sx={ListItemStyles} secondaryAction={actionButtons} divider>
             <ListItemIcon>
                 <InsertDriveFile />
             </ListItemIcon>

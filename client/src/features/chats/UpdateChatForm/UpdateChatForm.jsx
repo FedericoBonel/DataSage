@@ -33,12 +33,14 @@ const UpdateChatForm = ({ chatId }) => {
             [e.target.name]: e.target.value,
         }));
 
-    const resetForm = () =>
+    const resetForm = () => {
+        updateQuery.reset();
         setUpdatedChat(
             chatQuery.isSuccess
                 ? { name: chatQuery.data?.data.name }
                 : initialFormState
         );
+    };
 
     const onSubmit = (e) => {
         e.preventDefault();

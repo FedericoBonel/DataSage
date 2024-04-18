@@ -14,16 +14,18 @@ const DocumentList = ({ chatId }) => {
         <DocumentListItem key={documentItem._id} documentItem={documentItem} />
     ));
 
+    const numberFilesUploaded = docsQuery.isSuccess && (
+        <Typography variant="overline">
+            {messages.documents.list.createFilesUploadedMessage(
+                docsQuery.data.data?.length
+            )}
+        </Typography>
+    );
+
     return (
         <ShowLoader isLoading={docsQuery.isLoading}>
-            <List sx={ListStyles}>
-                <Typography variant="overline">
-                    {messages.documents.list.createFilesUploadedMessage(
-                        docsQuery.data.data?.length
-                    )}
-                </Typography>
-                {items}
-            </List>
+            {numberFilesUploaded}
+            <List sx={ListStyles}>{items}</List>
         </ShowLoader>
     );
 };

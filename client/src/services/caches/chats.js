@@ -38,6 +38,12 @@ const chatsCache = Object.freeze({
      * @returns {Array<string>} The cache key for a specific chat by id.
      */
     detail: (chatId) => [...chatsCache.details(), chatId],
+    /**
+     * Returns the cache key for a chat documents list.
+     * @param {string} chatId The id of the chat from which the documents are.
+     * @returns {Array<string>} The key for all chat lists.
+     */
+    documents: (chatId) => [...chatsCache.detail(chatId), "documents"],
 });
 
 export default chatsCache;

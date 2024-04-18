@@ -53,6 +53,19 @@ const fileUniqueNames = (fieldName) => async (req, res, next) => {
 };
 
 /**
+ * Encodes the filenames. This is a way of dealing with an issue that multer has, by default it uses latin1 as the
+ * name encoder. So we need to change it to UTF-8
+ */
+const encodeFileName = async (req, res, next) => {
+    const files = req.files;
+    files.forEach((file) => {
+        /* eslint no-param-reassign: ["error", { "props": true, "ignorePropertyModificationsFor": ["file"] }] */
+        file.originalname = Buffer.from(file.originalname, "latin1").toString("utf8");
+    });
+    next();
+};
+
+/**
  * Filters out files that should not be accepted
  * @param {Object} validExtensions An object containing the allowed file extensions as keys and their corresponding values as true.
  */
@@ -95,6 +108,7 @@ const documentUploadValidator = (
     return [
         multerInstance.array(fieldName, options.limits.filesPerField),
         filesExists(fieldName),
+        encodeFileName,
         fileUniqueNames(fieldName),
     ];
 };

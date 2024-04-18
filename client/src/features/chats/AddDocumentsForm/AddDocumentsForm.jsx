@@ -21,7 +21,10 @@ const AddDocumentsForm = ({ chatId }) => {
 
     const addDocQuery = chatsServices.useAddDocToChatById();
 
-    const resetForm = () => setDocsToUpload(initialFormState);
+    const resetForm = () => {
+        setDocsToUpload(initialFormState);
+        addDocQuery.reset();
+    };
 
     // Updates state when files are selected
     const onFileSelection = (documents) => {
@@ -31,7 +34,10 @@ const AddDocumentsForm = ({ chatId }) => {
     const onSubmit = (e) => {
         e.preventDefault();
 
-        addDocQuery.mutate({ chatId, documents: docsToUpload });
+        addDocQuery.mutate(
+            { chatId, documents: docsToUpload },
+            { onSuccess: resetForm }
+        );
     };
 
     // If submition was unsuccessful show the corresponding errors
@@ -50,7 +56,9 @@ const AddDocumentsForm = ({ chatId }) => {
         <ShowLoader isLoading={docsListQuery.isLoading}>
             <Form
                 onSubmit={onSubmit}
-                canSubmit={canUploadMore}
+                canSubmit={
+                    canUploadMore && chatsValidator.uploadDocs(docsToUpload)
+                }
                 onCancel={resetForm}
                 isSubmitting={addDocQuery.isPending}
                 buttonsLabels={{

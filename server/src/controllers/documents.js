@@ -28,7 +28,7 @@ const addToChatById = async (req, res) => {
 
     const addedDocuments = await docsServices.addToChatById(documents, chatId);
 
-    return res.status(StatusCodes.CREATED).json(addedDocuments);
+    return res.status(StatusCodes.CREATED).json(new SuccessPayload(addedDocuments));
 };
 
 export default { getByChatId, deleteById, addToChatById };

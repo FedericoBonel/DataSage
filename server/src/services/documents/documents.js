@@ -18,6 +18,7 @@ const getByChatId = async (chatId) => {
     if (!foundChat) {
         throw new NotFoundError(messages.errors.ROUTE_NOT_FOUND);
     }
+    foundChat.documents.sort((docA, docB) => docB.createdAt.getTime() - docA.createdAt.getTime());
 
     // Generate urls for each document
     const signedUrls = await chatsRepository.docsToUrls(foundChat.documents);
@@ -54,7 +55,10 @@ const deleteById = async (chatId, documentId, userId) => {
 };
 
 /**
- *
+ * Adds a document to a chat by id
+ * @param {Array.<File>} documents Array with all the documents to be added to the chat
+ * @param {string} chatId Id of the chat to which add the documents
+ * @returns The array of uploaded documents as they should be exposed in the web
  */
 const addToChatById = async (documents, chatId) => {
     // Check if the chat has reached its limit of uploaded documents after uploading documents

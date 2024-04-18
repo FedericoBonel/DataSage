@@ -33,7 +33,10 @@ const NewChatForm = () => {
         setNewChat((prev) => ({ ...prev, documents }));
     };
 
-    const resetForm = () => setNewChat(initialFormState);
+    const resetForm = () => {
+        createQuery.reset();
+        setNewChat(initialFormState);
+    };
 
     const onSubmit = (e) => {
         e.preventDefault();
