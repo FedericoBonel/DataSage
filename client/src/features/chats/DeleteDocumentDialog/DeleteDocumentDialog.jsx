@@ -1,20 +1,28 @@
 import { DialogContentText } from "@mui/material";
+import { chatsServices } from "@/services/chats";
 import { DecisionDialog } from "@/components/actions";
 import { messages } from "@/utils/constants";
 import propTypes from "./DeleteDocumentDialog.props";
+import { useEffect } from "react";
 
 /** Dialog that prompts the user to delete a document from a chat or not. */
 const DeleteDocumentDialog = ({ chatId, documentId, isOpen, onClose }) => {
-    const deleteDocQuery = {
-        isPending: false,
-        isSuccess: false,
-        mutate: () => console.log(documentId),
-    };
+    const deleteDocQuery = chatsServices.useDeleteDocFromChatById();
 
     const onSubmit = () => {
-        deleteDocQuery.mutate({ chatId, documentId }, { onSuccess: onClose });
+        deleteDocQuery.mutate({ chatId, documentId });
         onClose();
     };
+
+    useEffect(() => {
+        if (
+            deleteDocQuery.isSuccess &&
+            deleteDocQuery.data.data?._id !== documentId
+        ) {
+            onClose();
+            deleteDocQuery.reset();
+        }
+    }, [deleteDocQuery, documentId, onClose]);
 
     return (
         <DecisionDialog

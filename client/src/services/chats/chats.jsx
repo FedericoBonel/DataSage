@@ -112,12 +112,31 @@ const useAddDocToChatById = () => {
             chatsAPI.addDocsToChat(documents, chatId),
         onSuccess: (response, { chatId }) => {
             // Update the documents cache with the received data
-            queryClient.setQueryData(
-                chatsCache.documents(chatId),
-                (oldData) => ({
-                    ...oldData,
-                    data: [...response.data, ...oldData.data],
-                })
+            queryClient.setQueryData(chatsCache.documents(chatId), (oldData) =>
+                utilsCache.mockSuccessfulRes([
+                    ...response.data,
+                    ...oldData.data,
+                ])
+            );
+        },
+        throwOnError: (error) => error?.response?.status !== 400,
+    });
+
+    return queryState;
+};
+
+/** It creates and provides the state to upload documents to chats. */
+const useDeleteDocFromChatById = () => {
+    const queryClient = useQueryClient();
+    const queryState = useMutation({
+        mutationFn: ({ chatId, documentId }) =>
+            chatsAPI.deleteDocFromChat(documentId, chatId),
+        onSuccess: (response, { chatId, documentId }) => {
+            // Remove the document from cache
+            queryClient.setQueryData(chatsCache.documents(chatId), (oldData) =>
+                utilsCache.mockSuccessfulRes(
+                    oldData.data.filter((doc) => doc._id !== documentId)
+                )
             );
         },
         throwOnError: (error) => error?.response?.status !== 400,
@@ -133,4 +152,5 @@ export default {
     useChatById,
     useAddDocToChatById,
     useChatDocsData,
+    useDeleteDocFromChatById,
 };

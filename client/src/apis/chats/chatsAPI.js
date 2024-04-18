@@ -101,6 +101,19 @@ const addDocsToChat = async (newDocs, chatId) => {
     });
 };
 
+/**
+ * Adds a list of documents to a chat by id
+ * @param {string} documentId Id of the document to remove from the chat
+ * @param {string} chatId Id of the chat to remove the documents from
+ * @returns The server response payload with the deleted document
+ */
+const deleteDocFromChat = async (documentId, chatId) => {
+    return makeRequest({
+        url: `${api.urls.chats.GET_ALL}/${chatId}/${api.urls.chats.DOCS_RESOURCE}/${documentId}`,
+        method: "delete",
+    });
+};
+
 export default {
     getChats,
     createChat,
@@ -108,4 +121,5 @@ export default {
     updateChatById,
     getDocsByChat,
     addDocsToChat,
+    deleteDocFromChat,
 };
