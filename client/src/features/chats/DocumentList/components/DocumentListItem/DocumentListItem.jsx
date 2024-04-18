@@ -12,7 +12,7 @@ import { ListItemStyles } from "./DocumentListItem.styles";
 import propTypes from "./DocumentListItem.props";
 
 /** Renders a chat document in a list of documents */
-const DocumentListItem = ({ documentItem }) => {
+const DocumentListItem = ({ documentItem, onClickDelete }) => {
     const actionButtons = (
         <>
             <IconButton
@@ -24,7 +24,10 @@ const DocumentListItem = ({ documentItem }) => {
             >
                 <OpenInNew />
             </IconButton>
-            <IconButton color="error">
+            <IconButton
+                color="error"
+                onClick={() => onClickDelete(documentItem._id)}
+            >
                 <Delete />
             </IconButton>
         </>
@@ -50,6 +53,7 @@ const memoizedComponent = memo(
     (prevProps, newProps) =>
         prevProps.documentItem._id === newProps.documentItem._id &&
         prevProps.documentItem.name === newProps.documentItem.name &&
-        prevProps.documentItem.url === newProps.documentItem.url
+        prevProps.documentItem.url === newProps.documentItem.url &&
+        prevProps.onClickDelete === newProps.onClickDelete
 );
 export default memoizedComponent;

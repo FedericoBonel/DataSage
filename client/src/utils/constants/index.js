@@ -26,6 +26,12 @@ export const messages = Object.freeze({
             SUBMIT: "Submit",
             CANCEL: "Cancel",
         },
+        decision: {
+            REMOVE: "Remove",
+            DELETE: "Delete",
+            CANCEL: "Cancel",
+            ACCEPT: "Accept",
+        },
     },
     chats: {
         filtering: {
@@ -110,6 +116,12 @@ export const messages = Object.freeze({
                 },
             },
         },
+        delete: {
+            form: {
+                TITLE: "Deleting File",
+                QUESTION: "You are deleting a file. The content of the file will stop being known by the chat and you wont be able to ask questions about it any longer. All its data will be removed from the system.\nDo you wish to delete this file?"
+            }
+        }
     },
 });
 
