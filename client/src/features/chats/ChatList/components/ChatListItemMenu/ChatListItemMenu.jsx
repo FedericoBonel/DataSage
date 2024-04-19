@@ -23,8 +23,8 @@ const ChatListItemMenu = ({ chatId }) => {
             >
                 <ListItem component="div">
                     <ListItemText
-                        primary={"Settings"}
-                        secondary={"Change chat name, files or delete it"}
+                        primary={messages.chats.list.CHAT_SETTINGS_LABEL}
+                        secondary={messages.chats.list.CHAT_SETTINGS_DESC}
                     />
                 </ListItem>
             </MenuItem>
@@ -35,8 +35,12 @@ const ChatListItemMenu = ({ chatId }) => {
             >
                 <ListItem component="div">
                     <ListItemText
-                        primary={"Manage Participants"}
-                        secondary={"Update who can access your chat"}
+                        primary={
+                            messages.chats.list.PARTICIPANTS_SETTINGS_LABEL
+                        }
+                        secondary={
+                            messages.chats.list.PARTICIPANTS_SETTINGS_DESC
+                        }
                     />
                 </ListItem>
             </MenuItem>

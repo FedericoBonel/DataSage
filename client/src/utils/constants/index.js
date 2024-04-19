@@ -99,6 +99,10 @@ export const messages = Object.freeze({
         },
         list: {
             SETTINGS_LABEL: "Chat settings",
+            CHAT_SETTINGS_LABEL: "Settings",
+            CHAT_SETTINGS_DESC: "Change chat name, files or delete the chat",
+            PARTICIPANTS_SETTINGS_LABEL: "Manage Participants",
+            PARTICIPANTS_SETTINGS_DESC: "Update who can access your chat",
         },
     },
     documents: {
