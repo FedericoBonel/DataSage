@@ -11,6 +11,8 @@ const defaultTheme = "dark";
 
 const baseNeutralBg = "#363636";
 const neutralBgMain = alpha(baseNeutralBg, 0.7);
+const baseChatBg = "#1A0D26";
+const baseChatBgMain = alpha(baseChatBg, 0.7);
 
 const getDesignTokens = (mode) => ({
     palette: {
@@ -24,6 +26,15 @@ const getDesignTokens = (mode) => ({
                       dark: alpha(neutralBgMain, 1),
                       contrastText:
                           getContrastRatio(neutralBgMain, "#fff") > 4.5
+                              ? "#fff"
+                              : "#111",
+                  },
+                  chatBg: {
+                      main: baseChatBgMain,
+                      light: alpha(baseChatBgMain, 0.5),
+                      dark: alpha(baseChatBgMain, 1),
+                      contrastText:
+                          getContrastRatio(baseChatBgMain, "#fff") > 4.5
                               ? "#fff"
                               : "#111",
                   },

@@ -4,3 +4,5 @@ export { default as UpdateChatForm } from "./UpdateChatForm/UpdateChatForm";
 export { default as AddDocumentsForm } from "./AddDocumentsForm/AddDocumentsForm";
 export { default as DocumentList } from "./DocumentList/DocumentList";
 export { default as DeleteDocumentDialog } from "./DeleteDocumentDialog/DeleteDocumentDialog";
+export { default as ChatDocumentViewer } from "./ChatDocumentViewer/ChatDocumentViewer";
+export { default as ChatConversation } from "./ChatConversation/ChatConversation";

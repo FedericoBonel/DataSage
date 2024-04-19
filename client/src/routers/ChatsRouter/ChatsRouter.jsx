@@ -1,5 +1,5 @@
 import { NavbarLayout } from "@/pages/layouts";
-import { NewChat, ChatSettings } from "@/pages/chats";
+import { NewChat, ChatSettings, ChatConversation } from "@/pages/chats";
 import { ChatListLayout } from "@/pages/chats/layouts";
 import { routes } from "@/utils/constants";
 
@@ -15,6 +15,10 @@ const ChatsRouter = {
                 {
                     index: true,
                     element: <NewChat />,
+                },
+                {
+                    path: ":chatId",
+                    element: <ChatConversation />,
                 },
                 {
                     path: `:chatId/${routes.SETTINGS}`,

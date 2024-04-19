@@ -9,14 +9,14 @@ const queryClient = new QueryClient();
 
 /**
  * Enables and provides the react query client that handles server state mirroing in the client.
- * 
+ *
  * Should be provided at the root level.
  */
 const QueryClientProvider = ({ children }) => {
     return (
         <TanQueryClientProvider client={queryClient}>
             {children}
-            <ReactQueryDevtools />
+            <ReactQueryDevtools buttonPosition="top-left" />
         </TanQueryClientProvider>
     );
 };

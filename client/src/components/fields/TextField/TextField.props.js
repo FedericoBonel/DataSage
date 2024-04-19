@@ -3,6 +3,10 @@ import PropTypes from "prop-types";
 export const propTypes = {
     /** The value of the input. If this is passed it will be used to validate it with the validator function and show the helper text if needed. */
     value: PropTypes.string,
+    /** Value of the field label */
+    label: PropTypes.string,
+    /** If true hides the label visually*/
+    hiddenLabel: PropTypes.bool,
     /** The text to display when the value is invalid. */
     helperText: PropTypes.string,
     /** The function to use for validating the value. Receives only one parameter: the value passed in the "value" prop. It should return a boolean value. */
@@ -25,4 +29,6 @@ export const propTypes = {
     onChange: PropTypes.func,
     /** If true the helper text will always be shown. This is useful if your design requires you to provide information to your user always. */
     showHelperText: PropTypes.bool,
+    /** Element to be shown at the end of the icon. If provided with the prop type="search" the icon will take presendence. */
+    endElement: PropTypes.node,
 };

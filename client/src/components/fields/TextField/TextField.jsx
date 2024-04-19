@@ -17,10 +17,12 @@ const TextField = ({
     validator = () => true,
     value,
     label,
+    hiddenLabel,
     type,
     isDebounced = false,
     onChange,
     showHelperText,
+    endElement,
     ...props
 }) => {
     // Handle blur event for detecting when field was touched
@@ -33,6 +35,12 @@ const TextField = ({
         isDebounced ? onChange : undefined
     );
 
+    // End icon adornment
+    const element = endElement ? endElement : type === "search" && <SearchIcon />;
+    const endAdornment = element && (
+        <InputAdornment position="end">{element}</InputAdornment>
+    );
+
     const isValid = validator(value);
     return (
         <TextFieldMUI
@@ -42,20 +50,14 @@ const TextField = ({
             helperText={
                 (touched && !isValid) || showHelperText ? helperText : ""
             }
-            label={label ? label : undefined}
+            hiddenLabel={hiddenLabel}
+            aria-label={hiddenLabel ? label : undefined}
+            label={label && !hiddenLabel ? label : undefined}
             id={label ? label : undefined}
             type={type}
-            InputProps={
-                type === "search"
-                    ? {
-                          endAdornment: (
-                              <InputAdornment position="end">
-                                  <SearchIcon />
-                              </InputAdornment>
-                          ),
-                      }
-                    : {}
-            }
+            InputProps={{
+                endAdornment,
+            }}
             onChange={
                 isDebounced
                     ? (e) => setDebouncedState(e.target.value)

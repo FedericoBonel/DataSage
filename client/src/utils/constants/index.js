@@ -97,6 +97,24 @@ export const messages = Object.freeze({
                     "Manage the PDF files you can make questions about. Any files listed here can be accessed by the chat to generate responses. If you remove files, the content of those will stop being known by the chat, and if you add files, new content will be known by the chat.",
             },
         },
+        messages: {
+            /** The "usernames" of each chat actor (sender or receiver) to show in chats */
+            actors: {
+                /** The user username */
+                USER: "You",
+                /** The AI username */
+                AI: "DataSage",
+            },
+            /** The message to be shown when the AI is generating a response */
+            WRITING_RESPONSE: "DataSage is writing...",
+            /** The chat message conversation input related variables */
+            input: {
+                /** Label of the input field */
+                LABEL: "Chat Message Input",
+                /** Placeholder of the input field */
+                PLACEHOLDER: "Message to be sent to chat...",
+            },
+        },
         list: {
             SETTINGS_LABEL: "Chat settings",
             CHAT_SETTINGS_LABEL: "Settings",

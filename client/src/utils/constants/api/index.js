@@ -32,5 +32,10 @@ export default Object.freeze({
             /** Maximum length for chat names. */
             MAX_NAME_LENGTH: 32,
         },
+        /** Api messages management endpoints related constants */
+        messages: {
+            /** Values of posible senders or receivers of messages ["AI", "Human"] */
+            actor: ["AI", "Human"],
+        },
     },
 });
