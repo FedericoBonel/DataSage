@@ -37,7 +37,7 @@ const ToastMessage = ({
             anchorOrigin={
                 isImportant
                     ? { vertical: "top", horizontal: "center" }
-                    : undefined
+                    : { vertical: "bottom", horizontal: "right" }
             }
             message={severity === "error" ? error?.errorMsg : message}
             {...props}

@@ -11,6 +11,7 @@ const FileField = ({
     maxFiles,
     maxSize,
     onChange,
+    onSelectedInvalid,
     disabled,
     sx,
 }) => {
@@ -20,6 +21,7 @@ const FileField = ({
         maxFiles,
         maxSize,
         onDropAccepted: onChange,
+        onDropRejected: onSelectedInvalid,
         disabled,
     });
 

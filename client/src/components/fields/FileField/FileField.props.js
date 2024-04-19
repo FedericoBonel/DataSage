@@ -11,6 +11,8 @@ export default {
     maxSize: PropTypes.number,
     /** The function to be executed when a file or files are selected. It receives the file or files if multiple is enabled. */
     onChange: PropTypes.func.isRequired,
+    /** Callback to be executed when invalid files have been selected. It receives the rejected files. */
+    onSelectedInvalid: PropTypes.func,
     /** True if the field should be disabled */
     disabled: PropTypes.bool,
     /** The styles to be provided to the button element where the input is rendered */

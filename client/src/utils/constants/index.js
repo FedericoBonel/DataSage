@@ -54,7 +54,10 @@ export const messages = Object.freeze({
             documents: {
                 /** The label to be shown in the file selection field */
                 FILE_FIELD:
-                    "Select or drag and drop your files\n(only up to 10 PDF files are allowed for now)",
+                    "Select or drag and drop your files\n(only up to 10 PDF files that weight less than 10MB are allowed for now)",
+                /** The message to be shown when an invalid file has been selected. */
+                FILE_FIELD_INVALID_ALERT:
+                    "Invalid files selected. Only valid ones will be uploaded.",
                 /** Creates the message to show to the user when more than one file is selected */
                 createFilesSelectedFeedback: (numberFiles) =>
                     `${numberFiles} files selected`,
@@ -119,9 +122,10 @@ export const messages = Object.freeze({
         delete: {
             form: {
                 TITLE: "Deleting File",
-                QUESTION: "You are deleting a file. The content of the file will stop being known by the chat and you wont be able to ask questions about it any longer. All its data will be removed from the system.\nDo you wish to delete this file?"
-            }
-        }
+                QUESTION:
+                    "You are deleting a file. The content of the file will stop being known by the chat and you wont be able to ask questions about it any longer. All its data will be removed from the system.\nDo you wish to delete this file?",
+            },
+        },
     },
 });
 
