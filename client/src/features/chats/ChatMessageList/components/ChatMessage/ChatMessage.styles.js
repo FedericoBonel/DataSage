@@ -17,4 +17,9 @@ export const ChatMessageSenderStyles = {
     alignItems: "center",
 };
 
+export const ChatMessageTextStyles = {
+    wordBreak: "break-word",
+    overflowWrap: "break-word",
+}
+
 export const ChatMessageSourcesStyles = { display: "flex", gap: 1 };

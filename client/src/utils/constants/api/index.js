@@ -36,6 +36,8 @@ export default Object.freeze({
         messages: {
             /** Values of posible senders or receivers of messages ["AI", "Human"] */
             actor: ["AI", "Human"],
+            /** Maximum length of a user message */
+            MESSAGE_MAX_LENGTH: 4096,
         },
     },
 });

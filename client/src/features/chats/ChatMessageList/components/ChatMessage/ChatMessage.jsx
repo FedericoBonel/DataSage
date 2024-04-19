@@ -14,6 +14,7 @@ import {
     ChatMessageItemTopStyles,
     ChatMessageSenderStyles,
     ChatMessageSourcesStyles,
+    ChatMessageTextStyles,
 } from "./ChatMessage.styles";
 import propTypes from "./ChatMessage.props.js";
 
@@ -53,7 +54,9 @@ const ChatMessage = ({ chatMessage }) => {
         <ListItem sx={ChatMessageItemStyles} component="div" divider>
             {messageHeader}
             {/* Content */}
-            <Typography>{chatMessage.content}</Typography>
+            <Typography sx={ChatMessageTextStyles}>
+                {chatMessage.content}
+            </Typography>
             {/* Sources */}
             {sources}
         </ListItem>

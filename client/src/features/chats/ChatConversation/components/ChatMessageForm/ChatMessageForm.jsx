@@ -2,7 +2,7 @@ import { useState } from "react";
 import { IconButton } from "@mui/material";
 import { Send } from "@mui/icons-material";
 import { TextField } from "@/components/fields";
-import { messages } from "@/utils/constants";
+import { messages, api } from "@/utils/constants";
 import propTypes from "./ChatMessageForm.props";
 
 /** Renders the form for sending chat messages and receives the callback to be called when user decides to send the message. */
@@ -20,7 +20,7 @@ const ChatMessageForm = ({ onSend, disabled }) => {
             return;
         } else if (e.key === "Enter") {
             e.preventDefault();
-            onPressSend();
+            if (message.length > 0) onPressSend();
         }
     };
 
@@ -39,13 +39,19 @@ const ChatMessageForm = ({ onSend, disabled }) => {
             minRows={1}
             maxRows={5}
             endElement={
-                <IconButton onClick={onPressSend} disabled={disabled}>
+                <IconButton
+                    onClick={onPressSend}
+                    disabled={disabled || message.length < 1}
+                >
                     <Send />
                 </IconButton>
             }
             onKeyDown={onKeyDown}
             onChange={onChange}
             disabled={disabled}
+            inputProps={{
+                maxLength: api.validation.messages.MESSAGE_MAX_LENGTH,
+            }}
         />
     );
 };
