@@ -38,7 +38,7 @@ const ChatMessage = ({ chatMessage }) => {
 
     const sources = (
         <Box sx={ChatMessageSourcesStyles}>
-            {chatMessage?.sources.map((source, index) => (
+            {chatMessage?.sources?.map((source, index) => (
                 <MUILink key={source._id} component={Link}>
                     {`[${index + 1}]`}
                 </MUILink>

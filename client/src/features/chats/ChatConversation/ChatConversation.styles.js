@@ -7,9 +7,3 @@ export const ChatConversationWrapperStyles = {
     alignItems: "stretch"
 }
 
-export const ChatConversationMessageListStyles = {
-    display: "flex",
-    flexDirection: "column-reverse",
-    overflowY: "auto",
-}
-

@@ -2,6 +2,7 @@ import config from "@/config";
 
 const CHATS_RESOURCE = "chats";
 const DOCS_RESOURCE = "documents";
+const MSG_RESOURCE = "messages";
 
 export default Object.freeze({
     /** Chats resource name */
@@ -12,4 +13,6 @@ export default Object.freeze({
     CREATE: `${config.api.BASE_URL}/${CHATS_RESOURCE}`,
     /** Documents resource name */
     DOCS_RESOURCE,
+    /** Messages resource name */
+    MSG_RESOURCE,
 });

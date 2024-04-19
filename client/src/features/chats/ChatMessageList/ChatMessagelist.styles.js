@@ -1,13 +1,14 @@
-export const ChatMessageListWrapperStyles = {
+export const ChatMessageListStyles = {
     display: "flex",
     flexDirection: "column-reverse",
+    overflowY: "auto",
 };
 
 export const WritingResponseWrapperStyles = {
     display: "flex",
     flexDirection: "column",
-}
+};
 
 export const WritingResponseTextStyles = {
-    padding: 2
-}
+    padding: 2,
+};

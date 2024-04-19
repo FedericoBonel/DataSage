@@ -1,5 +1,7 @@
 // Name of the main chats cache
 const CHATS_CACHE = "chats";
+const DOCUMENTS_CACHE = "documents";
+const MESSAGES_CACHE = "messages";
 
 /**
  * Factory to create chats cache keys.
@@ -41,9 +43,16 @@ const chatsCache = Object.freeze({
     /**
      * Returns the cache key for a chat documents list.
      * @param {string} chatId The id of the chat from which the documents are.
-     * @returns {Array<string>} The key for all chat lists.
+     * @returns {Array<string>} The key for the chat documents lists.
      */
-    documents: (chatId) => [...chatsCache.detail(chatId), "documents"],
+    documents: (chatId) => [...chatsCache.detail(chatId), DOCUMENTS_CACHE],
+    /**
+     * Returns the cache key for a chat messages list (chat history).
+     * This one depends on documents because some sources could change if the documents of a chat changes.
+     * @param {string} chatId The id of the chat where the messages were sent and received.
+     * @returns {Array<string>} The key for the chat messages list.
+     */
+    messages: (chatId) => [...chatsCache.documents(chatId), MESSAGES_CACHE],
 });
 
 export default chatsCache;

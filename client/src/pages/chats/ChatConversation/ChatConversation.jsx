@@ -19,10 +19,10 @@ const ChatConversation = () => {
     return (
         <Grid container sx={ConversationPageWrapperStyles}>
             <Grid xs={0} md={6}>
-                <ChatDocumentViewer />
+                <ChatDocumentViewer key={chatId} />
             </Grid>
             <Grid xs={12} md={6} sx={ChatConversationSectionStyles}>
-                <ChatConversationFeature chatId={chatId} />
+                <ChatConversationFeature chatId={chatId} key={chatId} />
             </Grid>
         </Grid>
     );

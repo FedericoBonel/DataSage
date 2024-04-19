@@ -61,6 +61,7 @@ const getChatById = async (chatId) => {
  * Updates a chat by id.
  * @param {object} updatedChat The updated chat to be saved
  * @param {string} updatedChat.name Name of the chat
+ * @param {string} chatId Id of the chat to update
  * @returns The promise that resolves to the updated chat
  */
 const updateChatById = async (updatedChat, chatId) => {
@@ -114,6 +115,41 @@ const deleteDocFromChat = async (documentId, chatId) => {
     });
 };
 
+/**
+ * Gets a list of chat messages from a chat by id from the back end
+ * @param {object} pagination Pagination parameters
+ * @param {number} pagination.page Page number to get results from
+ * @param {number} pagination.limit Number of results per page
+ * @returns The server response payload with the list of chat messages (chat history)
+ */
+const getMessagesByChat = async (chatId, pagination) => {
+    const params = {
+        page: pagination.page,
+        limit: pagination.limit,
+    };
+
+    return await makeRequest({
+        url: `${api.urls.chats.GET_ALL}/${chatId}/${api.urls.chats.MSG_RESOURCE}`,
+        method: "get",
+        params,
+    });
+};
+
+/**
+ * Sends a message to a chat by id.
+ * @param {object} message The object wrapping the new message to be sent.
+ * @param {string} message.content Content of the message being sent
+ * @param {string} chatId Id of the chat to which to send the message
+ * @returns The promise that resolves to the AI response to the sent message.
+ */
+const sendMessageToChat = async (message, chatId) => {
+    return makeRequest({
+        url: `${api.urls.chats.GET_ALL}/${chatId}/${api.urls.chats.MSG_RESOURCE}`,
+        method: "post",
+        data: message,
+    });
+};
+
 export default {
     getChats,
     createChat,
@@ -122,4 +158,6 @@ export default {
     getDocsByChat,
     addDocsToChat,
     deleteDocFromChat,
+    getMessagesByChat,
+    sendMessageToChat,
 };

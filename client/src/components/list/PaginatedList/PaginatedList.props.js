@@ -11,4 +11,6 @@ export const propTypes = {
     hasNextPage: PropTypes.bool,
     /** Object containing styles to be applied to the list container. Following MUI's notation of {@link https://mui.com/system/getting-started/the-sx-prop/ sx} */
     listContainerStyles: PropTypes.object,
+    /** If true, it hides the end list messages. (When no more items are available or when there are not any items to show) */
+    disableEndlistMessages: PropTypes.bool,
 };
