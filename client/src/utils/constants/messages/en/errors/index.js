@@ -1,6 +1,6 @@
 export default Object.freeze({
     /** Message to be shown in the error page title */
-    errorTitle: "An Error Occurred",
+    errorTitle: "Something went wrong",
     /** Messages to be shown by HTTP error code in the error page. */
     errorCode: {
         400: "Hm, that didn't work. It seems there's a problem with the information you provided. Please try again.",
