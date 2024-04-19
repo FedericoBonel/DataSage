@@ -188,43 +188,16 @@ const useSendMessageToChat = () => {
                     content: message,
                 };
 
-                const formattedFirstPage = old.pages[0]
-                    ? {
-                          ...old.pages[0],
-                          data: [newMessage, ...old.pages[0].data],
-                      }
-                    : {
-                          success: true,
-                          data: [newMessage],
-                      };
-
-                return {
-                    ...old,
-                    pages: old.pages.map((page, i) =>
-                        i === 0 ? formattedFirstPage : page
-                    ),
-                };
+                return utilsCache.mockSuccessfulPaginatedRes(old, newMessage);
             });
             // Return a context object with the snapshotted value
             return { previousMessages, chatId };
         },
         onSuccess: async (response, variables) => {
-            // Update the query for the details of the chat
+            // Update the query to add the AI response
             return queryClient.setQueryData(
                 chatsCache.messages(variables.chatId),
-                (old) => {
-                    const formattedFirstPage = {
-                        ...old.pages[0],
-                        data: [response.data, ...old.pages[0].data],
-                    };
-
-                    return {
-                        ...old,
-                        pages: old.pages.map((page, i) =>
-                            i === 0 ? formattedFirstPage : page
-                        ),
-                    };
-                }
+                (old) => utilsCache.insertInFirstPage(old, response.data)
             );
         },
         onError: (err, message, context) => {
