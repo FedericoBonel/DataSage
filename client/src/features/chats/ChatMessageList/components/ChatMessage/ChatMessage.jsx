@@ -6,6 +6,7 @@ import {
     Avatar,
     Link as MUILink,
 } from "@mui/material";
+import dataSageProfileImg from "@/assets/profilepicture.svg";
 import { api, messages } from "@/utils/constants";
 import toLocaleString from "@/utils/dates/toLocaleString";
 import {
@@ -18,13 +19,15 @@ import propTypes from "./ChatMessage.props.js";
 
 /** Component that renders a single message in a chat */
 const ChatMessage = ({ chatMessage }) => {
+    const isAI = chatMessage.from === api.validation.messages.actor[0]; // AI is the first actor
+
     const messageHeader = (
         <Box sx={ChatMessageItemTopStyles}>
             {/* Sender */}
             <Box sx={ChatMessageSenderStyles}>
-                <Avatar />
+                <Avatar src={isAI ? dataSageProfileImg : undefined} />
                 <Typography component="p" variant="H6">
-                    {chatMessage.from === api.validation.messages.actor[0]
+                    {isAI
                         ? messages.chats.messages.actors.AI
                         : messages.chats.messages.actors.USER}
                 </Typography>
