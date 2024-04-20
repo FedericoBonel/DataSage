@@ -47,6 +47,14 @@ const getDesignTokens = (mode) => ({
                 variant: "contained",
             },
         },
+        MuiTypography: {
+            defaultProps: {
+                sx: {
+                    wordBreak: "break-word",
+                    overflowWrap: "break-word",
+                },
+            },
+        },
     },
 });
 

@@ -12,11 +12,19 @@ const isDefined = (variable, name) => {
     }
 };
 
+// Back end configuration
 const BACK_END_BASE_URL = import.meta.env.VITE_BACK_END_BASE_URL;
 isDefined(BACK_END_BASE_URL, "VITE_BACK_END_BASE_URL");
+
+// PDF Worker Parser configuration
+const WORKER_PDF_URL = import.meta.env.VITE_WORKER_PDF_URL;
+isDefined(BACK_END_BASE_URL, "VITE_WORKER_PDF_URL");
 
 export default Object.freeze({
     api: {
         BASE_URL: BACK_END_BASE_URL,
     },
+    pdf: {
+        WORKER_URL: WORKER_PDF_URL
+    }
 });

@@ -1,3 +1,4 @@
+import { memo } from "react";
 import { Link } from "react-router-dom";
 import {
     ListItem,
@@ -65,4 +66,13 @@ const ChatMessage = ({ chatMessage }) => {
 
 ChatMessage.propTypes = propTypes;
 
-export default ChatMessage;
+const memoizedComponent = memo(
+    ChatMessage,
+    (prevProps, newProps) =>
+        prevProps.chatMessage._id === newProps.chatMessage._id &&
+        prevProps.chatMessage.from === newProps.chatMessage.from &&
+        prevProps.chatMessage.content === newProps.chatMessage.content &&
+        prevProps.chatMessage.createdAt === newProps.chatMessage.createdAt
+);
+
+export default memoizedComponent;

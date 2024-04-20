@@ -7,6 +7,7 @@ import {
 import {
     ConversationPageWrapperStyles,
     ChatConversationSectionStyles,
+    DocumentViewerSectionStyles,
 } from "./ChatConversation.styles";
 import { routes } from "@/utils/constants";
 
@@ -18,8 +19,8 @@ const ChatConversation = () => {
 
     return (
         <Grid container sx={ConversationPageWrapperStyles}>
-            <Grid xs={0} md={6}>
-                <ChatDocumentViewer key={chatId} />
+            <Grid xs={0} md={6} sx={DocumentViewerSectionStyles}>
+                <ChatDocumentViewer key={chatId} chatId={chatId} />
             </Grid>
             <Grid xs={12} md={6} sx={ChatConversationSectionStyles}>
                 <ChatConversationFeature chatId={chatId} key={chatId} />
