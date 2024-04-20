@@ -12,9 +12,13 @@ import propTypes from "./ChatDocumentViewer.props";
 
 /** Renders a set of tabs of documents viewers for a chat by id */
 const ChatDocumentViewer = ({ chatId }) => {
-    const documentsQuery = chatsServices.useChatDocsData(chatId);
     const [searchParams, setSearchParams] = useSearchParams();
     const selectedDoc = searchParams.get("selectedDoc");
+    const selectedPage = parseInt(searchParams.get("docsPage"));
+    const selectedIndexPage =
+        selectedPage && selectedPage > 0 ? selectedPage - 1 : 0;
+
+    const documentsQuery = chatsServices.useChatDocsData(chatId);
 
     // Add the document id on URL when someone clicks a new document tab
     const onClickDoc = (e, newValue) => {
@@ -40,6 +44,7 @@ const ChatDocumentViewer = ({ chatId }) => {
                     (doc) => selectedDoc === doc._id
                 )?.url || documentsQuery.data?.data?.[0]?.url
             }
+            pageToShow={selectedIndexPage}
         />
     );
 

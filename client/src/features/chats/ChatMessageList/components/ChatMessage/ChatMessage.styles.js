@@ -20,6 +20,7 @@ export const ChatMessageSenderStyles = {
 export const ChatMessageTextStyles = {
     wordBreak: "break-word",
     overflowWrap: "break-word",
+    whiteSpace: "pre-wrap"
 }
 
-export const ChatMessageSourcesStyles = { display: "flex", gap: 1 };
+export const ChatMessageSourcesStyles = { display: "flex", gap: 1, flexWrap: "wrap" };

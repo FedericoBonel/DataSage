@@ -41,11 +41,21 @@ const ChatMessage = ({ chatMessage }) => {
         </Box>
     );
 
-    const sources = (
+    const sources = Boolean(chatMessage.sources?.length) && (
         <Box sx={ChatMessageSourcesStyles}>
-            {chatMessage?.sources?.map((source, index) => (
-                <MUILink key={source._id} component={Link}>
-                    {`[${index + 1}]`}
+            <Typography variant="overline">
+                {messages.chats.messages.sources.INTRODUCTION}
+            </Typography>
+            {chatMessage.sources.map((source) => (
+                <MUILink
+                    key={source._id}
+                    component={Link}
+                    to={`?selectedDoc=${source.document}&docsPage=${source.locationPage}`}
+                    variant="overline"
+                >
+                    {messages.chats.messages.sources.buildSourceMessage(
+                        source.locationPage
+                    )}
                 </MUILink>
             ))}
         </Box>

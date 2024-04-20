@@ -114,6 +114,12 @@ export const messages = Object.freeze({
                 /** Placeholder of the input field */
                 PLACEHOLDER: "Message to be sent to chat...",
             },
+            sources: {
+                /** Message that introduces the sources section (context used) of an AI generated message. */
+                INTRODUCTION: "Sources:",
+                /** Function that builds a single source text from a location page. (Should be used inside a link to the source). */
+                buildSourceMessage: (locationPage) => `Page ${locationPage}`,
+            },
         },
         list: {
             SETTINGS_LABEL: "Chat settings",
