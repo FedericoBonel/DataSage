@@ -139,6 +139,10 @@ const useDeleteDocFromChatById = () => {
                     oldData.data.filter((doc) => doc._id !== documentId)
                 )
             );
+            // Invalidate its list
+            queryClient.invalidateQueries({
+                queryKey: chatsCache.documents(chatId),
+            });
         },
         throwOnError: (error) => error?.response?.status !== 400,
     });

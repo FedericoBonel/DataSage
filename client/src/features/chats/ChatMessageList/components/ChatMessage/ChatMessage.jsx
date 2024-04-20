@@ -82,7 +82,9 @@ const memoizedComponent = memo(
         prevProps.chatMessage._id === newProps.chatMessage._id &&
         prevProps.chatMessage.from === newProps.chatMessage.from &&
         prevProps.chatMessage.content === newProps.chatMessage.content &&
-        prevProps.chatMessage.createdAt === newProps.chatMessage.createdAt
+        prevProps.chatMessage.createdAt === newProps.chatMessage.createdAt &&
+        prevProps.chatMessage.sources?.length ===
+            newProps.chatMessage.sources?.length
 );
 
 export default memoizedComponent;
