@@ -5,6 +5,7 @@ import "./index.css";
 
 import { ThemeProvider } from "@/lib/mui";
 import { QueryClientProvider } from "@/lib/react-query";
+import { WorkerProvider } from "@/lib/react-pdf-viewer";
 import { AuthProvider } from "@/contexts/auth";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
@@ -12,7 +13,9 @@ ReactDOM.createRoot(document.getElementById("root")).render(
         <QueryClientProvider>
             <ThemeProvider>
                 <AuthProvider>
-                    <App />
+                    <WorkerProvider>
+                        <App />
+                    </WorkerProvider>
                 </AuthProvider>
             </ThemeProvider>
         </QueryClientProvider>

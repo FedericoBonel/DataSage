@@ -2,7 +2,6 @@ import { useSearchParams } from "react-router-dom";
 import { Tab, Tabs, Box } from "@mui/material";
 import { chatsServices } from "@/services/chats";
 import { PdfViewer, ShowLoader } from "@/components/informational";
-import { WorkerProvider } from "@/lib/react-pdf-viewer";
 import {
     DocumentTabStyles,
     DocumentTabsStyles,
@@ -50,22 +49,18 @@ const ChatDocumentViewer = ({ chatId }) => {
 
     return (
         <Box sx={ViewerWrapperStyles}>
-            <WorkerProvider>
-                <ShowLoader isLoading={documentsQuery.isLoading}>
-                    <Tabs
-                        value={
-                            selectedDoc || documentsQuery.data?.data?.[0]?._id
-                        }
-                        variant="scrollable"
-                        scrollButtons="auto"
-                        onChange={onClickDoc}
-                        sx={DocumentTabsStyles}
-                    >
-                        {documentTabs}
-                    </Tabs>
-                    {documentViewer}
-                </ShowLoader>
-            </WorkerProvider>
+            <ShowLoader isLoading={documentsQuery.isLoading}>
+                <Tabs
+                    value={selectedDoc || documentsQuery.data?.data?.[0]?._id}
+                    variant="scrollable"
+                    scrollButtons="auto"
+                    onChange={onClickDoc}
+                    sx={DocumentTabsStyles}
+                >
+                    {documentTabs}
+                </Tabs>
+                {documentViewer}
+            </ShowLoader>
         </Box>
     );
 };
