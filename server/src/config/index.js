@@ -27,6 +27,12 @@ isDefined(API_VERSION, "API_VERSION");
 const API_URL = process.env.API_URL;
 isDefined(API_URL, "API_URL");
 
+const ADMIN_EMAIL = process.env.ADMIN_EMAIL;
+isDefined(ADMIN_EMAIL, "ADMIN_EMAIL");
+
+const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD;
+isDefined(ADMIN_PASSWORD, "ADMIN_PASSWORD");
+
 // Rate limiter configuration
 const MAX_NUMBER_PROXIES = process.env.MAX_NUMBER_PROXIES;
 isDefined(MAX_NUMBER_PROXIES, "MAX_NUMBER_PROXIES");
@@ -47,6 +53,27 @@ isDefined(TEST_URL, "TEST_URL");
 
 const SWAGGER_THEME_URL = process.env.SWAGGER_THEME_URL;
 isDefined(SWAGGER_THEME_URL, "SWAGGER_THEME_URL");
+
+// Database connection
+const DB_AUTH_URL = process.env.DATABASE_CONNECTION_URL;
+isDefined(DB_AUTH_URL, "DATABASE_CONNECTION_URL");
+
+// Cloud store configuration
+const S3_ACCESS_KEY = process.env.S3_ACCESS_KEY;
+isDefined(S3_ACCESS_KEY, "S3_ACCESS_KEY");
+
+const S3_SECRET_KEY = process.env.S3_SECRET_KEY;
+isDefined(S3_SECRET_KEY, "S3_SECRET_KEY");
+
+const S3_REGION = process.env.S3_REGION;
+isDefined(S3_REGION, "S3_REGION");
+
+const S3_BUCKET = process.env.S3_BUCKET;
+isDefined(S3_BUCKET, "S3_BUCKET");
+
+// LLM Model configuration
+const OPEN_AI_KEY = process.env.OPEN_AI_KEY;
+isDefined(OPEN_AI_KEY, "OPEN_AI_KEY");
 
 /** Object with all configuration environment variables */
 export default Object.freeze({
@@ -77,6 +104,12 @@ export default Object.freeze({
             /** Test api url without the host and last "/" (i.g. "/test/api/v1") */
             test: TEST_URL,
         },
+        admin: {
+            /** Administrator email to create the first admin on system startup */
+            email: ADMIN_EMAIL,
+            /** Password for the first admin account */
+            password: ADMIN_PASSWORD,
+        },
     },
     /** JSON Web Token related variables */
     jwt: {
@@ -87,5 +120,22 @@ export default Object.freeze({
     swagger: {
         /** URL to the swagger theme */
         theme: SWAGGER_THEME_URL,
+    },
+    /** Database configuration related variables */
+    db: {
+        /** Database connection url */
+        url: DB_AUTH_URL,
+    },
+    /** Cloud store configuration related variables (Amazon s3) */
+    cloudStore: {
+        accessKey: S3_ACCESS_KEY,
+        secretKey: S3_SECRET_KEY,
+        region: S3_REGION,
+        bucketName: S3_BUCKET,
+    },
+    /** Large language models related variables (Access keys, etc.) */
+    llm: {
+        /** Large language model API Key being used. (Currently OpenAI) */
+        apiKey: OPEN_AI_KEY,
     },
 });

@@ -1,0 +1,4 @@
+.rpv-full-screen__overlay {
+    /* Temporary solution to problems with zooming in and out, this will be fixed in React PDF viewer v4 */
+    display: none;
+}

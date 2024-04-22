@@ -48,7 +48,16 @@ const openAPIConfig = {
         security: [],
     },
     // Files containing API Specs
-    apis: ["./src/routers/*.js", "./src/dtos/*.js", "./src/utils/responsebodies/*.js"],
+    apis: [
+        // Endpoints/resources docs
+        "./src/routers/**/*.js",
+        // Response body data output docs
+        "./src/dtos/**/*.js",
+        // Response body schemas docs
+        "./src/utils/responsebodies/**/*.js",
+        // Request body docs. Input from the user and expected schema.
+        "./src/middleware/validators/**/*.js",
+    ],
 };
 
 const openApiSpecs = swaggerJs(openAPIConfig);
