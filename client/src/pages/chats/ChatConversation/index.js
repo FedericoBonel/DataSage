@@ -1,1 +1,1 @@
-export { default as ChatConversation } from "./ChatConversation";
+export { default } from "./ChatConversation";

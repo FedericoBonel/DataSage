@@ -1,1 +1,1 @@
-export { default as ChatListLayout } from "./ChatListLayout";
+export { default } from "./ChatListLayout";
