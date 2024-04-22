@@ -69,7 +69,7 @@ const useChatById = (chatId) => {
 };
 
 /** It creates and provides the state to update chats. */
-const useUpdateByIdChat = () => {
+const useUpdateChatById = () => {
     const queryClient = useQueryClient();
     const queryState = useMutation({
         mutationFn: ({ chatId, updatedChat }) =>
@@ -227,7 +227,7 @@ const useSendMessageToChat = () => {
 export default {
     useInfiniteChatData,
     useCreateChat,
-    useUpdateByIdChat,
+    useUpdateChatById,
     useChatById,
     useAddDocToChatById,
     useChatDocsData,
