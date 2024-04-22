@@ -1,4 +1,4 @@
-import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import { createBrowserRouter, RouterProvider, Navigate } from "react-router-dom";
 import { ErrorRouter, NotFoundRouter, ChatsRouter } from "@/routers";
 import { Public, Private } from "@/routers/layouts";
 import { ErrorHandler } from "@/routers/utils";
@@ -9,6 +9,11 @@ const router = createBrowserRouter([
     {
         errorElement: <ErrorHandler />,
         children: [
+            /** Route the root path to the home path */
+            {
+                path: "/",
+                element: <Navigate replace to={routes.HOME}/>
+            },
             /** Public routes */
             {
                 element: <Public />,
