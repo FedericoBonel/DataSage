@@ -18,7 +18,7 @@ export default Object.freeze({
     },
     pages: {
         /** Maximum number of pages per document */
-        MAX_PAGES: 100,
+        MAX_PAGES: 200,
     },
     extensions: {
         /** Supported documents extensions */
