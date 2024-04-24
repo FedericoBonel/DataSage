@@ -24,7 +24,7 @@ const UpdateChatForm = ({ chatId }) => {
         }
     }, [chatQuery.data, chatQuery.isSuccess]);
 
-    const updateQuery = chatsServices.useUpdateByIdChat();
+    const updateQuery = chatsServices.useUpdateChatById();
 
     // Updates state when text fields changes
     const onChangeTextField = (e) =>
