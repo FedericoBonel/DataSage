@@ -129,4 +129,19 @@ const getById = async (chatId, userId) => {
     return colaboratorDTO.colaboratorToChatDetailsOutputDTO(savedChatForUser, userId);
 };
 
-export default { create, get, updateById, getById };
+/**
+ * Deletes a chat by id with all its related data from the system.
+ * @param {String} chatId Id of the chat to be deleted
+ * @param {String} userId Id of the owner of the chat
+ * @return The deleted chat
+ */
+const deleteById = async (chatId, userId) => {
+    const deletedChat = await chatsRepository.deleteByIdAndOwner(chatId, userId);
+    if (!deletedChat) {
+        throw new NotFoundError(messages.errors.ROUTE_NOT_FOUND);
+    }
+
+    return chatDTO.toChatOutputDTO(deletedChat);
+};
+
+export default { create, get, updateById, getById, deleteById };

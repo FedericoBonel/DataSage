@@ -3,7 +3,7 @@ import { chat } from "../../models/chat/chat.js";
 import { page } from "../../models/page/page.js";
 import { message } from "../../models/message/message.js";
 import { colaborator } from "../../models/colaborator/colaborator.js";
-import { saveFilesInS3, getSignedURLById, deleteFileInS3 } from "../../lib/amazonS3.js";
+import { saveFilesInS3, getSignedURLById, deleteFileInS3, deleteMultipleFilesInS3 } from "../../lib/amazonS3.js";
 import { getLLMChat } from "../../lib/langchain.js";
 
 /**
@@ -35,9 +35,15 @@ const storeAllDocs = (documents) =>
 
 /**
  * Deletes a document from the store by its store id
- * @param {string} storeId store id
+ * @param {string} storeId store id of the file to be removed
  */
 const deleteDocFromStore = (storeId) => deleteFileInS3(storeId);
+
+/**
+ * Deletes multiple documents from the store by their store ids
+ * @param {Array.<string>} storeId store ids of the files to be removed
+ */
+const deleteDocsFromStore = (storeId) => deleteMultipleFilesInS3(storeId);
 
 /**
  * Transforms all document's store ids to signed urls
@@ -101,6 +107,48 @@ const updateByIdAndOwner = async (updates, chatId, ownerId) => {
     }
 
     return updatedChat;
+};
+
+/**
+ * Deletes a chat from the database by id and owner id and all of its related data
+ * @param {string} chatId The chat id to update
+ * @param {string} ownerId The chat owners id
+ * @returns The deleted chat
+ */
+const deleteByIdAndOwner = async (chatId, ownerId) => {
+    // Delete and get the chat
+    const deletedChat = await chat.findOneAndDelete({ _id: chatId, "owner._id": ownerId });
+    if (!deletedChat) {
+        return deletedChat;
+    }
+
+    const listOfDocumentsIds = [];
+    const listOfDocumentsStoreIds = [];
+    deletedChat.documents.forEach((doc) => {
+        listOfDocumentsIds.push(doc._id);
+        listOfDocumentsStoreIds.push(doc.storeId);
+    });
+
+    // Get the ids of the collaborators that are going to be deleted
+    const collaboratorsIds = await colaborator
+        .aggregate()
+        .match({ "chat._id": new Types.ObjectId(chatId), "chat.owner._id": new Types.ObjectId(ownerId) })
+        .project({ _id: 1 });
+
+    // Delete the colaborators messages
+    const listOfCollaboratorsIds = collaboratorsIds.map((collab) => collab._id);
+    await message.deleteMany({ colaborator: { $in: listOfCollaboratorsIds } });
+
+    // Delete the colaborators
+    await colaborator.deleteMany({ "chat._id": chatId, "chat.owner._id": ownerId });
+
+    // Delete the pages of the chat documents
+    await page.deleteMany({ document: { $in: listOfDocumentsIds } });
+
+    // Delete the documents from the cloud
+    await deleteDocsFromStore(listOfDocumentsStoreIds);
+
+    return deletedChat;
 };
 
 /**
@@ -194,6 +242,7 @@ export default {
     addDocsById,
     getByNameAndOwner,
     updateByIdAndOwner,
+    deleteByIdAndOwner,
     getById,
     docsToUrls,
     removeDocumentByIdAndOwner,

@@ -1,5 +1,11 @@
 import { v4 as uuidV4 } from "uuid";
-import { S3Client, PutObjectCommand, GetObjectCommand, DeleteObjectCommand } from "@aws-sdk/client-s3";
+import {
+    S3Client,
+    PutObjectCommand,
+    GetObjectCommand,
+    DeleteObjectCommand,
+    DeleteObjectsCommand,
+} from "@aws-sdk/client-s3";
 import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
 import config from "../config/index.js";
 
@@ -63,4 +69,20 @@ const deleteFileInS3 = async (storeId) => {
     await s3Client.send(deleteCommand);
 };
 
-export { saveFilesInS3, deleteFileInS3, getSignedURLById, s3Client };
+/**
+ * Deletes multiple files from Amazon S3. If the files do not exist nothing is thrown, you should handle this before returning.
+ * @param {Array.<string>} storeIds The store ids of the files to remove
+ */
+const deleteMultipleFilesInS3 = async (storeIds) => {
+    const params = {
+        Bucket: config.cloudStore.bucketName,
+        Delete: {
+            Objects: storeIds.map((id) => ({ Key: id })),
+        },
+    };
+
+    const deleteCommand = new DeleteObjectsCommand(params);
+    await s3Client.send(deleteCommand);
+};
+
+export { saveFilesInS3, deleteFileInS3, deleteMultipleFilesInS3, getSignedURLById, s3Client };
