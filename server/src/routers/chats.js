@@ -168,7 +168,41 @@ chatsRouter
      *       404:
      *         $ref: '#/components/responses/404Response'
      */
-    .put(entityIdValidator("chatId"), chatValidators.updateChatValidator, chatsController.updateById);
+    .put(entityIdValidator("chatId"), chatValidators.updateChatValidator, chatsController.updateById)
+    /**
+     * @openapi
+     * /chats/{chatId}:
+     *   delete:
+     *     tags: [Chats]
+     *     summary: Deletes a chat by id.
+     *     description: Deletes a chat by id. It's used to delete chats and all of its related information (including documents). This action can only be done by the chat owner.
+     *     parameters:
+     *       - in: path
+     *         name: chatId
+     *         description: Id of the chat to be deleted.
+     *         example: 65154ed674410acd535bc0d3
+     *         schema:
+     *           type: string
+     *     responses:
+     *       200:
+     *         description: Returns the deleted chat.
+     *         content:
+     *           application/json:
+     *             schema:
+     *               allOf:
+     *                 - $ref: '#/components/schemas/SuccessApiPayload'
+     *                 - type: object
+     *                   required:
+     *                     - data
+     *                   properties:
+     *                     data:
+     *                       $ref: '#/components/schemas/ChatOutputDTO'
+     *       400:
+     *         $ref: '#/components/responses/400Response'
+     *       404:
+     *         $ref: '#/components/responses/404Response'
+     */
+    .delete(entityIdValidator("chatId"), chatsController.deleteById);
 
 chatsRouter.use(`/:chatId/${routes.documents.DOCUMENTS}`, entityIdValidator("chatId"), documentsRouter);
 chatsRouter.use(`/:chatId/${routes.messages.MESSAGES}`, entityIdValidator("chatId"), messagesRouter);
