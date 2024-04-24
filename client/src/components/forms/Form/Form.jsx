@@ -17,6 +17,10 @@ const Form = ({
         submit: messages.actions.form.SUBMIT,
         cancel: messages.actions.form.CANCEL,
     },
+    buttonsColor = {
+        submit: "primary",
+        cancel: "error",
+    },
     onSubmit,
     isSubmitting,
     canSubmit,
@@ -41,12 +45,19 @@ const Form = ({
                     isLoading={isSubmitting}
                     disabled={!canSubmit}
                     variant="text"
+                    color={buttonsColor.submit}
                 >
                     {buttonsLabels.submit}
                 </Button>
-                <Button color="error" variant="text" onClick={onCancel}>
-                    {buttonsLabels.cancel}
-                </Button>
+                {buttonsLabels.cancel && (
+                    <Button
+                        variant="text"
+                        onClick={onCancel}
+                        color={buttonsColor.cancel}
+                    >
+                        {buttonsLabels.cancel}
+                    </Button>
+                )}
             </Box>
         </ComponentToRender>
     );

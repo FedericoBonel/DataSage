@@ -5,6 +5,7 @@ import {
     AddDocumentsForm,
     DocumentList,
 } from "@/features/chats";
+import DeleteChatForm from "@/features/chats/DeleteChatForm";
 import { messages, routes } from "@/utils/constants";
 import { UpdateChatFormContainerStyles } from "./ChatSettings.styles";
 import ChatFileSection from "./components/ChatFilesSection/ChatFileSection";
@@ -32,6 +33,10 @@ const ChatSettings = () => {
                     <AddDocumentsForm chatId={chatId} />
                     <DocumentList chatId={chatId} />
                 </ChatFileSection>
+            </Grid>
+            {/* Delete chat. */}
+            <Grid sm={12}>
+                <DeleteChatForm chatId={chatId} />
             </Grid>
         </Grid>
     );
