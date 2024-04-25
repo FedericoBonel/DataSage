@@ -17,6 +17,8 @@ import paginationValidation from "./validation/pagination.js";
 import textSearchValidation from "./validation/textSearch.js";
 import messagesValidation from "./validation/messages.js";
 import colaboratorPermissions from "./permissions/colaborator.js";
+import notificationTypes from "./notifications/notificationTypes.js";
+import notificationRelatedEntities from "./notifications/relatedEntities.js";
 
 /** Object with all messages to be shown to the user */
 export const messages = Object.freeze({
@@ -34,7 +36,7 @@ export const routes = Object.freeze({
     chats: chatsRoutes,
     documents: docsRoutes,
     messages: messagesRoutes,
-    participants: participantsRoutes
+    participants: participantsRoutes,
 });
 
 /** Object with all the validation values used in the application for each entity. */
@@ -53,4 +55,10 @@ export const validation = Object.freeze({
 /** Exports all application permissions (These should be stored in database as well) */
 export const permissions = Object.freeze({
     colaborator: colaboratorPermissions,
+});
+
+/** Exports all application notification types and related entities (These should be stored in database as well) */
+export const notifications = Object.freeze({
+    types: notificationTypes,
+    relatedEntities: notificationRelatedEntities,
 });

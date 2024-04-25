@@ -4,9 +4,12 @@ import { user } from "../../../models/user/user.js";
 import { page } from "../../../models/page/page.js";
 import { chat } from "../../../models/chat/chat.js";
 import { colaborator } from "../../../models/colaborator/colaborator.js";
+import { notification } from "../../../models/notification/notification.js";
+import { notificationType } from "../../../models/notificationType/notificationType.js";
+import { relatedEntityType } from "../../../models/relatedEntityType/relatedEntityType.js";
 import { permission } from "../../../models/permission/permission.js";
 import { message } from "../../../models/message/message.js";
-import { permissions } from "../../constants/index.js";
+import { permissions, notifications } from "../../constants/index.js";
 import dummyUsers from "./dummydata/users.js";
 
 if (config.node_environment !== "development") {
@@ -20,6 +23,9 @@ await user.createCollection();
 await page.createCollection();
 await chat.createCollection();
 await colaborator.createCollection();
+await notification.createCollection();
+await notificationType.createCollection();
+await relatedEntityType.createCollection();
 await permission.createCollection();
 await message.createCollection();
 
@@ -48,6 +54,26 @@ const permissionsExist = await permission.find({
 if (!permissionsExist.length) {
     await permission.insertMany(
         Object.keys(permissions.colaborator).map((key) => ({ allowedAction: permissions.colaborator[key] }))
+    );
+}
+
+// Check if related entity types have been created
+const relatedEntityTypesExist = await relatedEntityType.find({
+    name: { $in: [notifications.relatedEntities.chat] },
+});
+if (!relatedEntityTypesExist.length) {
+    await relatedEntityType.insertMany(
+        Object.keys(notifications.relatedEntities).map((key) => ({ name: notifications.relatedEntities[key] }))
+    );
+}
+
+// Check if notification types have been created
+const notificationTypesExist = await notificationType.find({
+    name: { $in: [notifications.types.names.chatInvitation] },
+});
+if (!notificationTypesExist.length) {
+    await notificationType.insertMany(
+        Object.keys(notifications.types.names).map((key) => ({ name: notifications.types.names[key] }))
     );
 }
 

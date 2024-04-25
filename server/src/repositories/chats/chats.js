@@ -15,6 +15,14 @@ import { getLLMChat } from "../../lib/langchain.js";
 const getByNameAndOwner = async (name, ownerId) => chat.findOne({ name, "owner._id": ownerId }).lean();
 
 /**
+ * Gets a chat by its id and its owner id and returns it
+ * @param {String} chatId Id of the chat to find
+ * @param {String} ownerId Id of the owner of the chat
+ * @returns The found chat or undefined if nothing was found
+ */
+const getByIdAndOwner = async (chatId, ownerId) => chat.findOne({ _id: chatId, "owner._id": ownerId }).lean();
+
+/**
  * Stores all documents in the cloud store and formats them to how they should be stored and returns them.
  * @param {Array.<{originalname: string, size: number}>} documents Array of documents to be stored
  * @returns An array with all the documents and their ids in the cloud store.
@@ -241,6 +249,7 @@ export default {
     save,
     addDocsById,
     getByNameAndOwner,
+    getByIdAndOwner,
     updateByIdAndOwner,
     deleteByIdAndOwner,
     getById,
