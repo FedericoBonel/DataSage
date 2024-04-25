@@ -1,22 +1,27 @@
+import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { Card, CardHeader, CardActions, CardContent } from "@mui/material";
+import { chatsServices } from "@/services/chats";
 import { Form } from "@/components/forms";
 import { TextField } from "@/components/fields";
-import { messages } from "@/utils/constants";
+import { messages, routes } from "@/utils/constants";
 import propTypes from "./DeleteChatForm.props";
 
 const confirmationValue = messages.actions.deleteForever.confirmation.VALUE;
 
 /** Renders a delete form to delete chats by id. */
 const DeleteChatForm = ({ chatId }) => {
+    const navigate = useNavigate();
     const [confirmation, setConfirmation] = useState("");
+
+    const deleteQuery = chatsServices.useDeleteChatById();
 
     const canSubmit = confirmation === confirmationValue;
 
     const onSubmit = (e) => {
         e.preventDefault();
 
-        alert(chatId);
+        deleteQuery.mutate({ chatId }, { onSuccess: navigate(`/${routes.HOME}`) });
     };
 
     return (
@@ -30,6 +35,7 @@ const DeleteChatForm = ({ chatId }) => {
             buttonsColor={{ submit: "error" }}
             canSubmit={canSubmit}
             onSubmit={onSubmit}
+            isSubmitting={deleteQuery.isPending}
         >
             <CardHeader
                 title={messages.chats.delete.form.TITLE}

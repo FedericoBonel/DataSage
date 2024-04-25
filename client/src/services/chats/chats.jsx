@@ -126,7 +126,7 @@ const useAddDocToChatById = () => {
     return queryState;
 };
 
-/** It creates and provides the state to upload documents to chats. */
+/** It creates and provides the state to delete documents from chats. */
 const useDeleteDocFromChatById = () => {
     const queryClient = useQueryClient();
     const queryState = useMutation({
@@ -224,9 +224,29 @@ const useSendMessageToChat = () => {
     return queryState;
 };
 
+/** It creates and provides the state to delete chats by id. */
+const useDeleteChatById = () => {
+    const queryClient = useQueryClient();
+    const queryState = useMutation({
+        mutationFn: ({ chatId }) => chatsAPI.deleteChatById(chatId),
+        onSuccess: (response, { chatId }) => {
+            // Remove the chat from cache
+            queryClient.removeQueries({ queryKey: chatsCache.detail(chatId) });
+            // Invalidate the chat lists
+            queryClient.invalidateQueries({
+                queryKey: chatsCache.lists(),
+            });
+        },
+        throwOnError: (error) => Boolean(error),
+    });
+
+    return queryState;
+};
+
 export default {
     useInfiniteChatData,
     useCreateChat,
+    useDeleteChatById,
     useUpdateChatById,
     useChatById,
     useAddDocToChatById,

@@ -46,6 +46,18 @@ const createChat = async (newChat) => {
 };
 
 /**
+ * Deletes a chat and all its data by id from the system.
+ * @param {string} chatId Id of the chat to delete
+ * @returns The server response payload with the deleted chat
+ */
+const deleteChatById = async (chatId) => {
+    return makeRequest({
+        url: api.urls.chats.createDelete(chatId),
+        method: "delete",
+    });
+};
+
+/**
  * Gets a chat by id
  * @param {string} chatId The id of the chat
  * @returns The server response payload with the chat with that id
@@ -103,7 +115,7 @@ const addDocsToChat = async (newDocs, chatId) => {
 };
 
 /**
- * Adds a list of documents to a chat by id
+ * Deletes a document from a chat by id
  * @param {string} documentId Id of the document to remove from the chat
  * @param {string} chatId Id of the chat to remove the documents from
  * @returns The server response payload with the deleted document
@@ -150,9 +162,11 @@ const sendMessageToChat = async (message, chatId) => {
     });
 };
 
+
 export default {
     getChats,
     createChat,
+    deleteChatById,
     getChatById,
     updateChatById,
     getDocsByChat,
