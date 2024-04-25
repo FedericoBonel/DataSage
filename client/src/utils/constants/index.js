@@ -6,6 +6,8 @@ import actions from "./messages/en/actions";
 import navbar from "./messages/en/navbar";
 import chats from "./messages/en/chats";
 import chatsRoutes from "./routes/chats";
+import authRoutes from "./routes/auth";
+import errorRoutes from "./routes/error";
 import apiConsts from "./api";
 
 /** Object with all messages to be shown to the user */
@@ -32,14 +34,11 @@ export const routes = Object.freeze({
     ERROR: "error",
     /** Route to settings */
     SETTINGS: "settings",
-    auth: {
-        /** Route to login page */
-        LOGIN: "login",
-    },
-    error: {
-        /** Route to error pages */
-        ERROR: "error",
-    },
+    /** Contains all authentication or authorization related routes */
+    auth: authRoutes,
+    /** Contains all error related routes */
+    error: errorRoutes,
+    /** Contains all chat related routes */
     chats: chatsRoutes,
 });
 
