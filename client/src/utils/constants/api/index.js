@@ -1,5 +1,5 @@
 import config from "@/config";
-import chatsConsts from "./chats";
+import chatsUrls from "./urls/chats";
 import searchingConsts from "./searching";
 
 export default Object.freeze({
@@ -8,7 +8,7 @@ export default Object.freeze({
     /** Api URLs and resources */
     urls: {
         BASE: config.api.BASE_URL,
-        chats: chatsConsts,
+        chats: chatsUrls,
     },
     /** API validation related constants */
     validation: {

@@ -52,7 +52,7 @@ const createChat = async (newChat) => {
  */
 const getChatById = async (chatId) => {
     return await makeRequest({
-        url: `${api.urls.chats.GET_ALL}/${chatId}`,
+        url: api.urls.chats.createGetById(chatId),
         method: "get",
     });
 };
@@ -66,7 +66,7 @@ const getChatById = async (chatId) => {
  */
 const updateChatById = async (updatedChat, chatId) => {
     return makeRequest({
-        url: `${api.urls.chats.GET_ALL}/${chatId}`,
+        url: api.urls.chats.createPut(chatId),
         method: "put",
         data: updatedChat,
     });
@@ -79,7 +79,7 @@ const updateChatById = async (updatedChat, chatId) => {
  */
 const getDocsByChat = async (chatId) => {
     return makeRequest({
-        url: `${api.urls.chats.GET_ALL}/${chatId}/${api.urls.chats.DOCS_RESOURCE}`,
+        url: api.urls.chats.createGetAllDocs(chatId),
         method: "get",
     });
 };
@@ -93,7 +93,7 @@ const getDocsByChat = async (chatId) => {
  */
 const addDocsToChat = async (newDocs, chatId) => {
     return makeRequest({
-        url: `${api.urls.chats.GET_ALL}/${chatId}/${api.urls.chats.DOCS_RESOURCE}`,
+        url: api.urls.chats.createCreateDocs(chatId),
         method: "post",
         data: newDocs,
         headers: {
@@ -110,7 +110,7 @@ const addDocsToChat = async (newDocs, chatId) => {
  */
 const deleteDocFromChat = async (documentId, chatId) => {
     return makeRequest({
-        url: `${api.urls.chats.GET_ALL}/${chatId}/${api.urls.chats.DOCS_RESOURCE}/${documentId}`,
+        url: api.urls.chats.createDeleteDoc(chatId, documentId),
         method: "delete",
     });
 };
@@ -129,7 +129,7 @@ const getMessagesByChat = async (chatId, pagination) => {
     };
 
     return await makeRequest({
-        url: `${api.urls.chats.GET_ALL}/${chatId}/${api.urls.chats.MSG_RESOURCE}`,
+        url: api.urls.chats.createGetAllMsgs(chatId),
         method: "get",
         params,
     });
@@ -144,7 +144,7 @@ const getMessagesByChat = async (chatId, pagination) => {
  */
 const sendMessageToChat = async (message, chatId) => {
     return makeRequest({
-        url: `${api.urls.chats.GET_ALL}/${chatId}/${api.urls.chats.MSG_RESOURCE}`,
+        url: api.urls.chats.createCreateMsgs(chatId),
         method: "post",
         data: message,
     });
