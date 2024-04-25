@@ -20,7 +20,7 @@ const DocumentsChatForm = ({ documentsField }) => {
                 secondary={
                     documentsField.documents.length < 2
                         ? documentsField.documents[0].name
-                        : messages.chats.formSections.documents.createFilesSelectedFeedback(
+                        : messages.chats.documents.createFilesSelectedFeedback(
                               documentsField.documents.length
                           )
                 }
@@ -41,7 +41,7 @@ const DocumentsChatForm = ({ documentsField }) => {
             >
                 <Upload fontSize="large" />
                 <Typography variant="subtitle2">
-                    {messages.chats.formSections.documents.FILE_FIELD}
+                    {messages.chats.documents.FILE_FIELD}
                 </Typography>
             </FileField>
             {fileList}
@@ -50,10 +50,7 @@ const DocumentsChatForm = ({ documentsField }) => {
                 open={showInvalidFiles}
                 onClose={() => setShowInvalidFiles(false)}
                 severity="alert"
-                message={
-                    messages.chats.formSections.documents
-                        .FILE_FIELD_INVALID_ALERT
-                }
+                message={messages.chats.documents.FILE_FIELD_INVALID_ALERT}
             />
         </>
     );

@@ -13,7 +13,7 @@ const ChatListItemMenu = ({ chatId }) => {
             variant="iconButton"
             icon={<MoreHoriz />}
             showLabel={false}
-            label={messages.chats.list.SETTINGS_LABEL}
+            label={messages.chats.list.item.settings.LABEL}
         >
             <MenuItem
                 disableGutters
@@ -23,8 +23,8 @@ const ChatListItemMenu = ({ chatId }) => {
             >
                 <ListItem component="div">
                     <ListItemText
-                        primary={messages.chats.list.CHAT_SETTINGS_LABEL}
-                        secondary={messages.chats.list.CHAT_SETTINGS_DESC}
+                        primary={messages.chats.list.item.settings.chat.LABEL}
+                        secondary={messages.chats.list.item.settings.chat.DESC}
                     />
                 </ListItem>
             </MenuItem>
@@ -36,10 +36,10 @@ const ChatListItemMenu = ({ chatId }) => {
                 <ListItem component="div">
                     <ListItemText
                         primary={
-                            messages.chats.list.PARTICIPANTS_SETTINGS_LABEL
+                            messages.chats.list.item.settings.participants.LABEL
                         }
                         secondary={
-                            messages.chats.list.PARTICIPANTS_SETTINGS_DESC
+                            messages.chats.list.item.settings.participants.DESC
                         }
                     />
                 </ListItem>

@@ -48,7 +48,7 @@ const AddDocumentsForm = ({ chatId }) => {
     // If the user cant upload more documents explain why.
     const fileLimitMessage = !canUploadMore && (
         <Typography variant="caption">
-            {messages.documents.upload.MAX_REACHED}
+            {messages.chats.documents.upload.MAX_REACHED}
         </Typography>
     );
 
@@ -62,8 +62,8 @@ const AddDocumentsForm = ({ chatId }) => {
                 onCancel={resetForm}
                 isSubmitting={addDocQuery.isPending}
                 buttonsLabels={{
-                    submit: messages.documents.upload.form.buttons.ACCEPT,
-                    cancel: messages.documents.upload.form.buttons.CANCEL,
+                    submit: messages.chats.documents.upload.form.buttons.ACCEPT,
+                    cancel: messages.chats.documents.upload.form.buttons.CANCEL,
                 }}
             >
                 <DocumentsChatForm

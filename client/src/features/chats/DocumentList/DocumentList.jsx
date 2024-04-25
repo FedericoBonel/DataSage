@@ -24,7 +24,7 @@ const DocumentList = ({ chatId }) => {
 
     const numberFilesUploaded = docsQuery.isSuccess && (
         <Typography variant="overline">
-            {messages.documents.list.createFilesUploadedMessage(
+            {messages.chats.documents.list.createFilesUploadedMessage(
                 docsQuery.data.data?.length
             )}
         </Typography>

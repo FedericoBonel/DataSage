@@ -26,7 +26,7 @@ const DeleteDocumentDialog = ({ chatId, documentId, isOpen, onClose }) => {
         <>
             <DecisionDialog
                 isOpen={isOpen}
-                title={messages.documents.delete.form.TITLE}
+                title={messages.chats.documents.delete.form.TITLE}
                 onClose={onClose}
                 onAccept={onSubmit}
                 isAccepting={deleteDocQuery.isPending}
@@ -36,7 +36,7 @@ const DeleteDocumentDialog = ({ chatId, documentId, isOpen, onClose }) => {
                 }}
             >
                 <DialogContentText>
-                    {messages.documents.delete.form.QUESTION}
+                    {messages.chats.documents.delete.form.QUESTION}
                 </DialogContentText>
             </DecisionDialog>
             <ToastMessage

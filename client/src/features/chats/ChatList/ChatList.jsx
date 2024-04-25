@@ -39,7 +39,7 @@ const ChatList = ({ selectedChat }) => {
                 }
             />
             <TextField
-                label={messages.chats.filtering.textSearch.label}
+                label={messages.chats.list.filtering.textSearch.label}
                 type="search"
                 variant="filled"
                 inputProps={{ maxLength: api.searching.textSearch.MAX_LENGTH }}
