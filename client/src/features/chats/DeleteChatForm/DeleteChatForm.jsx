@@ -2,9 +2,10 @@ import { useState } from "react";
 import { Card, CardHeader, CardActions, CardContent } from "@mui/material";
 import { Form } from "@/components/forms";
 import { TextField } from "@/components/fields";
+import { messages } from "@/utils/constants";
 import propTypes from "./DeleteChatForm.props";
 
-const confirmationValue = "delete forever";
+const confirmationValue = messages.actions.deleteForever.confirmation.VALUE;
 
 /** Renders a delete form to delete chats by id. */
 const DeleteChatForm = ({ chatId }) => {
@@ -22,23 +23,28 @@ const DeleteChatForm = ({ chatId }) => {
         <Form
             component={Card}
             buttonsWrapper={CardActions}
-            buttonsLabels={{ submit: "delete forever" }}
+            buttonsLabels={{
+                submit: messages.actions.deleteForever.confirmation
+                    .BUTTON_LABEL,
+            }}
             buttonsColor={{ submit: "error" }}
             canSubmit={canSubmit}
             onSubmit={onSubmit}
         >
             <CardHeader
-                title={"Danger Zone - Delete Chat"}
+                title={messages.chats.delete.form.TITLE}
                 titleTypographyProps={{ color: "error" }}
-                subheader={
-                    "Deleting your chat will delete permanently all its uploaded files and data and will make it unaccessible by all participants. This action is not reversible."
-                }
+                subheader={messages.chats.delete.form.SUB_TITLE}
             />
             <CardContent>
                 <TextField
                     autoComplete="off"
-                    label="Confirm deletion"
-                    helperText={`Insert "${confirmationValue}" to confirm deletion.`}
+                    label={
+                        messages.actions.deleteForever.confirmation.FIELD_LABEL
+                    }
+                    helperText={messages.actions.deleteForever.confirmation.generateHelperText(
+                        confirmationValue
+                    )}
                     showHelperText
                     variant="standard"
                     name="confirmation"

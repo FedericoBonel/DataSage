@@ -32,6 +32,25 @@ export const messages = Object.freeze({
             CANCEL: "Cancel",
             ACCEPT: "Accept",
         },
+        /** Contains all messages to be shown to the user on delete forever form fields. */
+        deleteForever: {
+            /** Contains all messages to be shown to the user on confirmation of delete forever actions. */
+            confirmation: {
+                /** Label of the field where that the user needs to fill to confirm deletion */
+                FIELD_LABEL: "Confirm deletion",
+                /** Value that has to be filled up by the user to confirm deletion */
+                VALUE: "delete forever",
+                /** Label of the button that confirms the delete action. */
+                BUTTON_LABEL: "delete forever",
+                /** 
+                 * Generates the helper text for the field that has to be filled up by the user to confirm deletion.
+                 * @param {string} confirmationValue Value the user has to fill up in the field to confirm deletion.
+                 * @returns The message to be shown in the helper text of the field the user has to fill up to confirm deletion.
+                 */
+                generateHelperText: (confirmationValue) =>
+                    `Insert "${confirmationValue}" to confirm deletion.`,
+            },
+        },
     },
     chats: {
         filtering: {
@@ -84,6 +103,13 @@ export const messages = Object.freeze({
                     ACCEPT: "Save changes",
                     CANCEL: "Reset changes",
                 },
+            },
+        },
+        delete: {
+            form: {
+                TITLE: "Danger Zone - Delete Chat",
+                SUB_TITLE:
+                    "Deleting your chat will delete permanently all its uploaded files and data and will make it unaccessible by all participants. This action is not reversible.",
             },
         },
         settings: {
