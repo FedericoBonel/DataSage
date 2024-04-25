@@ -23,11 +23,11 @@ import EntityDTO from "../../utils/EntityDTO.js";
  *             hasJoined:
  *               type: boolean
  *               description: True if the user that is requesting the resource has accepted to join to the chat or if it is its owner.
- *               example: true.
+ *               example: true
  *             isOwner:
  *               type: boolean
  *               description: True if the user that is requesting the resource is the owner of the resource.
- *               example: true.
+ *               example: true
  *             permissions:
  *               type: array
  *               description: Array of allowed permissions for this user in this chat. If the user is the owner (isOwner == true) then the user can do anything in the chat and this will be empty.

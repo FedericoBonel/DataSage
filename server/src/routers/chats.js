@@ -1,6 +1,7 @@
 import { Router } from "express";
 import documentsRouter from "./documents.js";
 import messagesRouter from "./messages.js";
+import participantsRouter from "./participants.js";
 import chatsController from "../controllers/chats.js";
 import { documentUploadValidator } from "../middleware/validators/documents/index.js";
 import entityIdValidator from "../middleware/validators/utils/entityIdValidator.js";
@@ -206,5 +207,6 @@ chatsRouter
 
 chatsRouter.use(`/:chatId/${routes.documents.DOCUMENTS}`, entityIdValidator("chatId"), documentsRouter);
 chatsRouter.use(`/:chatId/${routes.messages.MESSAGES}`, entityIdValidator("chatId"), messagesRouter);
+chatsRouter.use(`/:chatId/${routes.participants.PARTICIPANTS}`, entityIdValidator("chatId"), participantsRouter);
 
 export default chatsRouter;

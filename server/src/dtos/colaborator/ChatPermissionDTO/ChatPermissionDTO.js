@@ -1,4 +1,5 @@
 import EntityDTO from "../../utils/EntityDTO.js";
+
 /**
  * @openapi
  * components:
@@ -13,10 +14,10 @@ import EntityDTO from "../../utils/EntityDTO.js";
  *           properties:
  *             allowedAction:
  *               type: string
- *               description: Actions that is being permitted in the chat.
- *               example: upload_docs
+ *               description: Action that is being permitted in the chat.
+ *               example: read_docs
  */
-export default class ChatOutputDTO extends EntityDTO {
+export default class ChatPermissionDTO extends EntityDTO {
     /**
      * Allowed action in the chat
      * @type {String}

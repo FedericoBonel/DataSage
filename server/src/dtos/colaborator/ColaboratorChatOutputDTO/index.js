@@ -1,20 +1,9 @@
 import ChatDetailsOutputDTO from "./ChatDetailsOutputDTO.js";
-import ChatPermissionDTO from "./ChatPermissionDTO.js";
 import { toChatOwnerDTO } from "../../chats/ChatOutputDTO/index.js";
+import { toChatPermissionDTO } from "../ChatPermissionDTO/index.js";
 
 /**
- * Transforms a colaborator permission as it is stored in the database to how it should be exposed inside a chat.
- * @param {*} permission The permission as it is stored in the database
- */
-const toChatPermissionDTO = (permission) => {
-    const dto = new ChatPermissionDTO();
-    dto._id = permission._id;
-    dto.allowedAction = permission.allowedAction;
-    return dto;
-};
-
-/**
- * Transforms a colaborator as it is stored in the database to how it should be exposed in a detailed manner.
+ * Transforms a colaborator as it is stored in the database to how it should be exposed in a detailed manner as a chat.
  * @param {*} colaborator The colaborator as it is stored in the database
  * @param {string} userId The id of the user requesting the details of the chat
  * @returns The colaborator chat
@@ -31,4 +20,4 @@ const colaboratorToChatDetailsOutputDTO = (colaborator, userId) => {
     return dto;
 };
 
-export { toChatPermissionDTO, colaboratorToChatDetailsOutputDTO };
+export { colaboratorToChatDetailsOutputDTO };

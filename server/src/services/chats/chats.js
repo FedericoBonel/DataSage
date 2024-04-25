@@ -86,7 +86,7 @@ const get = async (
         { skip, limit: pagination.limit, sort: "-createdAt" }
     );
 
-    return savedChatsForUser.map((colaborator) => colaboratorDTO.toColaboratorOutputDTO(colaborator));
+    return savedChatsForUser.map((colaborator) => colaboratorDTO.toChatExcerptOutputDTO(colaborator));
 };
 
 /**
