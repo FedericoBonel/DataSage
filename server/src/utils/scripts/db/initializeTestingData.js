@@ -7,6 +7,7 @@ import { colaborator } from "../../../models/colaborator/colaborator.js";
 import { permission } from "../../../models/permission/permission.js";
 import { message } from "../../../models/message/message.js";
 import { permissions } from "../../constants/index.js";
+import dummyUsers from "./dummydata/users.js";
 
 if (config.node_environment !== "development") {
     process.exit(); // Only run in development mode
@@ -22,13 +23,19 @@ await colaborator.createCollection();
 await permission.createCollection();
 await message.createCollection();
 
-// Check if there is a user already and create one for testing otherwise
-const userExists = await user.findOne({ isAdmin: true }).lean();
-if (!userExists) {
+// Add user dummy data
+const noAdminUsersExist = await user.findOne({ isAdmin: false }).lean();
+if (!noAdminUsersExist) {
+    await user.insertMany(dummyUsers);
+}
+
+// Check if there is an Admin already and create one for testing otherwise
+const adminUserExists = await user.findOne({ isAdmin: true }).lean();
+if (!adminUserExists) {
     await user.create({
-        names: "Admin",
-        lastnames: "Admin",
-        email: config.server.admin.email,
+        names: "admin",
+        lastnames: "admin",
+        email: config.server.admin.email?.toLowerCase(),
         password: config.server.admin.password,
         isAdmin: true,
     });
