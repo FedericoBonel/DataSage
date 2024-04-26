@@ -4,6 +4,7 @@ import errorMessages from "./messages/errors.js";
 import openapiMessages from "./messages/openapi.js";
 import swaggeruiRoutes from "./routes/swaggerui.js";
 import chatsRoutes from "./routes/chats.js";
+import notificationsRoutes from "./routes/notifications.js";
 import docsRoutes from "./routes/documents.js";
 import messagesRoutes from "./routes/messages.js";
 import participantsRoutes from "./routes/participants.js";
@@ -35,6 +36,7 @@ export const messages = Object.freeze({
 export const routes = Object.freeze({
     swaggerUi: swaggeruiRoutes,
     chats: chatsRoutes,
+    notifications: notificationsRoutes,
     documents: docsRoutes,
     messages: messagesRoutes,
     participants: participantsRoutes,
