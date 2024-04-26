@@ -8,7 +8,7 @@ import { toChatPermissionDTO } from "../ChatPermissionDTO/index.js";
  */
 const colaboratorToParticipantOutputDTO = (colaborator) => {
     const dto = new ParticipantOutputDTO();
-    dto._id = colaborator.chat._id;
+    dto._id = colaborator.user._id;
     dto.names = colaborator.user.names;
     dto.lastnames = colaborator.user.lastnames;
     dto.email = colaborator.user.email;

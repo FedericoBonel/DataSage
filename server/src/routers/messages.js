@@ -22,7 +22,7 @@ messagesRouter
      *     parameters:
      *       - in: path
      *         name: chatId
-     *         description: Id of the chat from wich you want to retrieve the messages.
+     *         description: Id of the chat from which you want to retrieve the messages.
      *         example: 65154ed674410acd535bc0d3
      *         schema:
      *           type: string

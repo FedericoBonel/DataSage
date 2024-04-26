@@ -23,7 +23,7 @@ participantsRouter
      *     parameters:
      *       - in: path
      *         name: chatId
-     *         description: Id of the chat from wich you want to retrieve the participants.
+     *         description: Id of the chat from which you want to retrieve the participants.
      *         example: 65154ed674410acd535bc0d3
      *         schema:
      *           type: string
@@ -98,6 +98,48 @@ participantsRouter
     /**
      * @openapi
      * /chats/{chatId}/participants/{participantId}:
+     *   get:
+     *     tags: [Chat Participants]
+     *     summary: Gets a participant (non owner) from a chat by id.
+     *     description: Gets a participant (non owner) from a chat by id. It can be used in a client to show the participant and its detailed information in an update participant form or similar.
+     *     parameters:
+     *       - in: path
+     *         name: chatId
+     *         description: Id of the chat from which you want to retrieve the participant.
+     *         example: 65154ed674410acd535bc0d3
+     *         schema:
+     *           type: string
+     *       - in: path
+     *         name: participantId
+     *         description: Id of the participant to get from the chat.
+     *         example: 65154ed674410acd535bc0d3
+     *         schema:
+     *           type: string
+     *     responses:
+     *       200:
+     *         description: Returns the chat participant that matches the provided ids.
+     *         content:
+     *           application/json:
+     *             schema:
+     *               allOf:
+     *                 - $ref: '#/components/schemas/SuccessApiPayload'
+     *                 - type: object
+     *                   required:
+     *                     - data
+     *                   properties:
+     *                     data:
+     *                       type: array
+     *                       items:
+     *                         $ref: '#/components/schemas/ParticipantDetailsOutputDTO'
+     *       400:
+     *         $ref: '#/components/responses/400Response'
+     *       404:
+     *         $ref: '#/components/responses/404Response'
+     */
+    .get(participantsController.getById)
+    /**
+     * @openapi
+     * /chats/{chatId}/participants/{participantId}:
      *   delete:
      *     tags: [Chat Participants]
      *     summary: Deletes a participant (non owner) from a chat.
@@ -105,7 +147,7 @@ participantsRouter
      *     parameters:
      *       - in: path
      *         name: chatId
-     *         description: Id of the chat from wich you want to remove the participant.
+     *         description: Id of the chat from which you want to remove the participant.
      *         example: 65154ed674410acd535bc0d3
      *         schema:
      *           type: string

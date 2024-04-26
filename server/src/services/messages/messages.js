@@ -67,7 +67,7 @@ const generateResponse = async (prompt, chatId, userId) => {
  * @param {Object} [pagination={}] Pagination options.
  * @param {number} [pagination.page=undefined] Page number.
  * @param {number} [pagination.limit=undefined] Limit per page.
- * @returns The chat history that match the parameters.
+ * @returns The chat history that matches the parameters.
  */
 const getByChatId = async (userId, chatId, pagination = { page: 1, limit: 10 }) => {
     const foundColaborator = await colaboratorsRepository.getByChatAndUser(chatId, userId);

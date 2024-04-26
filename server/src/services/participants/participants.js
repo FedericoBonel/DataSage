@@ -75,7 +75,7 @@ const createByChatId = async (newParticipant, chatId, user) => {
  * @param {Object} [pagination={}] Pagination options.
  * @param {number} [pagination.page=undefined] Page number.
  * @param {number} [pagination.limit=undefined] Limit per page.
- * @returns The list of chat participants that match the parameters.
+ * @returns The list of chat participants that matches the parameters.
  */
 const getByChatId = async (
     chatId,
@@ -107,6 +107,22 @@ const getByChatId = async (
 };
 
 /**
+ * Retrieves a participant from a chat by chat id and participant id.
+ * @param {string} participantId Id of the participant to get from the chat.
+ * @param {string} chatId Id of the chat from which to get the participant from.
+ * @param {string} userId The Id of the user that is logged in.
+ * @returns The participant that matches the parameters.
+ */
+const getById = async (participantId, chatId, userId) => {
+    const foundCollab = await collaboratorsRepository.getByChatOwnerAndUser(chatId, userId, participantId);
+    if (!foundCollab) {
+        throw new NotFoundError(messages.errors.ROUTE_NOT_FOUND);
+    }
+
+    return collaboratorsDTO.colaboratorToParticipantOutputDTO(foundCollab);
+};
+
+/**
  * Deletes a participant from a chat by id and all its related messages and notifications.
  * @param {*} participantId Id of the participant (user) to delete from the chat.
  * @param {*} chatId Id of the chat where the participant needs to be removed from.
@@ -127,4 +143,4 @@ const deleteById = async (participantId, chatId, userId) => {
     return collaboratorsDTO.colaboratorToParticipantOutputDTO(deletedCollab);
 };
 
-export default { createByChatId, getByChatId, deleteById };
+export default { createByChatId, getByChatId, getById, deleteById };

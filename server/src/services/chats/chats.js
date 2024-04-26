@@ -64,7 +64,7 @@ const create = async (chat, documents, userId) => {
  * @param {Object} [pagination={}] Pagination options.
  * @param {number} [pagination.page=undefined] Page number.
  * @param {number} [pagination.limit=undefined] Limit per page.
- * @returns The list of chats that match the parameters.
+ * @returns The list of chats that matches the parameters.
  */
 const get = async (
     userId,

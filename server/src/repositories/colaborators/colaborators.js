@@ -89,10 +89,26 @@ const getAllByChatAndUserTextMatch = async (
  * @param {string} chatId Id of the chat to retrieve.
  * @param {string} userId Id of the colaborator user.
  * @param {boolean | null} [hasJoined] Whether it should look for users who have joined or not. If false, only returns those who haven't joined to the chat. If null it returns everything. By default returns only those who have joined.
- * @returns The saved chat with that id and that colaborator.
+ * @returns The saved collaborator with that id and that chat user.
  */
-const getByChatAndUser = async (chatId, userId, hasJoined = true) =>
-    colaborator.findOne({ "chat._id": chatId, "user._id": userId, hasJoined }).lean();
+const getByChatAndUser = async (chatId, userId, hasJoined = true) => {
+    if (!chatId || !userId) throw Error("Missing parameters");
+
+    return colaborator.findOne({ "chat._id": chatId, "user._id": userId, hasJoined }).lean();
+};
+
+/**
+ * Gets a colaborator instance by chat id, owner id and colaborator user id.
+ * @param {string} chatId Id of the chat to retrieve.
+ * @param {string} ownerId Id of the owner of the chat.
+ * @param {string} userId Id of the user of the chat.
+ * @returns The saved collaborator with that id, that chat owner and that chat user.
+ */
+const getByChatOwnerAndUser = async (chatId, ownerId, userId) => {
+    if (!chatId || !userId || !ownerId) throw Error("Missing parameters");
+
+    return colaborator.findOne({ "chat._id": chatId, "chat.owner._id": ownerId, "user._id": userId }).lean();
+};
 
 /**
  * Deletes a collaborator instance from a chat by chat id, chat owner id and user id.
@@ -130,4 +146,11 @@ const deleteByChatOwnerAndUser = async (chatId, ownerId, userId) => {
     return deletedCollab;
 };
 
-export default { save, getAllBy, getByChatAndUser, getAllByChatAndUserTextMatch, deleteByChatOwnerAndUser };
+export default {
+    save,
+    getAllBy,
+    getByChatAndUser,
+    getAllByChatAndUserTextMatch,
+    getByChatOwnerAndUser,
+    deleteByChatOwnerAndUser,
+};
