@@ -1,7 +1,9 @@
 import { Router } from "express";
+import participationRouter from "./participation.js";
 import participantValidator from "../middleware/validators/participants/index.js";
 import entityIdValidator from "../middleware/validators/utils/entityIdValidator.js";
 import participantsController from "../controllers/participants.js";
+import { routes } from "../utils/constants/index.js";
 
 const participantsRouter = Router({ mergeParams: true });
 
@@ -227,5 +229,7 @@ participantsRouter
      *         $ref: '#/components/responses/404Response'
      */
     .delete(entityIdValidator("participantId"), participantsController.deleteById);
+
+participantsRouter.use(`/${routes.participation.PARTICIPATION}`, participationRouter);
 
 export default participantsRouter;

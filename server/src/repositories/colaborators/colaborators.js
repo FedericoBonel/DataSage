@@ -118,9 +118,9 @@ const getByChatOwnerAndUser = async (chatId, ownerId, userId) => {
 /**
  * Updates a collaborator instance by the chat it belongs to, the owner of the chat and the user of the chat.
  * @param {*} updatedCollaborator The updates to be applied to the collaborator instance
- * @param {*} chatId The id of the chat from which to update the collaborator instace
- * @param {*} ownerId The id of the owner of the chat from which to update the collaborator instance
- * @param {*} userId The id of the user whose collaborator instance is being updated
+ * @param {string} chatId The id of the chat from which to update the collaborator instance
+ * @param {string} ownerId The id of the owner of the chat from which to update the collaborator instance
+ * @param {string} userId The id of the user whose collaborator instance is being updated
  * @returns The collaborator instance as it is after being updated.
  */
 const updateByChatOwnerAndUser = async (updatedCollaborator, chatId, ownerId, userId) => {
@@ -131,6 +131,31 @@ const updateByChatOwnerAndUser = async (updatedCollaborator, chatId, ownerId, us
             "chat._id": chatId,
             "chat.owner._id": ownerId,
             "user._id": userId,
+        },
+        updatedCollaborator,
+        { new: true, runValidators: true }
+    );
+
+    return updatedCollab;
+};
+
+/**
+ * Updates a collaborator instance by the chat it belongs to, the user of the chat and the has joined state of that user.
+ * @param {*} updatedCollaborator The updates to be applied to the collaborator instance
+ * @param {string} chatId The id of the chat from which to update the collaborator instance
+ * @param {string} userId The id of the user whose collaborator instance is being updated
+ * @param {boolean} hasJoined True if the update should be done where the user of this collaboration instance has joined its chat and false otherwise
+ * @returns The collaborator instance as it is after being updated.
+ */
+const updateByChatUserAndHasJoined = async (updatedCollaborator, chatId, userId, hasJoined) => {
+    if (!chatId || !userId || hasJoined === null || hasJoined === undefined || !updatedCollaborator)
+        throw Error("Missing Parameters");
+
+    const updatedCollab = await colaborator.findOneAndUpdate(
+        {
+            "chat._id": chatId,
+            "user._id": userId,
+            hasJoined,
         },
         updatedCollaborator,
         { new: true, runValidators: true }
@@ -182,5 +207,6 @@ export default {
     getAllByChatAndUserTextMatch,
     getByChatOwnerAndUser,
     updateByChatOwnerAndUser,
+    updateByChatUserAndHasJoined,
     deleteByChatOwnerAndUser,
 };

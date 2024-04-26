@@ -7,6 +7,7 @@ import chatsRoutes from "./routes/chats.js";
 import docsRoutes from "./routes/documents.js";
 import messagesRoutes from "./routes/messages.js";
 import participantsRoutes from "./routes/participants.js";
+import participationRoutes from "./routes/participation.js";
 import chatValidation from "./validation/chat.js";
 import userValidation from "./validation/user.js";
 import documentValidation from "./validation/document.js";
@@ -37,6 +38,7 @@ export const routes = Object.freeze({
     documents: docsRoutes,
     messages: messagesRoutes,
     participants: participantsRoutes,
+    participation: participationRoutes,
 });
 
 /** Object with all the validation values used in the application for each entity. */
