@@ -116,7 +116,9 @@ const addDocsById = async (documents, chatId) => {
  */
 const updateByIdAndOwner = async (updates, chatId, ownerId) => {
     if (!chatId || !ownerId) throw Error("Missing parameters");
-    const oldChat = await chat.findOneAndUpdate({ _id: chatId, "owner._id": ownerId }, updates).lean();
+    const oldChat = await chat
+        .findOneAndUpdate({ _id: chatId, "owner._id": ownerId }, updates, { runValidators: true })
+        .lean();
 
     // If nothing was found return it as undefined;
     if (!oldChat) {

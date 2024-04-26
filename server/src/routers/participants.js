@@ -140,6 +140,56 @@ participantsRouter
     /**
      * @openapi
      * /chats/{chatId}/participants/{participantId}:
+     *   put:
+     *     tags: [Chat Participants]
+     *     summary: Updates a participant (non owner) in a chat.
+     *     description: Updates a participant (non owner) in a chat by chat id and participant id. It can be used to allow chat owners to change participant permissions in their chats and manage their access.
+     *     parameters:
+     *       - in: path
+     *         name: chatId
+     *         description: Id of the chat in which you want to update the participant.
+     *         example: 65154ed674410acd535bc0d3
+     *         schema:
+     *           type: string
+     *       - in: path
+     *         name: participantId
+     *         description: Id of the participant to update in the chat.
+     *         example: 65154ed674410acd535bc0d3
+     *         schema:
+     *           type: string
+     *     requestBody:
+     *       required: true
+     *       content:
+     *         application/json:
+     *           schema:
+     *             $ref: '#/components/schemas/UpdateParticipantSchema'
+     *     responses:
+     *       200:
+     *         description: Update was successful and the updated participant is returned.
+     *         content:
+     *           application/json:
+     *             schema:
+     *               allOf:
+     *                 - $ref: '#/components/schemas/SuccessApiPayload'
+     *                 - type: object
+     *                   required:
+     *                     - data
+     *                   properties:
+     *                     data:
+     *                       $ref: "#/components/schemas/ParticipantDetailsOutputDTO"
+     *       400:
+     *         $ref: '#/components/responses/400Response'
+     *       404:
+     *         $ref: '#/components/responses/404Response'
+     */
+    .put(
+        entityIdValidator("participantId"),
+        participantValidator.updateParticipantValidator,
+        participantsController.updateById
+    )
+    /**
+     * @openapi
+     * /chats/{chatId}/participants/{participantId}:
      *   delete:
      *     tags: [Chat Participants]
      *     summary: Deletes a participant (non owner) from a chat.

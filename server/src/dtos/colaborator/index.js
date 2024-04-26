@@ -20,11 +20,21 @@ const newChatToColaboratorModel = (user, chat) => ({
  * Formats the data of a new participant to how it should be stored in database for collaborators
  * @param {*} user The user as it is saved in the database that is invited to the chat
  * @param {*} chat The chat where the user is being invited as it is stored in the database
- * @param {Array.<*>} permissions The dabatased stored permissions that the user will have in the chat
+ * @param {Array.<*>} permissions The database stored permissions that the user will have in the chat
+ * @returns The new collaborator as it should be stored in the database.
  */
 const newParticipantToColaboratorModel = (user, chat, permissions) => ({
     user,
     chat,
+    permissions,
+});
+
+/**
+ * Formats the data of a participant update to how it should be stored in database for collaborators
+ * @param {Array.<*>} permissions The database stored permissions that the user will have in the chat
+ * @returns The updated collaborator as it should be stored in the database.
+ */
+const updateParticipantToColaboratorModel = (permissions) => ({
     permissions,
 });
 
@@ -44,6 +54,7 @@ const toChatExcerptOutputDTO = (colaborator) => {
 export default {
     newChatToColaboratorModel,
     newParticipantToColaboratorModel,
+    updateParticipantToColaboratorModel,
     toChatExcerptOutputDTO,
     colaboratorToChatDetailsOutputDTO,
     colaboratorToParticipantOutputDTO,

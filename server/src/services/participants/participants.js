@@ -123,6 +123,33 @@ const getById = async (participantId, chatId, userId) => {
 };
 
 /**
+ * Updates a participant by chat and participant id
+ * @param {{permissions: Array.<string>}} updatedParticipant The participant updates to be applied.
+ * @param {string} participantId Id of the participant to updated in the chat.
+ * @param {string} chatId Id of the chat from which to update the participant from.
+ * @param {string} userId The id of the logged in user
+ * @returns The participant after being updated and as it should be exposed to the web.
+ */
+const updateById = async (updatedParticipant, participantId, chatId, userId) => {
+    const savedPermissions = await permissionsRepository.getByAllowedActions(updatedParticipant.permissions);
+    if (savedPermissions.length !== updatedParticipant.permissions.length) {
+        throw new NotFoundError(messages.errors.ROUTE_NOT_FOUND);
+    }
+
+    const savedCollab = await collaboratorsRepository.updateByChatOwnerAndUser(
+        collaboratorsDTO.updateParticipantToColaboratorModel(savedPermissions),
+        chatId,
+        userId,
+        participantId
+    );
+    if (!savedCollab) {
+        throw new NotFoundError(messages.errors.ROUTE_NOT_FOUND);
+    }
+
+    return collaboratorsDTO.colaboratorToParticipantOutputDTO(savedCollab);
+};
+
+/**
  * Deletes a participant from a chat by id and all its related messages and notifications.
  * @param {*} participantId Id of the participant (user) to delete from the chat.
  * @param {*} chatId Id of the chat where the participant needs to be removed from.
@@ -143,4 +170,4 @@ const deleteById = async (participantId, chatId, userId) => {
     return collaboratorsDTO.colaboratorToParticipantOutputDTO(deletedCollab);
 };
 
-export default { createByChatId, getByChatId, getById, deleteById };
+export default { createByChatId, getByChatId, getById, updateById, deleteById };

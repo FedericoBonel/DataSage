@@ -94,7 +94,12 @@ const getAllByChatAndUserTextMatch = async (
 const getByChatAndUser = async (chatId, userId, hasJoined = true) => {
     if (!chatId || !userId) throw Error("Missing parameters");
 
-    return colaborator.findOne({ "chat._id": chatId, "user._id": userId, hasJoined }).lean();
+    const filters = { "chat._id": chatId, "user._id": userId };
+    if (hasJoined !== null) {
+        filters.hasJoined = hasJoined;
+    }
+
+    return colaborator.findOne(filters).lean();
 };
 
 /**
@@ -108,6 +113,30 @@ const getByChatOwnerAndUser = async (chatId, ownerId, userId) => {
     if (!chatId || !userId || !ownerId) throw Error("Missing parameters");
 
     return colaborator.findOne({ "chat._id": chatId, "chat.owner._id": ownerId, "user._id": userId }).lean();
+};
+
+/**
+ * Updates a collaborator instance by the chat it belongs to, the owner of the chat and the user of the chat.
+ * @param {*} updatedCollaborator The updates to be applied to the collaborator instance
+ * @param {*} chatId The id of the chat from which to update the collaborator instace
+ * @param {*} ownerId The id of the owner of the chat from which to update the collaborator instance
+ * @param {*} userId The id of the user whose collaborator instance is being updated
+ * @returns The collaborator instance as it is after being updated.
+ */
+const updateByChatOwnerAndUser = async (updatedCollaborator, chatId, ownerId, userId) => {
+    if (!chatId || !ownerId || !userId || !updatedCollaborator) throw Error("Missing Parameters");
+
+    const updatedCollab = await colaborator.findOneAndUpdate(
+        {
+            "chat._id": chatId,
+            "chat.owner._id": ownerId,
+            "user._id": userId,
+        },
+        updatedCollaborator,
+        { new: true, runValidators: true }
+    );
+
+    return updatedCollab;
 };
 
 /**
@@ -152,5 +181,6 @@ export default {
     getByChatAndUser,
     getAllByChatAndUserTextMatch,
     getByChatOwnerAndUser,
+    updateByChatOwnerAndUser,
     deleteByChatOwnerAndUser,
 };
