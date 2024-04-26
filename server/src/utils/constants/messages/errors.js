@@ -4,6 +4,7 @@ import docValidation from "./validation/document.js";
 import pageValidation from "./validation/page.js";
 import collabValidation from "./validation/colaborator.js";
 import participantValidation from "./validation/participant.js";
+import participationValidation from "./validation/participation.js";
 import relEntityTypeValidation from "./validation/relatedEntityType.js";
 import notificationValidation from "./validation/notification.js";
 import notificationTypeValidation from "./validation/notificationType.js";
@@ -29,6 +30,7 @@ export default Object.freeze({
         page: pageValidation,
         colaborator: collabValidation,
         participant: participantValidation,
+        participation: participationValidation,
         relatedEntityType: relEntityTypeValidation,
         notification: notificationValidation,
         notificationType: notificationTypeValidation,

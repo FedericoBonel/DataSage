@@ -44,6 +44,40 @@ participationRouter
      *       404:
      *         $ref: '#/components/responses/404Response'
      */
-    .post(participationsController.create);
+    .post(participationsController.create)
+    /**
+     * @openapi
+     * /chats/{chatId}/participants/participation:
+     *   delete:
+     *     tags: [Chat Participation]
+     *     summary: Leaves a chat that the logged-in user is participating in as a participant (not the chat owner).
+     *     description: Leaves a chat that the logged-in user is participating in as a participant (not the chat owner). It can be used to allow a user to exit the chat in question. Once the user exits a chat all the messages the user made with the chat will be deleted and it will be inaccessible by them.
+     *     parameters:
+     *       - in: path
+     *         name: chatId
+     *         description: Id of the chat to exit.
+     *         example: 65154ed674410acd535bc0d3
+     *         schema:
+     *           type: string
+     *     responses:
+     *       200:
+     *         description: The user has successfully left the chat, all of their messages have been deleted and the chat information for the user as it was before leaving is returned.
+     *         content:
+     *           application/json:
+     *             schema:
+     *               allOf:
+     *                 - $ref: '#/components/schemas/SuccessApiPayload'
+     *                 - type: object
+     *                   required:
+     *                     - data
+     *                   properties:
+     *                     data:
+     *                       $ref: "#/components/schemas/ChatDetailsOutputDTO"
+     *       400:
+     *         $ref: '#/components/responses/400Response'
+     *       404:
+     *         $ref: '#/components/responses/404Response'
+     */
+    .delete(participationsController.deleteById);
 
 export default participationRouter;

@@ -7,9 +7,19 @@ const create = async (req, res) => {
     const { chatId } = req.params;
     const user = req.user;
 
-    const savedParticipant = await participationsServices.joinChatById(chatId, user._id);
+    const savedParticipation = await participationsServices.joinChatById(chatId, user._id);
 
-    res.status(StatusCodes.CREATED).json(new SuccessPayload(savedParticipant));
+    res.status(StatusCodes.CREATED).json(new SuccessPayload(savedParticipation));
 };
 
-export default { create };
+/** Controller that handles requests that ask to leave a chat after accessing it. */
+const deleteById = async (req, res) => {
+    const { chatId } = req.params;
+    const user = req.user;
+
+    const deletedParticipation = await participationsServices.leaveChatById(chatId, user._id);
+
+    res.status(StatusCodes.OK).json(new SuccessPayload(deletedParticipation));
+};
+
+export default { create, deleteById };

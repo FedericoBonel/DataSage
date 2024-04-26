@@ -1,5 +1,5 @@
 import { Router } from "express";
-import participationRouter from "./participation.js";
+import participationRouter from "./participations.js";
 import participantValidator from "../middleware/validators/participants/index.js";
 import entityIdValidator from "../middleware/validators/utils/entityIdValidator.js";
 import participantsController from "../controllers/participants.js";
@@ -94,6 +94,8 @@ participantsRouter
      *         $ref: '#/components/responses/404Response'
      */
     .post(participantValidator.newParticipantValidator, participantsController.create);
+
+participantsRouter.use(`/${routes.participation.PARTICIPATION}`, participationRouter);
 
 participantsRouter
     .route("/:participantId")
@@ -229,7 +231,5 @@ participantsRouter
      *         $ref: '#/components/responses/404Response'
      */
     .delete(entityIdValidator("participantId"), participantsController.deleteById);
-
-participantsRouter.use(`/${routes.participation.PARTICIPATION}`, participationRouter);
 
 export default participantsRouter;
