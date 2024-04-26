@@ -13,4 +13,15 @@ const create = async (req, res) => {
     res.status(StatusCodes.CREATED).json(new SuccessPayload(savedParticipant));
 };
 
-export default { create };
+/** Controller that handles all requests that ask for a list of participants */
+const get = async (req, res) => {
+    const { chatId } = req.params;
+    const { textSearch, page, limit } = req.query;
+    const user = req.user;
+
+    const savedParticipants = await participantsServices.getByChatId(chatId, user._id, { textSearch }, { limit, page });
+
+    res.status(StatusCodes.OK).json(new SuccessPayload(savedParticipants));
+};
+
+export default { create, get };

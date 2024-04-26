@@ -14,7 +14,7 @@ const colaboratorToParticipantOutputDTO = (colaborator) => {
     dto.email = colaborator.user.email;
     dto.hasJoined = colaborator.hasJoined;
     dto.permissions = colaborator.permissions.map((permission) => toChatPermissionDTO(permission));
-    dto.createdAt = colaborator.chat.createdAt?.toISOString();
+    dto.createdAt = colaborator.createdAt?.toISOString();
     return dto;
 };
 

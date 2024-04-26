@@ -46,6 +46,39 @@ const getAllBy = async (
 };
 
 /**
+ * Gets a list of collaborators from a chat by id and applies a text search on user attributes (on names, last names and email).
+ *
+ * @param {string} chatId Id of the chat from which to get the collaborators instances from.
+ * @param {Object} [filtering={}] Filtering options.
+ * @param {string} [filtering.textSearch=undefined] Text search query applied to the user name, last names and email of the collaborator instance.
+ * @param {string} [filtering.chatOwnerId=undefined] Chat owner ID filter.
+ * @param {Object} [resultsProcessing={}] Results processing options.
+ * @param {number} [resultsProcessing.skip=0] Number of items to skip from the beggining of the results.
+ * @param {number} [resultsProcessing.limit=undefined] Limit of items to retrieve.
+ * @param {string} [resultsProcessing.sort=undefined] Sorting criteria.
+ * @returns All matching colaborator instances from that chat
+ */
+const getAllByChatAndUserTextMatch = async (
+    chatId,
+    filtering = { textSearch: undefined, chatOwnerId: undefined },
+    resultsProcessing = { skip: 0, limit: undefined, sort: undefined }
+) => {
+    const filterQuery = { "chat._id": chatId };
+    if (filtering.chatOwnerId) filterQuery["chat.owner._id"] = filtering.chatOwnerId;
+    if (filtering.textSearch) {
+        const regexp = { $regex: `^${filtering.textSearch.toLowerCase()}` };
+
+        filterQuery.$or = [{ "user.names": regexp }, { "user.lastnames": regexp }, { "user.email": regexp }];
+    }
+    return colaborator
+        .find(filterQuery)
+        .sort(`${resultsProcessing.sort} _id`)
+        .skip(resultsProcessing.skip)
+        .limit(resultsProcessing.limit)
+        .lean();
+};
+
+/**
  * Gets a colaborator instance by chat id and colaborator user id.
  * @param {string} chatId Id of the chat to retrieve.
  * @param {string} userId Id of the colaborator user.
@@ -54,4 +87,4 @@ const getAllBy = async (
 const getByChatAndUser = async (chatId, userId) =>
     colaborator.findOne({ "chat._id": chatId, "user._id": userId }).lean();
 
-export default { save, getAllBy, getByChatAndUser };
+export default { save, getAllBy, getByChatAndUser, getAllByChatAndUserTextMatch };

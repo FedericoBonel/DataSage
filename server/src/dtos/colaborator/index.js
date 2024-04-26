@@ -1,5 +1,6 @@
 import { colaboratorToParticipantOutputDTO } from "./ColaboratorParticipantOutputDTO/index.js";
 import { colaboratorToChatDetailsOutputDTO } from "./ColaboratorChatOutputDTO/index.js";
+import { colaboratorToParticipantExcerptOutputDTO } from "./ColaboratorParticipantExcerptOutputDTO/index.js";
 import { toChatPermissionDTO } from "./ChatPermissionDTO/index.js";
 import ColaboratorChatExcerptOutputDTO from "./ColaboratorChatExcerptOutputDTO/ColaboratorChatExcerptOutputDTO.js";
 import chatsDTO from "../chats/index.js";
@@ -46,5 +47,6 @@ export default {
     toChatExcerptOutputDTO,
     colaboratorToChatDetailsOutputDTO,
     colaboratorToParticipantOutputDTO,
+    colaboratorToParticipantExcerptOutputDTO,
     toChatPermissionDTO,
 };

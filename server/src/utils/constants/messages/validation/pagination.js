@@ -8,6 +8,6 @@ export default Object.freeze({
     },
     limit: {
         /** Message to be shown when the limit number provided in a query is an invalid value */
-        INVALID_VALUE: `The limit of elements by page value must be a positive integer between ${paginationValidation.limit.MIN} and ${paginationValidation.limit.MAX}`,
+        INVALID_VALUE: `The limit of elements by page must be a positive integer between ${paginationValidation.limit.MIN} and ${paginationValidation.limit.MAX}`,
     },
 });

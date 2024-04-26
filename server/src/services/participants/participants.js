@@ -1,13 +1,14 @@
 import chatsRepository from "../../repositories/chats/chats.js";
 import usersRepository from "../../repositories/users/users.js";
 import permissionsRepository from "../../repositories/permissions/permissions.js";
-import colaboratorsRepository from "../../repositories/colaborators/colaborators.js";
+import collaboratorsRepository from "../../repositories/colaborators/colaborators.js";
 import notificationTypesRepository from "../../repositories/notificationTypes/notificationTypes.js";
 import relatedEntityTypesRepository from "../../repositories/relatedEntityTypes/relatedEntityTypes.js";
 import notificationsRepository from "../../repositories/notifications/notifications.js";
 import collaboratorsDTO from "../../dtos/colaborator/index.js";
 import { BadRequestError, NotFoundError } from "../../utils/errors/index.js";
 import { messages, notifications } from "../../utils/constants/index.js";
+import calculateSkip from "../../utils/db/calculateSkip.js";
 
 /**
  * Helper function that generates and saves a notification for a chat invitation
@@ -44,7 +45,7 @@ const createByChatId = async (newParticipant, chatId, user) => {
     }
 
     // Verify that the user isn't already invited (or is the owner of the chat)
-    const foundCollaborator = await colaboratorsRepository.getByChatAndUser(chatId, savedUser._id);
+    const foundCollaborator = await collaboratorsRepository.getByChatAndUser(chatId, savedUser._id);
     if (foundCollaborator) {
         throw new BadRequestError(messages.errors.validation.participant.ALREADY_INVITED);
     }
@@ -56,7 +57,7 @@ const createByChatId = async (newParticipant, chatId, user) => {
     }
 
     // Save the collaborator instance
-    const savedCollaborator = await colaboratorsRepository.save(
+    const savedCollaborator = await collaboratorsRepository.save(
         collaboratorsDTO.newParticipantToColaboratorModel(savedUser, savedChat, savedPermissions)
     );
 
@@ -66,4 +67,43 @@ const createByChatId = async (newParticipant, chatId, user) => {
     return collaboratorsDTO.colaboratorToParticipantOutputDTO(savedCollaborator);
 };
 
-export default { createByChatId };
+/**
+ * Retrieves a list of participants from a chat by id based on provided parameters.
+ * @param {string} userId The Id of the user that is logged in.
+ * @param {Object} [filtering={}] Filtering options. This will filter out values in the result.
+ * @param {string} [filtering.textSearch=undefined] Text search query. Filters values to only those that match this text search in the participant's names, lastnames or email.
+ * @param {Object} [pagination={}] Pagination options.
+ * @param {number} [pagination.page=undefined] Page number.
+ * @param {number} [pagination.limit=undefined] Limit per page.
+ * @returns The list of chat participants that match the parameters.
+ */
+const getByChatId = async (
+    chatId,
+    userId,
+    filtering = { textSearch: undefined },
+    pagination = { page: 1, limit: 10 }
+) => {
+    // Verify the chat exists for this owner
+    const foundChat = await chatsRepository.getByIdAndOwner(chatId, userId);
+    if (!foundChat) {
+        throw new NotFoundError(messages.errors.ROUTE_NOT_FOUND);
+    }
+
+    const skip = calculateSkip(pagination.page, pagination.limit);
+    const foundCollabs = await collaboratorsRepository.getAllByChatAndUserTextMatch(
+        chatId,
+        { textSearch: filtering.textSearch, chatOwnerId: userId },
+        { skip, limit: pagination.limit, sort: "-createdAt" }
+    );
+
+    const result = [];
+    foundCollabs.forEach((collab) => {
+        // Filter out the logged in user that is requesting for this list
+        if (collab.user._id.toString() !== userId)
+            result.push(collaboratorsDTO.colaboratorToParticipantExcerptOutputDTO(collab));
+    });
+
+    return result;
+};
+
+export default { createByChatId, getByChatId };
