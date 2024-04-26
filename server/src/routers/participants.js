@@ -1,5 +1,6 @@
 import { Router } from "express";
 import participantValidator from "../middleware/validators/participants/index.js";
+import entityIdValidator from "../middleware/validators/utils/entityIdValidator.js";
 import participantsController from "../controllers/participants.js";
 
 const participantsRouter = Router({ mergeParams: true });
@@ -84,14 +85,55 @@ participantsRouter
      *                     - data
      *                   properties:
      *                     data:
-     *                       type: array
-     *                       items:
-     *                         $ref: '#/components/schemas/ParticipantDetailsOutputDTO'
+     *                       $ref: "#/components/schemas/ParticipantDetailsOutputDTO"
      *       400:
      *         $ref: '#/components/responses/400Response'
      *       404:
      *         $ref: '#/components/responses/404Response'
      */
     .post(participantValidator.newParticipantValidator, participantsController.create);
+
+participantsRouter
+    .route("/:participantId")
+    /**
+     * @openapi
+     * /chats/{chatId}/participants/{participantId}:
+     *   delete:
+     *     tags: [Chat Participants]
+     *     summary: Deletes a participant (non owner) from a chat.
+     *     description: Deletes a participant (non owner) from a chat by chat id and participant id. It can be used to allow chat owners to delete invited participants from chats and manage access to their chats.
+     *     parameters:
+     *       - in: path
+     *         name: chatId
+     *         description: Id of the chat from wich you want to remove the participant.
+     *         example: 65154ed674410acd535bc0d3
+     *         schema:
+     *           type: string
+     *       - in: path
+     *         name: participantId
+     *         description: Id of the participant to remove from the chat.
+     *         example: 65154ed674410acd535bc0d3
+     *         schema:
+     *           type: string
+     *     responses:
+     *       200:
+     *         description: Deletion was successful and the deleted participant is returned.
+     *         content:
+     *           application/json:
+     *             schema:
+     *               allOf:
+     *                 - $ref: '#/components/schemas/SuccessApiPayload'
+     *                 - type: object
+     *                   required:
+     *                     - data
+     *                   properties:
+     *                     data:
+     *                       $ref: "#/components/schemas/ParticipantDetailsOutputDTO"
+     *       400:
+     *         $ref: '#/components/responses/400Response'
+     *       404:
+     *         $ref: '#/components/responses/404Response'
+     */
+    .delete(entityIdValidator("participantId"), participantsController.deleteById);
 
 export default participantsRouter;

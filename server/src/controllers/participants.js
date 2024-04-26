@@ -24,4 +24,14 @@ const get = async (req, res) => {
     res.status(StatusCodes.OK).json(new SuccessPayload(savedParticipants));
 };
 
-export default { create, get };
+/** Controller that handles all requests that ask for the deletion of a participant from a chat by id */
+const deleteById = async (req, res) => {
+    const { chatId, participantId } = req.params;
+    const user = req.user;
+
+    const deletedParticipant = await participantsServices.deleteById(participantId, chatId, user._id);
+
+    res.status(StatusCodes.OK).json(new SuccessPayload(deletedParticipant));
+};
+
+export default { create, get, deleteById };

@@ -45,7 +45,7 @@ const createByChatId = async (newParticipant, chatId, user) => {
     }
 
     // Verify that the user isn't already invited (or is the owner of the chat)
-    const foundCollaborator = await collaboratorsRepository.getByChatAndUser(chatId, savedUser._id);
+    const foundCollaborator = await collaboratorsRepository.getByChatAndUser(chatId, savedUser._id, null);
     if (foundCollaborator) {
         throw new BadRequestError(messages.errors.validation.participant.ALREADY_INVITED);
     }
@@ -106,4 +106,25 @@ const getByChatId = async (
     return result;
 };
 
-export default { createByChatId, getByChatId };
+/**
+ * Deletes a participant from a chat by id and all its related messages and notifications.
+ * @param {*} participantId Id of the participant (user) to delete from the chat.
+ * @param {*} chatId Id of the chat where the participant needs to be removed from.
+ * @param {*} userId Id of the owner (logged in user) of the chat who is making the request to remove this participant.
+ * @returns The deleted participant as it should be exposed to the web and was before deletion.
+ */
+const deleteById = async (participantId, chatId, userId) => {
+    if (participantId === userId) {
+        throw new BadRequestError(messages.errors.validation.participant.DELETING_ONESELF);
+    }
+
+    const deletedCollab = await collaboratorsRepository.deleteByChatOwnerAndUser(chatId, userId, participantId);
+
+    if (!deletedCollab) {
+        throw new NotFoundError(messages.errors.ROUTE_NOT_FOUND);
+    }
+
+    return collaboratorsDTO.colaboratorToParticipantOutputDTO(deletedCollab);
+};
+
+export default { createByChatId, getByChatId, deleteById };

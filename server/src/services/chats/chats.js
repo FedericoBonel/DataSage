@@ -82,7 +82,7 @@ const get = async (
     const skip = calculateSkip(pagination.page, pagination.limit);
 
     const savedChatsForUser = await colaboratorRepository.getAllBy(
-        { textSearch: filtering.textSearch, chatOwnerId, userId },
+        { textSearch: filtering.textSearch, chatOwnerId, userId, hasJoined: true },
         { skip, limit: pagination.limit, sort: "-createdAt" }
     );
 

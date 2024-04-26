@@ -8,11 +8,15 @@ import { getLLMChat } from "../../lib/langchain.js";
 
 /**
  * Gets a chat by its name and its owner id and returns it
- * @param {String} name Name of the to find
+ * @param {String} name Name of the chat to find
  * @param {String} ownerId Id of the owner of the chat
  * @returns The found chat or undefined if nothing was found
  */
-const getByNameAndOwner = async (name, ownerId) => chat.findOne({ name, "owner._id": ownerId }).lean();
+const getByNameAndOwner = async (name, ownerId) => {
+    if (!name || !ownerId) throw Error("Missing parameters");
+
+    return chat.findOne({ name, "owner._id": ownerId }).lean();
+};
 
 /**
  * Gets a chat by its id and its owner id and returns it
@@ -20,7 +24,11 @@ const getByNameAndOwner = async (name, ownerId) => chat.findOne({ name, "owner._
  * @param {String} ownerId Id of the owner of the chat
  * @returns The found chat or undefined if nothing was found
  */
-const getByIdAndOwner = async (chatId, ownerId) => chat.findOne({ _id: chatId, "owner._id": ownerId }).lean();
+const getByIdAndOwner = async (chatId, ownerId) => {
+    if (!chatId || !ownerId) throw Error("Missing parameters");
+
+    return chat.findOne({ _id: chatId, "owner._id": ownerId }).lean();
+};
 
 /**
  * Stores all documents in the cloud store and formats them to how they should be stored and returns them.
@@ -45,13 +53,21 @@ const storeAllDocs = (documents) =>
  * Deletes a document from the store by its store id
  * @param {string} storeId store id of the file to be removed
  */
-const deleteDocFromStore = (storeId) => deleteFileInS3(storeId);
+const deleteDocFromStore = (storeId) => {
+    if (!storeId) throw Error("Missing parameters");
+
+    return deleteFileInS3(storeId);
+};
 
 /**
  * Deletes multiple documents from the store by their store ids
- * @param {Array.<string>} storeId store ids of the files to be removed
+ * @param {Array.<string>} storeIds store ids of the files to be removed
  */
-const deleteDocsFromStore = (storeId) => deleteMultipleFilesInS3(storeId);
+const deleteDocsFromStore = (storeIds) => {
+    if (!storeIds) throw Error("Missing parameters");
+
+    return deleteMultipleFilesInS3(storeIds);
+};
 
 /**
  * Transforms all document's store ids to signed urls
@@ -84,6 +100,7 @@ const save = async (newChat) => {
  * @returns The updated chat with all its information
  */
 const addDocsById = async (documents, chatId) => {
+    if (!chatId || !documents) throw Error("Missing parameters");
     // Save all documents into the store and add them to the chat
     const savedDocs = await storeAllDocs(documents);
 
@@ -124,6 +141,7 @@ const updateByIdAndOwner = async (updates, chatId, ownerId) => {
  * @returns The deleted chat
  */
 const deleteByIdAndOwner = async (chatId, ownerId) => {
+    if (!chatId || !ownerId) throw Error("Missing parameters");
     // Delete and get the chat
     const deletedChat = await chat.findOneAndDelete({ _id: chatId, "owner._id": ownerId });
     if (!deletedChat) {
