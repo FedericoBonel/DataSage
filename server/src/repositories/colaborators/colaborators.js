@@ -12,15 +12,15 @@ const save = async (newColaborator) => colaborator.create(newColaborator);
 
 /**
  * Retrieves all colaborator instances based on provided parameters.
- * @param {Object} [filtering={}] Filtering options.
- * @param {string} [filtering.textSearch=undefined] Text search query.
- * @param {boolean} [filtering.hasJoined=undefined] If the list should include only collaborators where the user has joined or not.
- * @param {(string|null|undefined)} [filtering.chatOwnerId=undefined] Chat owner ID filter. Can be a valid ID, null, undefined, or 'shared'. If shared and userId provided, values are filtered for that user where ownerId is not equal to them.
- * @param {string} [filtering.userId=undefined] Id of the user colaborator for additional filtering.
- * @param {Object} [resultsProcessing={}] Results processing options.
- * @param {number} [resultsProcessing.skip=0] Number of items to skip from the beggining of the results.
- * @param {number} [resultsProcessing.limit=undefined] Limit of items to retrieve.
- * @param {string} [resultsProcessing.sort=undefined] Sorting criteria.
+ * @param {Object} [filtering] Filtering options.
+ * @param {string} [filtering.textSearch] Text search query.
+ * @param {boolean} [filtering.hasJoined] If the list should include only collaborators where the user has joined or not.
+ * @param {(string|null|undefined)} [filtering.chatOwnerId] Chat owner ID filter. Can be a valid ID, null, undefined, or 'shared'. If shared and userId provided, values are filtered for that user where ownerId is not equal to them.
+ * @param {string} [filtering.userId] Id of the user colaborator for additional filtering.
+ * @param {Object} [resultsProcessing] Results processing options.
+ * @param {number} [resultsProcessing.skip] Number of items to skip from the beggining of the results.
+ * @param {number} [resultsProcessing.limit] Limit of items to retrieve.
+ * @param {string} [resultsProcessing.sort] Sorting criteria.
  * @returns All matching colaborator instances
  */
 const getAllBy = async (

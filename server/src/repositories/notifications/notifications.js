@@ -9,6 +9,33 @@ import { notification } from "../../models/notification/notification.js";
 const save = (newNotification) => notification.create(newNotification);
 
 /**
+ * Retrieves all notifications based on provided parameters.
+ * @param {Object} [filtering] Filtering options.
+ * @param {string} [filtering.toId] The id of the receiver of the notifications to retrieve.
+ * @param {boolean} [filtering.isRead] Is read value for which to filter the results by.
+ * @param {Object} [resultsProcessing] Results processing options.
+ * @param {number} [resultsProcessing.skip] Number of items to skip from the beggining of the results.
+ * @param {number} [resultsProcessing.limit] Limit of items to retrieve.
+ * @param {string} [resultsProcessing.sort] Sorting criteria.
+ * @returns All matching notifications
+ */
+const getAllBy = async (
+    filtering = { toId: undefined, isRead: undefined },
+    resultsProcessing = { skip: 0, limit: undefined, sort: undefined }
+) => {
+    const filterQuery = {};
+    if (filtering.toId) filterQuery["to._id"] = filtering.toId;
+    if (filtering.isRead !== undefined || filtering.isRead !== null) filterQuery.isRead = Boolean(filtering.isRead);
+
+    return notification
+        .find(filterQuery)
+        .sort(`${resultsProcessing.sort} _id`)
+        .skip(resultsProcessing.skip)
+        .limit(resultsProcessing.limit)
+        .lean();
+};
+
+/**
  * Counts notifications based on their read status and recipient id.
  * @param {boolean} isRead The read status of the notifications for the recipient.
  * @param {string} toId The Id of the recipient user.
@@ -27,4 +54,4 @@ const countByIsReadAndTo = async (isRead, toId) => {
     return aggregateRes[0] || { notReadCount: 0 };
 };
 
-export default { save, countByIsReadAndTo };
+export default { save, getAllBy, countByIsReadAndTo };

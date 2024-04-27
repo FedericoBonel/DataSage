@@ -20,4 +20,10 @@ export default Object.freeze({
         /** Message to be shown when the related entity id of a notification is not present. */
         INVALID: "You need to provide the notification related entity id.",
     },
+    filtering: {
+        isRead: {
+            /** Message to be shown when the isRead filter option is invalid. */
+            INVALID: "You need to provide the isRead filter as a boolean value. Accepted values are true or false."
+        }
+    }
 });

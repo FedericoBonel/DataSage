@@ -36,6 +36,7 @@ const paginatedListValidators = expressValidator.checkSchema(
                 },
                 errorMessage: messages.errors.validation.pagination.page.INVALID_VALUE,
             },
+            toInt: true,
         },
         limit: {
             optional: false,
@@ -45,7 +46,8 @@ const paginatedListValidators = expressValidator.checkSchema(
                     max: validation.pagination.limit.MAX,
                 },
                 errorMessage: messages.errors.validation.pagination.limit.INVALID_VALUE,
-            }
+            },
+            toInt: true,
         },
     },
     ["query"]
