@@ -1,3 +1,4 @@
 import notificationFilterValidator from "./notificationFilterValidator.js";
+import notificationUpdateValidator from "./updateNotificationValidator.js";
 
-export default { notificationFilterValidator };
+export default { notificationFilterValidator, notificationUpdateValidator };

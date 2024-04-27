@@ -1,6 +1,7 @@
 import { Router } from "express";
 import notificationsController from "../controllers/notifications.js";
 import notificationValidator from "../middleware/validators/notifications/index.js";
+import entityIdValidator from "../middleware/validators/utils/entityIdValidator.js";
 import { routes } from "../utils/constants/index.js";
 
 const notificationsRouter = Router({ mergeParams: true });
@@ -70,5 +71,46 @@ notificationsRouter
      *                       $ref: "#/components/schemas/NotificationCountDTO"
      */
     .get(notificationsController.checkNotReadCount);
+
+notificationsRouter
+    .route("/:notificationId")
+    /**
+     * @openapi
+     * /notifications/{notificationId}:
+     *   put:
+     *     tags: [User Notifications]
+     *     summary: Updates a notification that belongs to the logged in user.
+     *     description: Updates a notification that belongs to the logged in user. It can be used in a client to mark the notification as read or unread when the user clicks it or interacts with it in some way.
+     *     parameters:
+     *       - in: path
+     *         name: notificationId
+     *         description: Id of the notification to be updated.
+     *         example: 65154ed674410acd535bc0d3
+     *         schema:
+     *           type: string
+     *     responses:
+     *       200:
+     *         description: The notification has been updated successfully and is returned in its updated form.
+     *         content:
+     *           application/json:
+     *             schema:
+     *               allOf:
+     *                 - $ref: '#/components/schemas/SuccessApiPayload'
+     *                 - type: object
+     *                   required:
+     *                     - data
+     *                   properties:
+     *                     data:
+     *                       $ref: "#/components/schemas/NotificationOutputDTO"
+     *       400:
+     *         $ref: '#/components/responses/400Response'
+     *       404:
+     *         $ref: '#/components/responses/404Response'
+     */
+    .put(
+        entityIdValidator("notificationId"),
+        notificationValidator.notificationUpdateValidator,
+        notificationsController.updateById
+    );
 
 export default notificationsRouter;

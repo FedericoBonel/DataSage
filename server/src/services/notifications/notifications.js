@@ -1,6 +1,8 @@
 import notificationsRepository from "../../repositories/notifications/notifications.js";
 import notificationsDTO from "../../dtos/notifications/index.js";
 import calculateSkip from "../../utils/db/calculateSkip.js";
+import NotFoundError from "../../utils/errors/NotFoundError.js";
+import { messages } from "../../utils/constants/index.js";
 
 /**
  * Retrieves a list of notifications for the logged in user based on provided parameters.
@@ -34,4 +36,20 @@ const getNotReadCount = async (userId) => {
     return notificationsDTO.toNotificationCountDTO(notReadCount);
 };
 
-export default { getNotReadCount, get };
+/**
+ * Updates a user notification by id that belongs to a user.
+ * @param {*} updates The updates to be applied to the notification.
+ * @param {string} notificationId The Id of the notification to update.
+ * @param {string} userId The Id of the logged in user the notification belongs to.
+ * @returns The updated notification as it should be exposed to the web.
+ */
+const updateById = async (updates, notificationId, userId) => {
+    const updatedNotification = await notificationsRepository.updateByIdAndTo(updates, notificationId, userId);
+    if (!updatedNotification) {
+        throw new NotFoundError(messages.errors.ROUTE_NOT_FOUND);
+    }
+
+    return notificationsDTO.toNotificationOutputDTO(updatedNotification);
+};
+
+export default { getNotReadCount, get, updateById };

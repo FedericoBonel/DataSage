@@ -21,4 +21,15 @@ const checkNotReadCount = async (req, res) => {
     return res.status(StatusCodes.OK).json(new SuccessPayload(notReadCount));
 };
 
-export default { get, checkNotReadCount };
+/** Controller that handles all requests that update a notification by id */
+const updateById = async (req, res) => {
+    const { notificationId } = req.params;
+    const updatedNotification = req.body;
+    const user = req.user;
+
+    const savedNotification = await notificationsServices.updateById(updatedNotification, notificationId, user._id);
+
+    return res.status(StatusCodes.OK).json(new SuccessPayload(savedNotification));
+};
+
+export default { get, checkNotReadCount, updateById };

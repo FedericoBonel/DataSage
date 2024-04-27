@@ -54,4 +54,24 @@ const countByIsReadAndTo = async (isRead, toId) => {
     return aggregateRes[0] || { notReadCount: 0 };
 };
 
-export default { save, getAllBy, countByIsReadAndTo };
+/**
+ * Updates a notification by id and receiver id.
+ * @param {*} updates Updates to be applied to the notification if found.
+ * @param {string} notificationId The id of the notification to be updated
+ * @param {string} toId The receivers id of the notification
+ * @returns The notification as it is after update. If no such notification was found returns null.
+ */
+const updateByIdAndTo = async (updates, notificationId, toId) => {
+    if (!updates || !notificationId || !toId) {
+        throw Error("Missing parameters");
+    }
+
+    const updatedNotification = notification.findOneAndUpdate({ _id: notificationId, "to._id": toId }, updates, {
+        new: true,
+        runValidators: true,
+    });
+
+    return updatedNotification;
+};
+
+export default { save, getAllBy, countByIsReadAndTo, updateByIdAndTo };
