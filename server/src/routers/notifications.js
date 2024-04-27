@@ -111,6 +111,44 @@ notificationsRouter
         entityIdValidator("notificationId"),
         notificationValidator.notificationUpdateValidator,
         notificationsController.updateById
+    )
+    /**
+     * @openapi
+     * /notifications/{notificationId}:
+     *   delete:
+     *     tags: [User Notifications]
+     *     summary: Deletes a notification that belongs to the logged in user.
+     *     description: Deletes a notification that belongs to the logged in user. It can be used in a client to delete a notification in a notification list.<br />
+     *                  If the user deletes a notification of a chat invitation, the user wont be able to access it from the notification list. They should navigate to the chat in question to accept the invitation or request another invite to receive another notification.
+     *     parameters:
+     *       - in: path
+     *         name: notificationId
+     *         description: Id of the notification to be deleted.
+     *         example: 65154ed674410acd535bc0d3
+     *         schema:
+     *           type: string
+     *     responses:
+     *       200:
+     *         description: The notification has been deleted successfully and is returned as it was before being deleted.
+     *         content:
+     *           application/json:
+     *             schema:
+     *               allOf:
+     *                 - $ref: '#/components/schemas/SuccessApiPayload'
+     *                 - type: object
+     *                   required:
+     *                     - data
+     *                   properties:
+     *                     data:
+     *                       $ref: "#/components/schemas/NotificationOutputDTO"
+     *       400:
+     *         $ref: '#/components/responses/400Response'
+     *       404:
+     *         $ref: '#/components/responses/404Response'
+     */
+    .delete(
+        entityIdValidator("notificationId"),
+        notificationsController.deleteById
     );
 
 export default notificationsRouter;

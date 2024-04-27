@@ -52,4 +52,19 @@ const updateById = async (updates, notificationId, userId) => {
     return notificationsDTO.toNotificationOutputDTO(updatedNotification);
 };
 
-export default { getNotReadCount, get, updateById };
+/**
+ * Deletes a user notification by id that belongs to a user.
+ * @param {string} notificationId The Id of the notification to delete.
+ * @param {string} userId The Id of the logged in user the notification belongs to.
+ * @returns The deleted notification as it should be exposed to the web.
+ */
+const deleteById = async (notificationId, userId) => {
+    const deletedNotification = await notificationsRepository.deleteByIdAndTo(notificationId, userId);
+    if (!deletedNotification) {
+        throw new NotFoundError(messages.errors.ROUTE_NOT_FOUND);
+    }
+
+    return notificationsDTO.toNotificationOutputDTO(deletedNotification);
+};
+
+export default { getNotReadCount, get, updateById, deleteById };

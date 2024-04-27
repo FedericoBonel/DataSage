@@ -40,7 +40,7 @@ const getAllBy = async (
     }
     if (filtering.textSearch) filterQuery.$text = { $search: filtering.textSearch };
     if (filtering.userId) filterQuery["user._id"] = filtering.userId;
-    if (filtering.hasJoined !== undefined || filtering.hasJoined !== null)
+    if (filtering.hasJoined !== undefined && filtering.hasJoined !== null)
         filterQuery.hasJoined = Boolean(filtering.hasJoined);
 
     return colaborator

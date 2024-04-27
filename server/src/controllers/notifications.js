@@ -32,4 +32,14 @@ const updateById = async (req, res) => {
     return res.status(StatusCodes.OK).json(new SuccessPayload(savedNotification));
 };
 
-export default { get, checkNotReadCount, updateById };
+/** Controller that handles all requests that delete a notification by id */
+const deleteById = async (req, res) => {
+    const { notificationId } = req.params;
+    const user = req.user;
+
+    const savedNotification = await notificationsServices.deleteById(notificationId, user._id);
+
+    return res.status(StatusCodes.OK).json(new SuccessPayload(savedNotification));
+};
+
+export default { get, checkNotReadCount, updateById, deleteById };

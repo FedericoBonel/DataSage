@@ -25,7 +25,7 @@ const getAllBy = async (
 ) => {
     const filterQuery = {};
     if (filtering.toId) filterQuery["to._id"] = filtering.toId;
-    if (filtering.isRead !== undefined || filtering.isRead !== null) filterQuery.isRead = Boolean(filtering.isRead);
+    if (filtering.isRead !== undefined && filtering.isRead !== null) filterQuery.isRead = Boolean(filtering.isRead);
 
     return notification
         .find(filterQuery)
@@ -59,14 +59,14 @@ const countByIsReadAndTo = async (isRead, toId) => {
  * @param {*} updates Updates to be applied to the notification if found.
  * @param {string} notificationId The id of the notification to be updated
  * @param {string} toId The receivers id of the notification
- * @returns The notification as it is after update. If no such notification was found returns null.
+ * @returns The notification as it is after update. If no notification was found returns null.
  */
 const updateByIdAndTo = async (updates, notificationId, toId) => {
     if (!updates || !notificationId || !toId) {
         throw Error("Missing parameters");
     }
 
-    const updatedNotification = notification.findOneAndUpdate({ _id: notificationId, "to._id": toId }, updates, {
+    const updatedNotification = await notification.findOneAndUpdate({ _id: notificationId, "to._id": toId }, updates, {
         new: true,
         runValidators: true,
     });
@@ -74,4 +74,20 @@ const updateByIdAndTo = async (updates, notificationId, toId) => {
     return updatedNotification;
 };
 
-export default { save, getAllBy, countByIsReadAndTo, updateByIdAndTo };
+/**
+ * Deletes a notification by id and receiver id.
+ * @param {string} notificationId The id of the notification to be deleted
+ * @param {string} toId The receivers id of the notification
+ * @returns The notification as it was before deletion. If no notification was found returns null.
+ */
+const deleteByIdAndTo = async (notificationId, toId) => {
+    if (!notificationId || !toId) {
+        throw Error("Missing parameters");
+    }
+
+    const deletedNotification = await notification.findOneAndDelete({ _id: notificationId, "to._id": toId });
+
+    return deletedNotification;
+};
+
+export default { save, getAllBy, countByIsReadAndTo, updateByIdAndTo, deleteByIdAndTo };
