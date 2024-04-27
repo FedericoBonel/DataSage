@@ -3,6 +3,7 @@ import { chat } from "../../models/chat/chat.js";
 import { page } from "../../models/page/page.js";
 import { message } from "../../models/message/message.js";
 import { colaborator } from "../../models/colaborator/colaborator.js";
+import { notification } from "../../models/notification/notification.js";
 import { saveFilesInS3, getSignedURLById, deleteFileInS3, deleteMultipleFilesInS3 } from "../../lib/amazonS3.js";
 import { getLLMChat } from "../../lib/langchain.js";
 
@@ -157,17 +158,22 @@ const deleteByIdAndOwner = async (chatId, ownerId) => {
         listOfDocumentsStoreIds.push(doc.storeId);
     });
 
+    // Delete the chat notifications
+    await notification.deleteMany({
+        relatedEntityId: deletedChat._id,
+    });
+
     // Get the ids of the collaborators that are going to be deleted
     const collaboratorsIds = await colaborator
         .aggregate()
         .match({ "chat._id": new Types.ObjectId(chatId), "chat.owner._id": new Types.ObjectId(ownerId) })
         .project({ _id: 1 });
 
-    // Delete the colaborators messages
+    // Delete the collaborators messages
     const listOfCollaboratorsIds = collaboratorsIds.map((collab) => collab._id);
     await message.deleteMany({ colaborator: { $in: listOfCollaboratorsIds } });
 
-    // Delete the colaborators
+    // Delete the collaborators
     await colaborator.deleteMany({ "chat._id": chatId, "chat.owner._id": ownerId });
 
     // Delete the pages of the chat documents
