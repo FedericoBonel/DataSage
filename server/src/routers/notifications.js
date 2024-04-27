@@ -88,6 +88,12 @@ notificationsRouter
      *         example: 65154ed674410acd535bc0d3
      *         schema:
      *           type: string
+     *     requestBody:
+     *       required: true
+     *       content:
+     *         application/json:
+     *           schema:
+     *             $ref: '#/components/schemas/UpdateNotificationSchema'
      *     responses:
      *       200:
      *         description: The notification has been updated successfully and is returned in its updated form.
@@ -146,9 +152,6 @@ notificationsRouter
      *       404:
      *         $ref: '#/components/responses/404Response'
      */
-    .delete(
-        entityIdValidator("notificationId"),
-        notificationsController.deleteById
-    );
+    .delete(entityIdValidator("notificationId"), notificationsController.deleteById);
 
 export default notificationsRouter;
