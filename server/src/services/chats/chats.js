@@ -120,7 +120,7 @@ const updateById = async (updatedChat, chatId, userId) => {
  */
 const getById = async (chatId, userId) => {
     // Get the colaborator instance for the user and check that it exists.
-    const savedChatForUser = await colaboratorRepository.getByChatAndUser(chatId, userId);
+    const savedChatForUser = await colaboratorRepository.getByChatAndUser(chatId, userId, null);
     if (!savedChatForUser) {
         throw new NotFoundError(messages.errors.ROUTE_NOT_FOUND);
     }
