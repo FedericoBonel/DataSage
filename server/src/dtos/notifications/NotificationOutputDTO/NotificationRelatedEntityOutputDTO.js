@@ -10,7 +10,7 @@
  *         - type
  *       properties:
  *         _id:
- *           description: The id of entity this notification refers to. You can use this with the type field to retrieve or redirect the user to the necessary resource.
+ *           description: The id of the entity this notification refers to. You can use this with the type field to retrieve or redirect the user to the necessary resource.
  *           example: 612c540c4e710faa8b71e15a
  *         type:
  *           description: The type of entity this notification refers to. You can use this with the _id field to retrieve or redirect the user to the necessary resource.
