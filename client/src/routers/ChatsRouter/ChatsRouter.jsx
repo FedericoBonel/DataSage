@@ -6,6 +6,7 @@ const ChatListLayout = lazy(() =>
 );
 const NewChat = lazy(() => import("@/pages/chats/NewChat"));
 const ChatSettings = lazy(() => import("@/pages/chats/ChatSettings"));
+const ChatParticipants = lazy(() => import("@/pages/chats/ChatParticipants"));
 const ChatConversation = lazy(() => import("@/pages/chats/ChatConversation"));
 import { routes } from "@/utils/constants";
 
@@ -43,6 +44,14 @@ const ChatsRouter = {
                     element: (
                         <Suspense>
                             <ChatSettings />
+                        </Suspense>
+                    ),
+                },
+                {
+                    path: `:chatId/${routes.chats.PARTICIPANTS}`,
+                    element: (
+                        <Suspense>
+                            <ChatParticipants />
                         </Suspense>
                     ),
                 },

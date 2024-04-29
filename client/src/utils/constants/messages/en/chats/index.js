@@ -4,6 +4,7 @@ import chatCreation from "./create";
 import chatUpdate from "./update";
 import chatDelete from "./delete";
 import chatSettings from "./settings";
+import chatParticipants from "./participants";
 import chatMessages from "./messages";
 
 export default Object.freeze({
@@ -28,6 +29,8 @@ export default Object.freeze({
     delete: chatDelete,
     /** Contains all messages to be shown in the chat settings page */
     settings: chatSettings,
+    /** Contains all messages to be shown in the chat participants management page */
+    participants: chatParticipants,
     /** Contains all messages to be shown in the chat messages section (Chatting). */
     messages: chatMessages,
     /** Contains all messages to be shown in chat listings. */

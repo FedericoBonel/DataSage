@@ -39,5 +39,15 @@ export default Object.freeze({
             /** Maximum length of a user message */
             MESSAGE_MAX_LENGTH: 4096,
         },
+        /** Api participants management endpoints related constants */
+        participants: {
+            /** The allowed actions that can be selected as permissions for participants of a chat (NOTE: This should be in sync with the servers permissions)*/
+            allowedActions: {
+                /** The permission that allows for reading documents */
+                READ_DOCS: "read_docs",
+                /** THe permission that allows for uploading documents */
+                UPLOAD_DOCS: "upload_docs",
+            },
+        },
     },
 });
