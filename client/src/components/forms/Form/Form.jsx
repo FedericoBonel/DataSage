@@ -1,5 +1,5 @@
 import { Box } from "@mui/material";
-import { Button } from "@/components/actions";
+import Button from "@/components/actions/Button";
 import { messages } from "@/utils/constants";
 import { ActionButtonWrapperStyles } from "./Form.styles";
 import propTypes from "./Form.props";

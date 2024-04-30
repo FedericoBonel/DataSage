@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { DialogTitle, DialogContent, DialogActions } from "@mui/material";
 import { chatsServices } from "@/services/chats";
-import { Button } from "@/components/actions";
+import Button from "@/components/actions/Button";
 import { ToastMessage } from "@/components/informational";
 import { api, messages } from "@/utils/constants";
 import PermissionsParticipantsForm from "../components/PermissionsParticipantsForm";
