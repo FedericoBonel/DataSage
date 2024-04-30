@@ -1,4 +1,4 @@
-import { TextField } from "@/components/fields";
+import TextField from "@/components/fields/TextField";
 import { messages } from "@/utils/constants";
 import propTypes from "./ParticipantContactForm.props";
 

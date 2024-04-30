@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { chatsServices } from "@/services/chats";
 import { PaginatedList } from "@/components/list";
-import { TextField } from "@/components/fields";
+import TextField from "@/components/fields/TextField";
 import { messages, api } from "@/utils/constants";
 import ChatListItem from "./components/ChatListItem/ChatListItem";
 import ChatListTabs from "./components/ChatListTabs/ChatListTabs";

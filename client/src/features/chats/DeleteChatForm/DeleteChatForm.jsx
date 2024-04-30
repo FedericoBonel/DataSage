@@ -3,7 +3,7 @@ import { useState } from "react";
 import { Card, CardHeader, CardActions, CardContent } from "@mui/material";
 import { chatsServices } from "@/services/chats";
 import { Form } from "@/components/forms";
-import { TextField } from "@/components/fields";
+import TextField from "@/components/fields/TextField";
 import { messages, routes } from "@/utils/constants";
 import propTypes from "./DeleteChatForm.props";
 
