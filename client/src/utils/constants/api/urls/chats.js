@@ -3,6 +3,7 @@ import config from "@/config";
 const CHATS_RESOURCE = "chats";
 const DOCS_RESOURCE = "documents";
 const MSG_RESOURCE = "messages";
+const PARTICIPANTS_RESOURCE = "participants";
 
 export default {
     /** Chats resource name */
@@ -38,4 +39,10 @@ export default {
     /** Creates the echat messages upload endpoint */
     createCreateMsgs: (chatId) =>
         `${config.api.BASE_URL}/${CHATS_RESOURCE}/${chatId}/${MSG_RESOURCE}`,
+    /** Creates the chat participants upload endpoint */
+    createCreateParticipants: (chatId) =>
+        `${config.api.BASE_URL}/${CHATS_RESOURCE}/${chatId}/${PARTICIPANTS_RESOURCE}`,
+    /** Creates the chat participants get all endpoint */
+    createGetAllParticipants: (chatId) =>
+        `${config.api.BASE_URL}/${CHATS_RESOURCE}/${chatId}/${PARTICIPANTS_RESOURCE}`,
 };

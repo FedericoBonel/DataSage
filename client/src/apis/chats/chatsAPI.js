@@ -129,6 +129,7 @@ const deleteDocFromChat = async (documentId, chatId) => {
 
 /**
  * Gets a list of chat messages from a chat by id from the back end
+ * @param {string} chatId The Id of the chat from which to get the messages
  * @param {object} pagination Pagination parameters
  * @param {number} pagination.page Page number to get results from
  * @param {number} pagination.limit Number of results per page
@@ -162,6 +163,46 @@ const sendMessageToChat = async (message, chatId) => {
     });
 };
 
+/**
+ * Invites a participant to a chat by id
+ * @param {string} chatId Id of the chat to add the participant to
+ * @param {object} newParticipant The new participant to be invited
+ * @param {string} newParticipant.email The email of the participant to be invited
+ * @param {Array.<string>} newParticipant.permissions The allowed actions to be assigned to the new participant
+ * @returns The server response payload with the invited participant
+ */
+const inviteParticipantToChat = async (newParticipant, chatId) => {
+    return makeRequest({
+        url: api.urls.chats.createCreateParticipants(chatId),
+        method: "post",
+        data: newParticipant,
+    });
+};
+
+/**
+ * Gets a list of chat participants from the back end for the logged in user by chat id
+ * @param {string} chatId The Id of the chat from which to get the participants
+ * @param {object} filtering Filtering parameters
+ * @param {string} filtering.textSearch String to search the list of chat participants by
+ * @param {object} pagination Pagination parameters
+ * @param {number} pagination.page Page number to get results from
+ * @param {number} pagination.limit Number of results per page
+ * @returns The server response payload with the list of participants
+ */
+const getParticipantsByChat = async (chatId, filtering, pagination) => {
+    const params = {
+        textSearch:
+            filtering.textSearch === "" ? undefined : filtering.textSearch,
+        page: pagination.page,
+        limit: pagination.limit,
+    };
+
+    return await makeRequest({
+        url: api.urls.chats.createGetAllParticipants(chatId),
+        method: "get",
+        params,
+    });
+};
 
 export default {
     getChats,
@@ -174,4 +215,6 @@ export default {
     deleteDocFromChat,
     getMessagesByChat,
     sendMessageToChat,
+    inviteParticipantToChat,
+    getParticipantsByChat,
 };

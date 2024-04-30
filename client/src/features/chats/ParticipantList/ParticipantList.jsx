@@ -1,4 +1,5 @@
 import { useCallback, useState } from "react";
+import { chatsServices } from "@/services/chats";
 import { TextField } from "@/components/fields";
 import { PaginatedList } from "@/components/list";
 import { messages, api } from "@/utils/constants";
@@ -11,46 +12,10 @@ const ParticipantList = ({ chatId }) => {
     const [textSearch, setTextSearch] = useState("");
     const onChangeSearch = (query) => setTextSearch(query);
 
-    const participantQuery = {
+    const participantQuery = chatsServices.useInfiniteParticipantDataByChat({
         chatId,
-        isLoading: false,
-        isSuccess: true,
-        fetchNextPage: () => undefined,
-        isFetchingNextPage: false,
-        hasNextPage: false,
-        data: {
-            pages: [
-                {
-                    data: [
-                        {
-                            _id: "test",
-                            names: "jane",
-                            lastnames: "lastnames",
-                            email: "example@mail.com",
-                            hasJoined: true,
-                            createdAt: new Date().toISOString(),
-                        },
-                        {
-                            _id: "test2",
-                            names: "john",
-                            lastnames: "lastnames",
-                            email: "example@mail.com",
-                            hasJoined: true,
-                            createdAt: new Date().toISOString(),
-                        },
-                        {
-                            _id: "test3",
-                            names: "david",
-                            lastnames: "lastnames",
-                            email: "example@mail.com",
-                            hasJoined: false,
-                            createdAt: new Date().toISOString(),
-                        },
-                    ],
-                },
-            ],
-        },
-    };
+        textSearch,
+    });
 
     const onDeleteParticipant = useCallback(() => undefined, []);
     const onEditParticipant = useCallback(() => undefined, []);

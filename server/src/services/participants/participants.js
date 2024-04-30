@@ -41,7 +41,7 @@ const createByChatId = async (newParticipant, chatId, user) => {
     // Get and verify that the invited user exists
     const savedUser = await usersRepository.getByEmail(newParticipant.email);
     if (!savedUser) {
-        throw new NotFoundError(messages.errors.ROUTE_NOT_FOUND);
+        throw new NotFoundError(messages.errors.validation.participant.NON_FOUND_BY_EMAIL);
     }
 
     // Verify that the user isn't already invited (or is the owner of the chat)

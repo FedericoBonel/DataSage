@@ -243,6 +243,58 @@ const useDeleteChatById = () => {
     return queryState;
 };
 
+/** It makes a back end request to get the list of all chats and returns the state of the query.*/
+const useInfiniteParticipantDataByChat = ({
+    chatId,
+    textSearch,
+    page = 1,
+    limit = 10,
+}) => {
+    const queryState = useInfiniteQuery({
+        // Disabling rule because including page could lead to incorrect cache generation
+        // eslint-disable-next-line
+        queryKey: chatsCache.participantsList(chatId, { textSearch }),
+        queryFn: ({ pageParam = page }) =>
+            chatsAPI.getParticipantsByChat(
+                chatId,
+                { textSearch },
+                { page: pageParam, limit }
+            ),
+        getNextPageParam: (lastPage, allPages) =>
+            lastPage?.data?.length ? allPages.length + 1 : undefined,
+        throwOnError: (error) => Boolean(error),
+    });
+
+    return queryState;
+};
+
+/** It creates and provides the state to invite participants to chats */
+const useInviteParticipant = () => {
+    const queryClient = useQueryClient();
+    const queryState = useMutation({
+        mutationFn: ({ chatId, newParticipant }) =>
+            chatsAPI.inviteParticipantToChat(newParticipant, chatId),
+        onSuccess: (response, { chatId }) => {
+            // Update the participants cache with the received data
+            queryClient.setQueryData(
+                chatsCache.participantsList(chatId, { textSearch: "" }),
+                (old) => utilsCache.insertInFirstPage(old, response.data)
+            );
+            queryClient.setQueryData(
+                chatsCache.participantsDetail(chatId, response.data._id),
+                utilsCache.mockSuccessfulRes(response.data)
+            );
+            queryClient.invalidateQueries({
+                queryKey: chatsCache.participantsLists(chatId),
+            });
+        },
+        throwOnError: (error) =>
+            error?.response?.status !== 400 && error?.response?.status !== 404,
+    });
+
+    return queryState;
+};
+
 export default {
     useInfiniteChatData,
     useCreateChat,
@@ -254,4 +306,6 @@ export default {
     useDeleteDocFromChatById,
     useInfiniteMessageDataByChat,
     useSendMessageToChat,
+    useInviteParticipant,
+    useInfiniteParticipantDataByChat,
 };

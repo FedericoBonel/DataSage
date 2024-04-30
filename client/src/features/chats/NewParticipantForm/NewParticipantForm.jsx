@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Card, CardHeader, CardContent, CardActions } from "@mui/material";
-import { Form } from "@/components/forms";
+import { chatsServices } from "@/services/chats";
+import { Form, FormAlert } from "@/components/forms";
 import { api, messages } from "@/utils/constants";
 import { participantsValidator } from "@/utils/validators";
 import PermissionsParticipantsForm from "../components/PermissionsParticipantsForm";
@@ -28,8 +29,12 @@ const formatData = (formState) => ({
 /** Renders a new participant form to add participants to a chat by id */
 const NewParticipantForm = ({ chatId }) => {
     const [participant, setParticipant] = useState(initialState);
+    const inviteQuery = chatsServices.useInviteParticipant();
 
-    const resetForm = () => setParticipant(initialState);
+    const resetForm = () => {
+        inviteQuery.reset();
+        setParticipant(initialState);
+    };
 
     const onChangeEmail = (e) =>
         setParticipant((prev) => ({ ...prev, email: e.target.value }));
@@ -43,16 +48,6 @@ const NewParticipantForm = ({ chatId }) => {
             },
         }));
 
-    const inviteQuery = {
-        chatId,
-        mutate: ({ chatId, newParticipant }, { onSuccess }) =>
-            console.log({
-                chatId,
-                newParticipant,
-                onSuccess,
-            }),
-        isPending: false,
-    };
 
     const onSubmit = (e) => {
         e.preventDefault();
@@ -64,6 +59,10 @@ const NewParticipantForm = ({ chatId }) => {
             { onSuccess: resetForm }
         );
     };
+
+    const formError = inviteQuery.isError && (
+        <FormAlert error={inviteQuery.error?.response?.data} />
+    );
 
     return (
         <Form
@@ -91,6 +90,7 @@ const NewParticipantForm = ({ chatId }) => {
                     onChangePermission={onToggle}
                 />
             </CardContent>
+            {formError}
         </Form>
     );
 };
