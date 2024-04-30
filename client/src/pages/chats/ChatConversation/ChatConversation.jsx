@@ -1,9 +1,7 @@
 import { useMatch } from "react-router-dom";
 import { Unstable_Grid2 as Grid } from "@mui/material";
-import {
-    ChatDocumentViewer,
-    ChatConversation as ChatConversationFeature,
-} from "@/features/chats";
+import ChatDocumentViewer from "@/features/chats/ChatDocumentViewer";
+import ChatConversationFeature from "@/features/chats/ChatConversation";
 import {
     ConversationPageWrapperStyles,
     ChatConversationSectionStyles,

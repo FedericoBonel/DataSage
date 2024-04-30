@@ -1,10 +1,8 @@
 import { useMatch } from "react-router-dom";
 import { Unstable_Grid2 as Grid, Typography } from "@mui/material";
-import {
-    UpdateChatForm,
-    AddDocumentsForm,
-    DocumentList,
-} from "@/features/chats";
+import UpdateChatForm from "@/features/chats/UpdateChatForm";
+import AddDocumentsForm from "@/features/chats/AddDocumentsForm";
+import DocumentList from "@/features/chats/DocumentList";
 import DeleteChatForm from "@/features/chats/DeleteChatForm";
 import { messages, routes } from "@/utils/constants";
 import { UpdateChatFormContainerStyles } from "./ChatSettings.styles";
