@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { chatsServices } from "@/services/chats";
+import chatsServices from "@/services/chats";
 import DeleteParticipantDialog from "../DeleteParticipantDialog";
 import UpdateParticipantDialog from "../UpdateParticipantDialog";
 import TextField from "@/components/fields/TextField";

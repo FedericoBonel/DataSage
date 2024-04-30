@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Card, CardHeader, CardContent, CardActions } from "@mui/material";
-import { chatsServices } from "@/services/chats";
+import chatsServices from "@/services/chats";
 import Form from "@/components/forms/Form";
 import FormAlert from "@/components/forms/FormAlert";
 import { api, messages } from "@/utils/constants";

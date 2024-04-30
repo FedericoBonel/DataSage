@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { Card, CardHeader, CardActions, CardContent } from "@mui/material";
-import { chatsServices } from "@/services/chats";
+import chatsServices from "@/services/chats";
 import Form from "@/components/forms/Form";
 import TextField from "@/components/fields/TextField";
 import { messages, routes } from "@/utils/constants";

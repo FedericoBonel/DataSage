@@ -1,5 +1,5 @@
 import { Dialog } from "@mui/material";
-import { chatsServices } from "@/services/chats";
+import chatsServices from "@/services/chats";
 import ShowLoader from "@/components/informational/ShowLoader";
 import UpdateParticipantDialogBody from "./UpdateParticipantDialogBody";
 import propTypes from "./UpdateParticipantDialog.props";

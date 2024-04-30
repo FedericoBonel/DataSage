@@ -1,6 +1,6 @@
 import { useSearchParams } from "react-router-dom";
 import { Tab, Tabs, Box } from "@mui/material";
-import { chatsServices } from "@/services/chats";
+import chatsServices from "@/services/chats";
 import PdfViewer from "@/components/informational/PdfViewer";
 import ShowLoader from "@/components/informational/ShowLoader";
 import {

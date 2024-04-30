@@ -1,5 +1,5 @@
 import { List, Typography } from "@mui/material";
-import { chatsServices } from "@/services/chats";
+import chatsServices from "@/services/chats";
 import DeleteDocumentDialog from "../DeleteDocumentDialog";
 import ShowLoader from "@/components/informational/ShowLoader";
 import useDialog from "@/utils/hooks/useDialog";
