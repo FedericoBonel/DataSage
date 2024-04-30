@@ -5,7 +5,8 @@ import {
     useQueryClient,
 } from "@tanstack/react-query";
 import chatsAPI from "@/apis/chats/chatsAPI";
-import { chatsCache, utilsCache } from "../caches";
+import chatsCache from "../caches/chats";
+import { utilsCache } from "../caches";
 import api from "@/utils/constants/api";
 
 /** It makes a back end request to get the list of all chats and returns the state of the query.*/
