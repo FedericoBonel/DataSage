@@ -1,4 +1,5 @@
 import { Notifications } from "@mui/icons-material";
+import notificationsServices from "@/services/notifications";
 import NavigationLink from "@/components/actions/NavigationLink";
 import { routes, messages } from "@/utils/constants";
 import propTypes from "./NavbarNotificationLink.props";
@@ -9,18 +10,10 @@ import propTypes from "./NavbarNotificationLink.props";
  * It's suppoused to be used in a navbar or similar.
  */
 const NavbarNotificationLink = ({ selected }) => {
-    const notReadQuery = {
-        // TODO Remove this with actual hook
-        isLoading: false,
-        data: {
-            data: {
-                notReadCount: 10,
-            },
-        },
-    };
+    const notReadQuery = notificationsServices.useCheckNotReadNotifications();
 
     const notReadCount =
-        !notReadQuery.isLoading && notReadQuery.data.data.notReadCount;
+        !notReadQuery.isLoading && notReadQuery.data?.data?.notReadCount;
 
     return (
         <NavigationLink
