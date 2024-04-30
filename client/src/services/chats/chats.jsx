@@ -4,7 +4,7 @@ import {
     useMutation,
     useQueryClient,
 } from "@tanstack/react-query";
-import { chatsAPI } from "@/apis/chats";
+import chatsAPI from "@/apis/chats/chatsAPI";
 import { chatsCache, utilsCache } from "../caches";
 import api from "@/utils/constants/api";
 
