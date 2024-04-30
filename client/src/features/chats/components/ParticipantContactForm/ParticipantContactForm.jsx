@@ -6,7 +6,7 @@ import propTypes from "./ParticipantContactForm.props";
  * Component that renders the participant contact section in participant forms.
  * It asks for the participant email.
  */
-const ParticipantContactForm = ({ emailField }) => {
+const ParticipantContactForm = ({ emailField, isSubmitting }) => {
     return (
         <TextField
             fullWidth
@@ -17,6 +17,7 @@ const ParticipantContactForm = ({ emailField }) => {
             value={emailField.value}
             onChange={emailField.onChange}
             autoComplete="off"
+            disabled={isSubmitting}
         />
     );
 };

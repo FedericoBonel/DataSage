@@ -48,7 +48,6 @@ const NewParticipantForm = ({ chatId }) => {
             },
         }));
 
-
     const onSubmit = (e) => {
         e.preventDefault();
 
@@ -84,6 +83,7 @@ const NewParticipantForm = ({ chatId }) => {
                         value: participant.email,
                         onChange: onChangeEmail,
                     }}
+                    isSubmitting={inviteQuery.isPending}
                 />
                 <PermissionsParticipantsForm
                     assignedPermissions={participant.permissions}

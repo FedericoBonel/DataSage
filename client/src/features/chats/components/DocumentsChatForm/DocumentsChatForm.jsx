@@ -10,7 +10,7 @@ import propTypes from "./DocumentsChatForm.props";
  * Component that renders the documents selection (file selection) section in chat forms.
  * It asks for the chat documents that will be the chat knowledge base.
  */
-const DocumentsChatForm = ({ documentsField }) => {
+const DocumentsChatForm = ({ documentsField, isSubmitting }) => {
     const [showInvalidFiles, setShowInvalidFiles] = useState(false);
 
     // Feedback of file selection
@@ -36,7 +36,7 @@ const DocumentsChatForm = ({ documentsField }) => {
                 maxFiles={api.validation.chats.MAX_FILES_UPLOAD}
                 maxSize={api.validation.chats.MAX_FILE_SIZE}
                 onChange={documentsField.onChange}
-                disabled={documentsField.disabled}
+                disabled={isSubmitting || documentsField.disabled}
                 onSelectedInvalid={() => setShowInvalidFiles(true)}
             >
                 <Upload fontSize="large" />

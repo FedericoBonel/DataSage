@@ -41,6 +41,8 @@ export default {
             /** Message to be shown in the body of the delete form of chat documents. It takes the form of a question to ask the user to confirm or cancel deletion. */
             QUESTION:
                 "You are deleting a file. The content of the file will stop being known by the chat and you wont be able to ask questions about it any longer. All its data will be removed from the system.\nDo you wish to delete this file?",
+            /** Message to be shown when the document was deleted successfully */
+            SUCCESS: "The file was deleted successfully!",
         },
     },
 };

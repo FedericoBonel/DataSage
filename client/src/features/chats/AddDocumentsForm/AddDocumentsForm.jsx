@@ -70,8 +70,9 @@ const AddDocumentsForm = ({ chatId }) => {
                     documentsField={{
                         onChange: onFileSelection,
                         documents: docsToUpload.documents,
-                        disabled: !canUploadMore || addDocQuery.isPending,
+                        disabled: !canUploadMore,
                     }}
+                    isSubmitting={addDocQuery.isPending}
                 />
                 {fileLimitMessage}
                 {errors}

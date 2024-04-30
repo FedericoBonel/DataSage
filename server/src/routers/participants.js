@@ -140,7 +140,7 @@ participantsRouter
      *       404:
      *         $ref: '#/components/responses/404Response'
      */
-    .get(participantsController.getById)
+    .get(entityIdValidator("participantId"), participantsController.getById)
     /**
      * @openapi
      * /chats/{chatId}/participants/{participantId}:

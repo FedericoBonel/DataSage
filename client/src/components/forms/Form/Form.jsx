@@ -54,6 +54,7 @@ const Form = ({
                         variant="text"
                         onClick={onCancel}
                         color={buttonsColor.cancel}
+                        disabled={isSubmitting}
                     >
                         {buttonsLabels.cancel}
                     </Button>

@@ -1,6 +1,7 @@
-import { useCallback, useState } from "react";
+import { useState } from "react";
 import { chatsServices } from "@/services/chats";
-import DeleteParticipantDialog from "../DeleteParticipantDialog/DeleteParticipantDialog";
+import DeleteParticipantDialog from "../DeleteParticipantDialog";
+import UpdateParticipantDialog from "../UpdateParticipantDialog";
 import { TextField } from "@/components/fields";
 import { PaginatedList } from "@/components/list";
 import { messages, api } from "@/utils/constants";
@@ -11,7 +12,8 @@ import propTypes from "./ParticipantList.props";
 
 /** Renders a list of participants of a chat by id and its management components (search bar, deletion and update). */
 const ParticipantList = ({ chatId }) => {
-    const { selected, open, isOpen, close } = useDialog();
+    const deleteDialog = useDialog();
+    const editDialog = useDialog();
     const [textSearch, setTextSearch] = useState("");
     const onChangeSearch = (query) => setTextSearch(query);
 
@@ -20,8 +22,6 @@ const ParticipantList = ({ chatId }) => {
         textSearch,
     });
 
-    const onEditParticipant = useCallback(() => undefined, []);
-
     const participants =
         participantQuery.isSuccess &&
         participantQuery.data.pages.map((page) =>
@@ -29,8 +29,8 @@ const ParticipantList = ({ chatId }) => {
                 <ParticipantListItem
                     key={participant._id}
                     participant={participant}
-                    onClickDelete={open}
-                    onClickEdit={onEditParticipant}
+                    onClickDelete={deleteDialog.open}
+                    onClickEdit={editDialog.open}
                 />
             ))
         );
@@ -58,9 +58,15 @@ const ParticipantList = ({ chatId }) => {
             </PaginatedList>
             <DeleteParticipantDialog
                 chatId={chatId}
-                participantId={selected}
-                isOpen={isOpen}
-                onClose={close}
+                participantId={deleteDialog.selected}
+                isOpen={deleteDialog.isOpen}
+                onClose={deleteDialog.close}
+            />
+            <UpdateParticipantDialog
+                chatId={chatId}
+                participantId={editDialog.selected}
+                isOpen={editDialog.isOpen}
+                onClose={editDialog.close}
             />
         </>
     );

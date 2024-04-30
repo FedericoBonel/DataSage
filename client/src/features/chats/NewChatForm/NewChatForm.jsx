@@ -72,6 +72,7 @@ const NewChatForm = () => {
                     onChange: onFileSelection,
                     documents: newChat.documents,
                 }}
+                isSubmitting={createQuery.isPending}
             />
             <CardContent>
                 <MetadataChatForm
@@ -79,6 +80,7 @@ const NewChatForm = () => {
                         onChange: onChangeTextField,
                         value: newChat.name,
                     }}
+                    isSubmitting={createQuery.isPending}
                 />
             </CardContent>
             {errors}

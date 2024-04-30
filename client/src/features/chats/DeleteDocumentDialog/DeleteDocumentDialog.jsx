@@ -18,7 +18,6 @@ const DeleteDocumentDialog = ({ chatId, documentId, isOpen, onClose }) => {
     useEffect(() => {
         if (deleteDocQuery.isSuccess) {
             if (deleteDocQuery.data.data?._id === documentId) onClose();
-            deleteDocQuery.reset();
         }
     }, [deleteDocQuery, documentId, onClose]);
 
@@ -46,6 +45,13 @@ const DeleteDocumentDialog = ({ chatId, documentId, isOpen, onClose }) => {
                 error={deleteDocQuery.error?.response?.data}
                 onClose={deleteDocQuery.reset}
                 severity="error"
+            />
+            <ToastMessage
+                autoClose
+                open={deleteDocQuery.isSuccess}
+                message={messages.chats.documents.delete.form.SUCCESS}
+                onClose={deleteDocQuery.reset}
+                severity="success"
             />
         </>
     );

@@ -78,6 +78,7 @@ const UpdateChatForm = ({ chatId }) => {
                             onChange: onChangeTextField,
                             value: updatedChat.name,
                         }}
+                        isSubmitting={updateQuery.isPending}
                     />
                 </CardContent>
                 {errors}

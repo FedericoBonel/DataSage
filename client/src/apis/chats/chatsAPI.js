@@ -205,6 +205,38 @@ const getParticipantsByChat = async (chatId, filtering, pagination) => {
 };
 
 /**
+ * Gets a chat participant by id
+ * @param {string} participantId The id of the participant
+ * @param {string} chatId The id of the chat that contains this participant
+ * @returns The server response payload with the chat participant with that id
+ */
+const getParticipantById = async (participantId, chatId) => {
+    return await makeRequest({
+        url: api.urls.chats.createGetParticipantById(chatId, participantId),
+        method: "get",
+    });
+};
+
+/**
+ * Updates a chat by id.
+ * @param {object} updatedParticipant The updated participant to be saved
+ * @param {string} updatedParticipant.permissions New permissions of the participant
+ * @param {string} chatId Id of the chat that contains this participant
+ * @returns The promise that resolves to the updated participant
+ */
+const updateParticipantById = async (
+    updatedParticipant,
+    participantId,
+    chatId
+) => {
+    return makeRequest({
+        url: api.urls.chats.createPutParticipant(chatId, participantId),
+        method: "put",
+        data: updatedParticipant,
+    });
+};
+
+/**
  * Deletes a participant from a chat by id
  * @param {string} participantId Id of the participant to remove from the chat
  * @param {string} chatId Id of the chat to remove the participant from
@@ -230,5 +262,7 @@ export default {
     sendMessageToChat,
     inviteParticipantToChat,
     getParticipantsByChat,
+    getParticipantById,
+    updateParticipantById,
     deleteParticipantFromChat,
 };

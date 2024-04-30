@@ -53,6 +53,20 @@ export default {
             /** Message to be shown in the body of the delete form of chat participants. It takes the form of a question to ask the user to confirm or cancel deletion. */
             QUESTION:
                 "You are about to remove a participant from the chat.\nThis will make the chat not accessible to the participant any longer. Their uploaded documents will remain.\nDo you wish to remove this user from the chat?",
+            /** Message to be shown in the submit success toast message */
+            SUCCESS: "Participant deleted successfully!",
+        },
+    },
+    /** Contains all messages to be shown in the update section of chat participants */
+    update: {
+        /** Contains all messages to be shown in the update form of chat participants. */
+        form: {
+            /** Message to be shown in the title of the delete form of chat participants. */
+            TITLE: "Update Participant's Permissions",
+            /** Message to be shown in the submit button of the form */
+            SUBMIT: "Save changes",
+            /** Message to be shown in the submit success toast message */
+            SUCCESS: "Changes saved successfully!",
         },
     },
 };

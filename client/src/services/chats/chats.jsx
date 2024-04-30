@@ -268,6 +268,18 @@ const useInfiniteParticipantDataByChat = ({
     return queryState;
 };
 
+/** It makes a back end request to get a chat participant by id and returns the state of the query. */
+const useParticipantById = (participantId, chatId, { enabled = true }) => {
+    const queryState = useQuery({
+        queryKey: chatsCache.participantsDetail(chatId, participantId),
+        queryFn: () => chatsAPI.getParticipantById(participantId, chatId),
+        throwOnError: (error) => Boolean(error),
+        enabled,
+    });
+
+    return queryState;
+};
+
 /** It creates and provides the state to invite participants to chats */
 const useInviteParticipant = () => {
     const queryClient = useQueryClient();
@@ -290,6 +302,32 @@ const useInviteParticipant = () => {
         },
         throwOnError: (error) =>
             error?.response?.status !== 400 && error?.response?.status !== 404,
+    });
+
+    return queryState;
+};
+
+/** It creates and provides the state to update participants from chats */
+const useUpdateParticipantById = () => {
+    const queryClient = useQueryClient();
+    const queryState = useMutation({
+        mutationFn: ({ updatedParticipant, chatId, participantId }) =>
+            chatsAPI.updateParticipantById(
+                updatedParticipant,
+                participantId,
+                chatId
+            ),
+        onSuccess: (response, { participantId, chatId }) => {
+            // Update the participants cache with the received data
+            queryClient.setQueryData(
+                chatsCache.participantsDetail(chatId, participantId),
+                utilsCache.mockSuccessfulRes(response.data)
+            );
+            queryClient.invalidateQueries({
+                queryKey: chatsCache.participantsLists(chatId),
+            });
+        },
+        throwOnError: (error) => error?.response?.status !== 400,
     });
 
     return queryState;
@@ -342,5 +380,7 @@ export default {
     useSendMessageToChat,
     useInviteParticipant,
     useInfiniteParticipantDataByChat,
+    useParticipantById,
+    useUpdateParticipantById,
     useDeleteParticipantFromChatById,
 };

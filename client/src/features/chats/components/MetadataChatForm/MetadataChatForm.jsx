@@ -6,7 +6,7 @@ import propTypes from "./MetadataChatForm.props";
  * Component that renders the metadata section in chat forms.
  * It asks for chat names.
  */
-const FormChatMetadata = ({ nameField }) => {
+const FormChatMetadata = ({ nameField, isSubmitting }) => {
     return (
         <TextField
             value={nameField.value}
@@ -21,6 +21,7 @@ const FormChatMetadata = ({ nameField }) => {
             onChange={nameField.onChange}
             showHelperText
             helperText={messages.chats.formSections.metadata.NAME_FIELD_HELPER}
+            disabled={isSubmitting}
         />
     );
 };

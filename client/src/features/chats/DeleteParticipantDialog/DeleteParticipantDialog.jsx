@@ -7,7 +7,12 @@ import { messages } from "@/utils/constants";
 import propTypes from "./DeleteParticipantDialog.props";
 
 /** Dialog that prompts the user to delete a participant from a chat. */
-const DeleteDocumentDialog = ({ chatId, participantId, isOpen, onClose }) => {
+const DeleteParticipantDialog = ({
+    chatId,
+    participantId,
+    isOpen,
+    onClose,
+}) => {
     const deleteQuery = chatsServices.useDeleteParticipantFromChatById();
 
     const onSubmit = () => {
@@ -18,7 +23,6 @@ const DeleteDocumentDialog = ({ chatId, participantId, isOpen, onClose }) => {
     useEffect(() => {
         if (deleteQuery.isSuccess) {
             if (deleteQuery.data.data?._id === participantId) onClose();
-            deleteQuery.reset();
         }
     }, [deleteQuery, participantId, onClose]);
 
@@ -47,10 +51,17 @@ const DeleteDocumentDialog = ({ chatId, participantId, isOpen, onClose }) => {
                 onClose={deleteQuery.reset}
                 severity="error"
             />
+            <ToastMessage
+                autoClose
+                open={deleteQuery.isSuccess}
+                message={messages.chats.participants.delete.form.SUCCESS}
+                onClose={deleteQuery.reset}
+                severity="success"
+            />
         </>
     );
 };
 
-DeleteDocumentDialog.propTypes = propTypes;
+DeleteParticipantDialog.propTypes = propTypes;
 
-export default DeleteDocumentDialog;
+export default DeleteParticipantDialog;
