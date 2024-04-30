@@ -1,1 +1,1 @@
-export { default as PdfViewerToolbar } from "./PdfViewerToolbar";
+export { default } from "./PdfViewerToolbar";
