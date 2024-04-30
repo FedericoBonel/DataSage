@@ -1,7 +1,8 @@
 import { useState } from "react";
 import { Typography } from "@mui/material";
 import { chatsServices } from "@/services/chats";
-import { Form, FormAlert } from "@/components/forms";
+import Form from "@/components/forms/Form";
+import { FormAlert } from "@/components/forms";
 import { ShowLoader } from "@/components/informational";
 import { messages } from "@/utils/constants";
 import { chatsValidator } from "@/utils/validators";

@@ -1,7 +1,8 @@
 import { useState } from "react";
 import { Card, CardHeader, CardContent, CardActions } from "@mui/material";
 import { chatsServices } from "@/services/chats";
-import { Form, FormAlert } from "@/components/forms";
+import Form from "@/components/forms/Form";
+import { FormAlert } from "@/components/forms";
 import { api, messages } from "@/utils/constants";
 import { participantsValidator } from "@/utils/validators";
 import PermissionsParticipantsForm from "../components/PermissionsParticipantsForm";
