@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Typography, ListItem, ListItemText } from "@mui/material";
 import { Upload } from "@mui/icons-material";
-import { FileField } from "@/components/fields";
+import FileField from "@/components/fields/FileField";
 import { ToastMessage } from "@/components/informational";
 import { api, messages } from "@/utils/constants";
 import propTypes from "./DocumentsChatForm.props";
