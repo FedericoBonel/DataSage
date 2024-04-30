@@ -2,7 +2,7 @@ import { useState } from "react";
 import { DialogTitle, DialogContent, DialogActions } from "@mui/material";
 import { chatsServices } from "@/services/chats";
 import Button from "@/components/actions/Button";
-import { ToastMessage } from "@/components/informational";
+import ToastMessage from "@/components/informational/ToastMessage";
 import { api, messages } from "@/utils/constants";
 import PermissionsParticipantsForm from "../components/PermissionsParticipantsForm";
 import propTypes from "./UpdateParticipantDialogBody.props";

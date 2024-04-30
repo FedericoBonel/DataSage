@@ -1,7 +1,7 @@
 import { DialogContentText } from "@mui/material";
 import { chatsServices } from "@/services/chats";
 import DecisionDialog from "@/components/actions/DecisionDialog";
-import { ToastMessage } from "@/components/informational";
+import ToastMessage from "@/components/informational/ToastMessage";
 import { messages } from "@/utils/constants";
 import propTypes from "./DeleteDocumentDialog.props";
 import { useEffect } from "react";
