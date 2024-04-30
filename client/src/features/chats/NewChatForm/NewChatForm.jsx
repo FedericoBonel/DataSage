@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Card, CardHeader, CardContent, CardActions } from "@mui/material";
 import { chatsServices } from "@/services/chats";
-import { FormAlert } from "@/components/forms";
+import FormAlert from "@/components/forms/FormAlert";
 import Form from "@/components/forms/Form";
 import { messages, routes } from "@/utils/constants";
 import { chatsValidator } from "@/utils/validators";
