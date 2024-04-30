@@ -45,4 +45,7 @@ export default {
     /** Creates the chat participants get all endpoint */
     createGetAllParticipants: (chatId) =>
         `${config.api.BASE_URL}/${CHATS_RESOURCE}/${chatId}/${PARTICIPANTS_RESOURCE}`,
+    /** Creates the chat participants delete by id endpoint */
+    createDeleteParticipant: (chatId, participantId) =>
+        `${config.api.BASE_URL}/${CHATS_RESOURCE}/${chatId}/${PARTICIPANTS_RESOURCE}/${participantId}`,
 };

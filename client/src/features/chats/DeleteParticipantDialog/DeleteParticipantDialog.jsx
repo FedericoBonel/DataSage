@@ -1,50 +1,50 @@
+import { useEffect } from "react";
 import { DialogContentText } from "@mui/material";
 import { chatsServices } from "@/services/chats";
 import { DecisionDialog } from "@/components/actions";
 import { ToastMessage } from "@/components/informational";
 import { messages } from "@/utils/constants";
-import propTypes from "./DeleteDocumentDialog.props";
-import { useEffect } from "react";
+import propTypes from "./DeleteParticipantDialog.props";
 
-/** Dialog that prompts the user to delete a document from a chat or not. */
-const DeleteDocumentDialog = ({ chatId, documentId, isOpen, onClose }) => {
-    const deleteDocQuery = chatsServices.useDeleteDocFromChatById();
+/** Dialog that prompts the user to delete a participant from a chat. */
+const DeleteDocumentDialog = ({ chatId, participantId, isOpen, onClose }) => {
+    const deleteQuery = chatsServices.useDeleteParticipantFromChatById();
 
     const onSubmit = () => {
-        deleteDocQuery.mutate({ chatId, documentId });
+        deleteQuery.mutate({ chatId, participantId });
         onClose();
     };
 
     useEffect(() => {
-        if (deleteDocQuery.isSuccess) {
-            if (deleteDocQuery.data.data?._id === documentId) onClose();
-            deleteDocQuery.reset();
+        if (deleteQuery.isSuccess) {
+            if (deleteQuery.data.data?._id === participantId) onClose();
+            deleteQuery.reset();
         }
-    }, [deleteDocQuery, documentId, onClose]);
+    }, [deleteQuery, participantId, onClose]);
 
     return (
         <>
             <DecisionDialog
                 isOpen={isOpen}
-                title={messages.chats.documents.delete.form.TITLE}
+                title={messages.chats.participants.delete.form.TITLE}
                 onClose={onClose}
                 onAccept={onSubmit}
-                isAccepting={deleteDocQuery.isPending}
+                isAccepting={deleteQuery.isPending}
                 buttonLabels={{
                     cancel: messages.actions.decision.CANCEL,
-                    accept: messages.actions.decision.DELETE,
+                    accept: messages.actions.decision.REMOVE,
                 }}
             >
                 <DialogContentText>
-                    {messages.chats.documents.delete.form.QUESTION}
+                    {messages.chats.participants.delete.form.QUESTION}
                 </DialogContentText>
             </DecisionDialog>
             <ToastMessage
                 isImportant
                 autoClose
-                open={deleteDocQuery.isError}
-                error={deleteDocQuery.error?.response?.data}
-                onClose={deleteDocQuery.reset}
+                open={deleteQuery.isError}
+                error={deleteQuery.error?.response?.data}
+                onClose={deleteQuery.reset}
                 severity="error"
             />
         </>

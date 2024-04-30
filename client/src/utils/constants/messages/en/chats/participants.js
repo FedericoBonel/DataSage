@@ -44,4 +44,15 @@ export default {
         /** Message to be shown in a list when a participant hasn't joined a chat yet */
         INVITED: "Invited",
     },
+    /** Contains all messages to be shown in the delete section of chat participants */
+    delete: {
+        /** Contains all messages to be shown in the delete form of chat participants. */
+        form: {
+            /** Message to be shown in the title of the delete form of chat participants. */
+            TITLE: "Deleting Participant",
+            /** Message to be shown in the body of the delete form of chat participants. It takes the form of a question to ask the user to confirm or cancel deletion. */
+            QUESTION:
+                "You are about to remove a participant from the chat.\nThis will make the chat not accessible to the participant any longer. Their uploaded documents will remain.\nDo you wish to remove this user from the chat?",
+        },
+    },
 };

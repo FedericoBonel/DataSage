@@ -204,6 +204,19 @@ const getParticipantsByChat = async (chatId, filtering, pagination) => {
     });
 };
 
+/**
+ * Deletes a participant from a chat by id
+ * @param {string} participantId Id of the participant to remove from the chat
+ * @param {string} chatId Id of the chat to remove the participant from
+ * @returns The server response payload with the deleted participant
+ */
+const deleteParticipantFromChat = async (participantId, chatId) => {
+    return makeRequest({
+        url: api.urls.chats.createDeleteParticipant(chatId, participantId),
+        method: "delete",
+    });
+};
+
 export default {
     getChats,
     createChat,
@@ -217,4 +230,5 @@ export default {
     sendMessageToChat,
     inviteParticipantToChat,
     getParticipantsByChat,
+    deleteParticipantFromChat,
 };

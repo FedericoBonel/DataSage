@@ -1,14 +1,17 @@
 import { useCallback, useState } from "react";
 import { chatsServices } from "@/services/chats";
+import DeleteParticipantDialog from "../DeleteParticipantDialog/DeleteParticipantDialog";
 import { TextField } from "@/components/fields";
 import { PaginatedList } from "@/components/list";
 import { messages, api } from "@/utils/constants";
+import useDialog from "@/utils/hooks/useDialog";
 import ParticipantListItem from "./components/ParticipantListItem/ParticipantListItem";
 import { ListStyles } from "./ParticipantList.styles";
 import propTypes from "./ParticipantList.props";
 
 /** Renders a list of participants of a chat by id and its management components (search bar, deletion and update). */
 const ParticipantList = ({ chatId }) => {
+    const { selected, open, isOpen, close } = useDialog();
     const [textSearch, setTextSearch] = useState("");
     const onChangeSearch = (query) => setTextSearch(query);
 
@@ -17,7 +20,6 @@ const ParticipantList = ({ chatId }) => {
         textSearch,
     });
 
-    const onDeleteParticipant = useCallback(() => undefined, []);
     const onEditParticipant = useCallback(() => undefined, []);
 
     const participants =
@@ -27,7 +29,7 @@ const ParticipantList = ({ chatId }) => {
                 <ParticipantListItem
                     key={participant._id}
                     participant={participant}
-                    onClickDelete={onDeleteParticipant}
+                    onClickDelete={open}
                     onClickEdit={onEditParticipant}
                 />
             ))
@@ -54,6 +56,12 @@ const ParticipantList = ({ chatId }) => {
             >
                 {participants}
             </PaginatedList>
+            <DeleteParticipantDialog
+                chatId={chatId}
+                participantId={selected}
+                isOpen={isOpen}
+                onClose={close}
+            />
         </>
     );
 };

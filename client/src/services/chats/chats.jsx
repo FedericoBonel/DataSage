@@ -295,6 +295,40 @@ const useInviteParticipant = () => {
     return queryState;
 };
 
+/** It creates and provides the state to delete chat participants by id. */
+const useDeleteParticipantFromChatById = () => {
+    const queryClient = useQueryClient();
+    const queryState = useMutation({
+        mutationFn: ({ chatId, participantId }) =>
+            chatsAPI.deleteParticipantFromChat(participantId, chatId),
+        onSuccess: (response, { chatId, participantId }) => {
+            // Remove the participant from cache
+            queryClient.removeQueries({
+                queryKey: chatsCache.participantsDetail(chatId, participantId),
+            });
+            queryClient.setQueriesData(
+                { queryKey: chatsCache.participantsLists(chatId) },
+                (oldData) => ({
+                    ...oldData,
+                    pages: oldData.pages.map((page) => ({
+                        ...page,
+                        data: page.data.filter(
+                            (item) => item._id !== participantId
+                        ),
+                    })),
+                })
+            );
+            // Invalidate the participants lists
+            queryClient.invalidateQueries({
+                queryKey: chatsCache.participantsLists(chatId),
+            });
+        },
+        throwOnError: (error) => error?.response?.status !== 400,
+    });
+
+    return queryState;
+};
+
 export default {
     useInfiniteChatData,
     useCreateChat,
@@ -308,4 +342,5 @@ export default {
     useSendMessageToChat,
     useInviteParticipant,
     useInfiniteParticipantDataByChat,
+    useDeleteParticipantFromChatById,
 };

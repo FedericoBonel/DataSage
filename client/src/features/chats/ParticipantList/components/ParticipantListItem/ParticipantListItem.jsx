@@ -21,10 +21,16 @@ const ParticipantListItem = ({ participant, onClickDelete, onClickEdit }) => {
                         label={participant.hasJoined ? JOINED : INVITED}
                     />
                     <Stack direction="row">
-                        <IconButton color="primary" onClick={onClickEdit}>
+                        <IconButton
+                            color="primary"
+                            onClick={() => onClickEdit(participant._id)}
+                        >
                             <Edit />
                         </IconButton>
-                        <IconButton color="error" onClick={onClickDelete}>
+                        <IconButton
+                            color="error"
+                            onClick={() => onClickDelete(participant._id)}
+                        >
                             <Delete />
                         </IconButton>
                     </Stack>
