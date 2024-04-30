@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 import { MenuItem, ListItem, ListItemText } from "@mui/material";
 import { MoreHoriz } from "@mui/icons-material";
-import { Menu } from "@/components/actions";
+import Menu from "@/components/actions/Menu";
 import { messages, routes } from "@/utils/constants";
 
 import propTypes from "./ChatListItemMenu.props";
