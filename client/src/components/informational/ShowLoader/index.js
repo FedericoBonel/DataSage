@@ -1,1 +1,1 @@
-export { default as ShowLoader } from "./ShowLoader";
+export { default } from "./ShowLoader";
