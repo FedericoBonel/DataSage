@@ -6,6 +6,7 @@ import actions from "./messages/en/actions";
 import navbar from "./messages/en/navbar";
 import chats from "./messages/en/chats";
 import chatsRoutes from "./routes/chats";
+import notificationsRoutes from "./routes/notifications";
 import authRoutes from "./routes/auth";
 import errorRoutes from "./routes/error";
 import apiConsts from "./api";
@@ -40,6 +41,8 @@ export const routes = Object.freeze({
     error: errorRoutes,
     /** Contains all chat related routes */
     chats: chatsRoutes,
+    /** Contains all notification related routes */
+    notifications: notificationsRoutes,
 });
 
 export const api = apiConsts;
