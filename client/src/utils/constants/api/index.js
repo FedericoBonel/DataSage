@@ -53,5 +53,18 @@ export default Object.freeze({
                 UPLOAD_DOCS: "upload_docs",
             },
         },
+        /** Api notifications management endpoints related constants */
+        notifications: {
+            /** Types of notifications */
+            types: {
+                /** Notification type for a new chat invitation */
+                CHAT_INVITATION: "chat_invitation",
+            },
+            /** Types of related entities */
+            relatedTypes: {
+                /** Related type for a chat */
+                chat: "chat",
+            },
+        },
     },
 });

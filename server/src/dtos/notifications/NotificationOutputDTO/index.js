@@ -40,6 +40,7 @@ const toNotificationOutputDTO = (notification) => {
         notification.relatedEntityType,
         notification.relatedEntityId
     );
+    dto.type = notification.type.name;
     dto.isRead = notification.isRead;
     dto.createdAt = notification.createdAt;
     dto.updatedAt = notification.updatedAt;

@@ -5,6 +5,7 @@ import info from "./messages/en/info";
 import actions from "./messages/en/actions";
 import navbar from "./messages/en/navbar";
 import chats from "./messages/en/chats";
+import notifications from "./messages/en/notifications";
 import chatsRoutes from "./routes/chats";
 import notificationsRoutes from "./routes/notifications";
 import authRoutes from "./routes/auth";
@@ -25,6 +26,8 @@ export const messages = Object.freeze({
     navbar,
     /** Contains all messages to be shown in the chats section of the application. */
     chats,
+    /** Contains all messages to be shown in the notifications section of the application */
+    notifications,
 });
 
 /** Object with all the routes used in the application */
