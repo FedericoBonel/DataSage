@@ -1,6 +1,6 @@
 import { Backdrop } from "@mui/material";
 
-import { LoaderSpinner } from "@/components/informational/LoaderSpinner";
+import LoaderSpinner from "@/components/informational/LoaderSpinner";
 import { propTypes } from "./ShowLoader.props";
 
 /** Shows a loader fallback when its children are loading. */
