@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { Box, Typography, LinearProgress } from "@mui/material";
 import { chatsServices } from "@/services/chats";
-import { PaginatedList } from "@/components/list";
+import PaginatedList from "@/components/list/PaginatedList";
 import { messages } from "@/utils/constants";
 import useScrollToBottom from "@/utils/hooks/useScrollToBottom";
 import ChatMessage from "./components/ChatMessage/ChatMessage";

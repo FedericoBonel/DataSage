@@ -3,7 +3,7 @@ import { chatsServices } from "@/services/chats";
 import DeleteParticipantDialog from "../DeleteParticipantDialog";
 import UpdateParticipantDialog from "../UpdateParticipantDialog";
 import TextField from "@/components/fields/TextField";
-import { PaginatedList } from "@/components/list";
+import PaginatedList from "@/components/list/PaginatedList";
 import { messages, api } from "@/utils/constants";
 import useDialog from "@/utils/hooks/useDialog";
 import ParticipantListItem from "./components/ParticipantListItem/ParticipantListItem";
