@@ -1,19 +1,28 @@
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import { Card, CardHeader, CardContent, Divider } from "@mui/material";
 import notificationsServices from "@/services/notifications";
 import PaginatedList from "@/components/list/PaginatedList";
+import DeleteNotificationDialog from "../DeleteNotificationDialog";
 import NotificationsListTabs from "./components/NotificationsListTabs";
 import NotificationListItem from "./components/NotificationListItem";
+import useDialog from "@/utils/hooks/useDialog";
 import { messages } from "@/utils/constants";
 
 /** Renders the list of notifications for the logged in user */
 const NotificationsList = () => {
+    const { open, selected, isOpen, close } = useDialog();
     const [isRead, setIsRead] = useState("false");
 
     const notificationsQuery =
         notificationsServices.useInfiniteNotificationData({
-            isRead: isRead ===  "true",
+            isRead: isRead === "true",
         });
+
+    const onClickDeleteNotification = useCallback(
+        (notificationId, notificationType) =>
+            open({ notificationId, notificationType }),
+        [open]
+    );
 
     const notifications =
         notificationsQuery.isSuccess &&
@@ -22,7 +31,7 @@ const NotificationsList = () => {
                 <NotificationListItem
                     notification={notification}
                     key={notification._id}
-                    onDelete={() => undefined}
+                    onDelete={onClickDeleteNotification}
                 />
             ))
         );
@@ -45,6 +54,12 @@ const NotificationsList = () => {
                     {notifications}
                 </PaginatedList>
             </CardContent>
+            <DeleteNotificationDialog
+                notificationId={selected?.notificationId}
+                notificationType={selected?.notificationType}
+                isOpen={isOpen}
+                onClose={close}
+            />
         </Card>
     );
 };
