@@ -4,6 +4,7 @@ import UpdateChatForm from "@/features/chats/UpdateChatForm";
 import AddDocumentsForm from "@/features/chats/AddDocumentsForm";
 import DocumentList from "@/features/chats/DocumentList";
 import DeleteChatForm from "@/features/chats/DeleteChatForm";
+import ExitChatForm from "@/features/chats/ExitChatForm";
 import { messages, routes } from "@/utils/constants";
 import { UpdateChatFormContainerStyles } from "./ChatSettings.styles";
 import ChatFileSection from "./components/ChatFilesSection/ChatFileSection";
@@ -35,6 +36,10 @@ const ChatSettings = () => {
             {/* Delete chat. */}
             <Grid sm={12}>
                 <DeleteChatForm chatId={chatId} />
+            </Grid>
+            {/* Exit chat. */}
+            <Grid sm={12}>
+                <ExitChatForm chatId={chatId} />
             </Grid>
         </Grid>
     );

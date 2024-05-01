@@ -9,4 +9,7 @@ export default {
     /** Creates the endpoint to join a chat by id */
     createJoin: (chatId) =>
         `${config.api.BASE_URL}/${chatsApiConsts.RESOURCE}/${chatId}/${chatsApiConsts.PARTICIPANTS_RESOURCE}/${PARTICIPATIONS_RESOURCE}/`,
+    /** Creates the endpoint to exit a chat by id */
+    createExit: (chatId) =>
+        `${config.api.BASE_URL}/${chatsApiConsts.RESOURCE}/${chatId}/${chatsApiConsts.PARTICIPANTS_RESOURCE}/${PARTICIPATIONS_RESOURCE}/`,
 };

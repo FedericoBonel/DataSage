@@ -1,27 +1,30 @@
-import { useNavigate } from "react-router-dom";
 import { useState } from "react";
-import { Card, CardHeader, CardActions, CardContent } from "@mui/material";
-import chatsServices from "@/services/chats";
+import { useNavigate } from "react-router-dom";
+import { Card, CardActions, CardHeader, CardContent } from "@mui/material";
 import Form from "@/components/forms/Form";
 import TextField from "@/components/fields/TextField";
+import participationServices from "@/services/participations";
 import { messages, routes } from "@/utils/constants";
-import propTypes from "./DeleteChatForm.props";
+import propTypes from "./ExitChatForm.props";
 
-const confirmationValue = messages.actions.deleteForever.confirmation.VALUE;
+const confirmationValue = messages.chats.exit.form.confirmation.VALUE;
 
-/** Renders a delete form to delete chats by id. */
-const DeleteChatForm = ({ chatId }) => {
+/** Renders an exit form to exit chats by id. */
+const ExitChatForm = ({ chatId }) => {
     const navigate = useNavigate();
     const [confirmation, setConfirmation] = useState("");
 
-    const deleteQuery = chatsServices.useDeleteChatById();
+    const exitQuery = participationServices.useExitChatById();
 
     const canSubmit = confirmation === confirmationValue;
 
     const onSubmit = (e) => {
         e.preventDefault();
 
-        deleteQuery.mutate({ chatId }, { onSuccess: () => navigate(`/${routes.HOME}`) });
+        exitQuery.mutate(
+            { chatId },
+            { onSuccess: () => navigate(`/${routes.HOME}`) }
+        );
     };
 
     return (
@@ -29,26 +32,23 @@ const DeleteChatForm = ({ chatId }) => {
             component={Card}
             buttonsWrapper={CardActions}
             buttonsLabels={{
-                submit: messages.actions.deleteForever.confirmation
-                    .BUTTON_LABEL,
+                submit: messages.chats.exit.form.confirmation.BUTTON_LABEL,
             }}
             buttonsColor={{ submit: "error" }}
             canSubmit={canSubmit}
             onSubmit={onSubmit}
-            isSubmitting={deleteQuery.isPending}
+            isSubmitting={exitQuery.isPending}
         >
             <CardHeader
-                title={messages.chats.delete.form.TITLE}
+                title={messages.chats.exit.form.TITLE}
                 titleTypographyProps={{ color: "error" }}
-                subheader={messages.chats.delete.form.SUB_TITLE}
+                subheader={messages.chats.exit.form.SUB_TITLE}
             />
             <CardContent>
                 <TextField
                     autoComplete="off"
-                    label={
-                        messages.actions.deleteForever.confirmation.FIELD_LABEL
-                    }
-                    helperText={messages.actions.deleteForever.confirmation.generateHelperText(
+                    label={messages.chats.exit.form.confirmation.FIELD_LABEL}
+                    helperText={messages.chats.exit.form.confirmation.generateHelperText(
                         confirmationValue
                     )}
                     showHelperText
@@ -64,6 +64,6 @@ const DeleteChatForm = ({ chatId }) => {
     );
 };
 
-DeleteChatForm.propTypes = propTypes;
+ExitChatForm.propTypes = propTypes;
 
-export default DeleteChatForm;
+export default ExitChatForm;

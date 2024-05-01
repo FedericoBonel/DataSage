@@ -3,6 +3,7 @@ import chatDocuments from "./documents";
 import chatCreation from "./create";
 import chatUpdate from "./update";
 import chatDelete from "./delete";
+import chatExit from "./exit";
 import chatSettings from "./settings";
 import chatParticipants from "./participants";
 import chatMessages from "./messages";
@@ -28,6 +29,8 @@ export default Object.freeze({
     update: chatUpdate,
     /** Contains all messages related to chat deleting */
     delete: chatDelete,
+    /** Contains all messages related to chat deleting */
+    exit: chatExit,
     /** Contains all messages to be shown in the chat settings page */
     settings: chatSettings,
     /** Contains all messages to be shown in the chat participants management page */
