@@ -17,9 +17,11 @@ const notificationsCache = Object.freeze({
     lists: () => [...notificationsCache.all, "list"],
     /**
      * Returns the cache key for a specific notification list.
+     * @param {Object} filters
+     * @param {boolean} filters.isRead Whether or not the cache contains read notifications or not.
      * @returns {Array<string|Object>} The cache key for this list.
      */
-    list: () => [...notificationsCache.lists()],
+    list: ({ isRead }) => [...notificationsCache.lists(), { isRead }],
     /**
      * Returns the cache key for a notifications count cache
      * @returns {Array<string>} The key for the notifications count cache.

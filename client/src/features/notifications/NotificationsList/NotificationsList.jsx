@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Card, CardHeader, CardContent, Divider } from "@mui/material";
+import notificationsServices from "@/services/notifications";
 import PaginatedList from "@/components/list/PaginatedList";
 import NotificationsListTabs from "./components/NotificationsListTabs";
 import NotificationListItem from "./components/NotificationListItem";
@@ -9,37 +10,10 @@ import { messages } from "@/utils/constants";
 const NotificationsList = () => {
     const [isRead, setIsRead] = useState("false");
 
-    const notificationsQuery = {
-        isLoading: false,
-        data: {
-            pages: [
-                {
-                    data: [
-                        {
-                            _id: "66309dc2c16105f754eaedad",
-                            createdAt: "2024-04-30T07:29:06.046Z",
-                            updatedAt: "2024-04-30T07:29:06.046Z",
-                            from: {
-                                _id: "661645f35333647769e601ac",
-                                names: "Test names",
-                                lastnames: "Test lastnames",
-                            },
-                            type: "chat_invitation",
-                            relatedEntity: {
-                                _id: "66283fcfe7bf4925e25bea6b",
-                                type: "chat",
-                            },
-                            isRead: false,
-                        },
-                    ],
-                },
-            ],
-        },
-        isSuccess: true,
-        isFetchingNextPage: false,
-        fetchNextPage: () => undefined,
-        hasNextPage: false,
-    };
+    const notificationsQuery =
+        notificationsServices.useInfiniteNotificationData({
+            isRead: isRead ===  "true",
+        });
 
     const notifications =
         notificationsQuery.isSuccess &&

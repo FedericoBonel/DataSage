@@ -1,3 +1,4 @@
+import { memo } from "react";
 import { Link } from "react-router-dom";
 import {
     ListItem,
@@ -86,4 +87,16 @@ const NotificationListItem = ({ notification, onDelete }) => {
 
 NotificationListItem.propTypes = propTypes;
 
-export default NotificationListItem;
+const memoizedListItem = memo(
+    NotificationListItem,
+    (prev, next) =>
+        prev.notification._id === next.notification._id &&
+        prev.notification.relatedEntity._id ===
+            next.notification.relatedEntity._id &&
+        prev.notification.createdAt === next.notification.createdAt &&
+        prev.notification.from.names === next.notification.from.names &&
+        prev.notification.from.lastnames === next.notification.from.lastnames &&
+        prev.notification.type === next.notification.type
+);
+
+export default memoizedListItem;
