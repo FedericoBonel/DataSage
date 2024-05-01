@@ -9,4 +9,7 @@ export default {
     GET_ALL: `${config.api.BASE_URL}/${NOTIFICATIONS_RESOURCE}`,
     /** Endpoint to get the number of notifications not read by the logged in user */
     GET_NOT_READ: `${config.api.BASE_URL}/${NOTIFICATIONS_RESOURCE}/notread`,
+    /** Creates the endpoint to delete a notification by a given id */
+    createDelete: (notificationId) =>
+        `${config.api.BASE_URL}/${NOTIFICATIONS_RESOURCE}/${notificationId}`,
 };

@@ -1,4 +1,9 @@
-import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
+import {
+    useInfiniteQuery,
+    useQuery,
+    useMutation,
+    useQueryClient,
+} from "@tanstack/react-query";
 import notificationsAPI from "@/apis/notifications/notificationsAPI";
 import notificationsCache from "../caches/notifications";
 
@@ -41,7 +46,59 @@ const useInfiniteNotificationData = ({
     return queryState;
 };
 
+/** Creates the state for deleting notifications by id and returns it. */
+const useDeleteNotificationById = () => {
+    const queryClient = useQueryClient();
+    const queryState = useMutation({
+        mutationFn: ({ notificationId }) =>
+            notificationsAPI.deleteNotificationById(notificationId),
+        onSuccess: (response, { notificationId }) => {
+            // Remove the notification from cache
+            queryClient.setQueriesData(
+                { queryKey: notificationsCache.lists() },
+                (oldData) => {
+                    if (
+                        !oldData.pages &&
+                        oldData.data.notReadCount &&
+                        !response.data.isRead
+                    ) {
+                        // If its the count query check if the notification wasn't read and reduce it
+                        return {
+                            ...oldData,
+                            data: {
+                                ...oldData.data,
+                                notReadCount: oldData.data.notReadCount - 1,
+                            },
+                        };
+                    } else if (oldData.pages) {
+                        // If its the list of notifications, filter out the deleted notification
+                        return {
+                            ...oldData,
+                            pages: oldData.pages.map((page) => ({
+                                ...page,
+                                data: page.data.filter(
+                                    (item) => item._id !== notificationId
+                                ),
+                            })),
+                        };
+                    }
+                    // If non of the above return the old data
+                    return oldData;
+                }
+            );
+            // Invalidate the notification lists
+            queryClient.invalidateQueries({
+                queryKey: notificationsCache.lists(),
+            });
+        },
+        throwOnError: (error) => Boolean(error),
+    });
+
+    return queryState;
+};
+
 export default {
     useCheckNotReadNotifications,
     useInfiniteNotificationData,
+    useDeleteNotificationById,
 };

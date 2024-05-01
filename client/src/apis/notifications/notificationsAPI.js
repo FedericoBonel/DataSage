@@ -35,7 +35,20 @@ const getNotifications = async (filtering, pagination) => {
     });
 };
 
+/**
+ * Deletes a notification by id
+ * @param {string} notificationId Id of the notification to be deleted
+ * @returns The server response payload with the deleted notification
+ */
+const deleteNotificationById = async (notificationId) => {
+    return await makeRequest({
+        url: api.urls.notifications.createDelete(notificationId),
+        method: "delete",
+    });
+};
+
 export default {
     getNotReadCount,
     getNotifications,
+    deleteNotificationById,
 };

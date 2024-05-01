@@ -23,24 +23,18 @@ const DeleteNotificationDialog = ({
     isOpen,
     onClose,
 }) => {
-    // const deleteQuery = notificationsServices.useDeleteNotificationById();
-    const deleteQuery = {
-        mutate: ({ notificationId }) => console.log(notificationId),
-        isPending: false,
-        data: { data: { _id: "1234" } },
-    };
+    const deleteQuery = notificationsServices.useDeleteNotificationById();
 
     const onSubmit = () => {
         deleteQuery.mutate({ notificationId });
         onClose();
     };
 
-    // TODO Implement this when connection to back end
-    // useEffect(() => {
-    //     if (deleteQuery.isSuccess) {
-    //         if (deleteQuery.data.data?._id === notificationId) onClose();
-    //     }
-    // }, [deleteQuery, notificationId, onClose]);
+    useEffect(() => {
+        if (deleteQuery.isSuccess) {
+            if (deleteQuery.data.data?._id === notificationId) onClose();
+        }
+    }, [deleteQuery, notificationId, onClose]);
 
     return (
         <>
@@ -62,7 +56,7 @@ const DeleteNotificationDialog = ({
             <ToastMessage
                 autoClose
                 open={deleteQuery.isSuccess}
-                message={messages.chats.participants.delete.form.SUCCESS}
+                message={messages.notifications.delete.SUCCESS}
                 onClose={deleteQuery.reset}
                 severity="success"
             />
