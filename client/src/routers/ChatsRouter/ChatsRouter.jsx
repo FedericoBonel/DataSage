@@ -5,9 +5,10 @@ const ChatListLayout = lazy(() =>
     import("@/pages/chats/layouts/ChatListLayout")
 );
 const NewChat = lazy(() => import("@/pages/chats/NewChat"));
+const ChatConversation = lazy(() => import("@/pages/chats/ChatConversation"));
+const JoinChat = lazy(() => import("@/pages/chats/JoinChat"));
 const ChatSettings = lazy(() => import("@/pages/chats/ChatSettings"));
 const ChatParticipants = lazy(() => import("@/pages/chats/ChatParticipants"));
-const ChatConversation = lazy(() => import("@/pages/chats/ChatConversation"));
 import { routes } from "@/utils/constants";
 
 /** Router that routes all requests associated with chats */
@@ -36,6 +37,14 @@ const ChatsRouter = {
                     element: (
                         <Suspense>
                             <ChatConversation />
+                        </Suspense>
+                    ),
+                },
+                {
+                    path: `:chatId/${routes.chats.JOIN}`,
+                    element: (
+                        <Suspense>
+                            <JoinChat />
                         </Suspense>
                     ),
                 },

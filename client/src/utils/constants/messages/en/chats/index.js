@@ -6,6 +6,7 @@ import chatDelete from "./delete";
 import chatSettings from "./settings";
 import chatParticipants from "./participants";
 import chatMessages from "./messages";
+import chatJoin from "./join";
 
 export default Object.freeze({
     /** Contains general messages to be shown to the user in chat form sections. */
@@ -35,4 +36,6 @@ export default Object.freeze({
     messages: chatMessages,
     /** Contains all messages to be shown in chat listings. */
     list: chatLists,
+    /** Contains all messages to be shown in chat join pages. */
+    join: chatJoin,
 });

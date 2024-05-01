@@ -8,6 +8,8 @@ const PARTICIPANTS_RESOURCE = "participants";
 export default {
     /** Chats resource name */
     RESOURCE: CHATS_RESOURCE,
+    /** Participants resource name */
+    PARTICIPANTS_RESOURCE,
     /** Endpoint to get all chats */
     GET_ALL: `${config.api.BASE_URL}/${CHATS_RESOURCE}`,
     /** Endpoint to create a chat */

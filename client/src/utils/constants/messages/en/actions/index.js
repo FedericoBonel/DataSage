@@ -9,6 +9,8 @@ const decisionMessages = {
     CANCEL: "Cancel",
     /** Contains the message to be shown to the user to describe the action of accepting something. */
     ACCEPT: "Accept",
+    /** Contains the message to be shown to the user to describe the action of joining something. */
+    JOIN: "Join",
 };
 
 export default Object.freeze({
