@@ -12,4 +12,7 @@ export default {
     /** Creates the endpoint to delete a notification by a given id */
     createDelete: (notificationId) =>
         `${config.api.BASE_URL}/${NOTIFICATIONS_RESOURCE}/${notificationId}`,
+    /** Creates the endpoint to update a notification by a given id */
+    createUpdate: (notificationId) =>
+        `${config.api.BASE_URL}/${NOTIFICATIONS_RESOURCE}/${notificationId}`,
 };

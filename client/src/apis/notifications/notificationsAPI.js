@@ -47,8 +47,22 @@ const deleteNotificationById = async (notificationId) => {
     });
 };
 
+/**
+ * Sets a notification as read by id
+ * @param {string} notificationId Id of the notification to be set as read
+ * @returns The server response payload with the updated notification
+ */
+const setNotificationAsReadById = async (notificationId) => {
+    return await makeRequest({
+        url: api.urls.notifications.createUpdate(notificationId),
+        method: "put",
+        data: { isRead: true },
+    });
+};
+
 export default {
     getNotReadCount,
     getNotifications,
     deleteNotificationById,
+    setNotificationAsReadById,
 };

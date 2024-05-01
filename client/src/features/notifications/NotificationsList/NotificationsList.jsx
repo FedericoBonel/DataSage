@@ -18,10 +18,18 @@ const NotificationsList = () => {
             isRead: isRead === "true",
         });
 
+    const { mutate: setAsRead } =
+        notificationsServices.useSetAsReadById();
+
     const onClickDeleteNotification = useCallback(
         (notificationId, notificationType) =>
             open({ notificationId, notificationType }),
         [open]
+    );
+
+    const onClickNotification = useCallback(
+        (notificationId) => setAsRead({ notificationId }),
+        [setAsRead]
     );
 
     const notifications =
@@ -32,6 +40,7 @@ const NotificationsList = () => {
                     notification={notification}
                     key={notification._id}
                     onDelete={onClickDeleteNotification}
+                    onClick={onClickNotification}
                 />
             ))
         );

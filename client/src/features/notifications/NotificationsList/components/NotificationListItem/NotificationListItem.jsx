@@ -13,7 +13,7 @@ import propTypes from "./NotificationListItem.props";
 import toNotificationItem from "./toNotificationItem";
 
 /** Renders a notification in a list of notifications as it is received from the back end. */
-const NotificationListItem = ({ notification, onDelete }) => {
+const NotificationListItem = ({ notification, onDelete, onClick }) => {
     const formattedNotifcation = toNotificationItem(notification);
 
     return (
@@ -32,7 +32,11 @@ const NotificationListItem = ({ notification, onDelete }) => {
             }
             disablePadding
         >
-            <ListItemButton component={Link} to={formattedNotifcation.href}>
+            <ListItemButton
+                component={Link}
+                to={formattedNotifcation.href}
+                onClick={() => onClick(notification._id)}
+            >
                 <ListItemAvatar>
                     <Avatar />
                 </ListItemAvatar>
@@ -57,7 +61,8 @@ const memoizedListItem = memo(
         prev.notification.from.names === next.notification.from.names &&
         prev.notification.from.lastnames === next.notification.from.lastnames &&
         prev.notification.type === next.notification.type &&
-        prev.onDelete === next.onDelete
+        prev.onDelete === next.onDelete &&
+        prev.onClick === next.onClick
 );
 
 export default memoizedListItem;

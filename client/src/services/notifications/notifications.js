@@ -97,8 +97,62 @@ const useDeleteNotificationById = () => {
     return queryState;
 };
 
+/** Creates the state for setting notifications as read by id and returns it. */
+const useSetAsReadById = () => {
+    const queryClient = useQueryClient();
+    const queryState = useMutation({
+        mutationFn: ({ notificationId }) =>
+            notificationsAPI.setNotificationAsReadById(notificationId),
+        onSuccess: (response, { notificationId }) => {
+            // Set the notification in cache as read
+            queryClient.setQueriesData(
+                { queryKey: notificationsCache.lists() },
+                (oldData) => {
+                    if (
+                        !oldData.pages &&
+                        oldData.data.notReadCount
+                    ) {
+                        // If its the count reduce the not read count
+                        return {
+                            ...oldData,
+                            data: {
+                                ...oldData.data,
+                                notReadCount: oldData.data.notReadCount - 1,
+                            },
+                        };
+                    } else if (
+                        oldData.pages &&
+                        !oldData.pages.data?.[0].isRead
+                    ) {
+                        // Remove it from the not read notifications
+                        return {
+                            ...oldData,
+                            pages: oldData.pages.map((page) => ({
+                                ...page,
+                                data: page.data.filter(
+                                    (item) => item._id !== notificationId
+                                ),
+                            })),
+                        };
+                    }
+                    // If non of the above return the old data
+                    return oldData;
+                }
+            );
+            // Invalidate the notification lists
+            queryClient.invalidateQueries({
+                queryKey: notificationsCache.lists(),
+            });
+        },
+        throwOnError: (error) => Boolean(error),
+    });
+
+    return queryState;
+};
+
 export default {
     useCheckNotReadNotifications,
     useInfiniteNotificationData,
     useDeleteNotificationById,
+    useSetAsReadById,
 };
