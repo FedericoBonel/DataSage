@@ -1,5 +1,5 @@
 import { List, Typography } from "@mui/material";
-import chatsServices from "@/services/chats";
+import documentsServices from "@/services/documents";
 import DeleteDocumentDialog from "../DeleteDocumentDialog";
 import ShowLoader from "@/components/informational/ShowLoader";
 import useDialog from "@/utils/hooks/useDialog";
@@ -12,7 +12,7 @@ import propTypes from "./DocumentList.props";
 const DocumentList = ({ chatId, showDelete }) => {
     const { selected, open, isOpen, close } = useDialog();
 
-    const docsQuery = chatsServices.useChatDocsData(chatId);
+    const docsQuery = documentsServices.useChatDocsData(chatId);
 
     const items = docsQuery.data?.data.map((documentItem) => (
         <DocumentListItem

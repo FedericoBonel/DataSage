@@ -1,5 +1,5 @@
 import { DialogContentText } from "@mui/material";
-import chatsServices from "@/services/chats";
+import documentsServices from "@/services/documents";
 import DecisionDialog from "@/components/actions/DecisionDialog";
 import ToastMessage from "@/components/informational/ToastMessage";
 import { messages } from "@/utils/constants";
@@ -8,7 +8,7 @@ import { useEffect } from "react";
 
 /** Dialog that prompts the user to delete a document from a chat or not. */
 const DeleteDocumentDialog = ({ chatId, documentId, isOpen, onClose }) => {
-    const deleteDocQuery = chatsServices.useDeleteDocFromChatById();
+    const deleteDocQuery = documentsServices.useDeleteDocFromChatById();
 
     const onSubmit = () => {
         deleteDocQuery.mutate({ chatId, documentId });

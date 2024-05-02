@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Typography } from "@mui/material";
-import chatsServices from "@/services/chats";
+import documentsServices from "@/services/documents";
 import Form from "@/components/forms/Form";
 import FormAlert from "@/components/forms/FormAlert";
 import ShowLoader from "@/components/informational/ShowLoader";
@@ -15,7 +15,7 @@ const initialFormState = { documents: [] };
 const AddDocumentsForm = ({ chatId, showCount }) => {
     const [docsToUpload, setDocsToUpload] = useState(initialFormState);
 
-    const docsListQuery = chatsServices.useChatDocsData(chatId, {
+    const docsListQuery = documentsServices.useChatDocsData(chatId, {
         enabled: showCount,
     });
     const canUploadMore =
@@ -23,7 +23,7 @@ const AddDocumentsForm = ({ chatId, showCount }) => {
         (docsListQuery.isSuccess &&
             chatsValidator.isUnderDocsLimit(docsListQuery.data?.data));
 
-    const addDocQuery = chatsServices.useAddDocToChatById();
+    const addDocQuery = documentsServices.useAddDocToChatById();
 
     const resetForm = () => {
         setDocsToUpload(initialFormState);
