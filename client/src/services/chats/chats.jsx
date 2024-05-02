@@ -5,6 +5,7 @@ import {
     useQueryClient,
 } from "@tanstack/react-query";
 import chatsAPI from "@/apis/chats/chatsAPI";
+import participantsAPI from "@/apis/participants/participantsAPI";
 import chatsCache from "../caches/chats";
 import { utilsCache } from "../caches";
 import api from "@/utils/constants/api";
@@ -200,7 +201,7 @@ const useInfiniteParticipantDataByChat = ({
         // eslint-disable-next-line
         queryKey: chatsCache.participantsList(chatId, { textSearch }),
         queryFn: ({ pageParam = page }) =>
-            chatsAPI.getParticipantsByChat(
+            participantsAPI.getParticipantsByChat(
                 chatId,
                 { textSearch },
                 { page: pageParam, limit }
@@ -217,7 +218,7 @@ const useInfiniteParticipantDataByChat = ({
 const useParticipantById = (participantId, chatId, { enabled = true } = {}) => {
     const queryState = useQuery({
         queryKey: chatsCache.participantsDetail(chatId, participantId),
-        queryFn: () => chatsAPI.getParticipantById(participantId, chatId),
+        queryFn: () => participantsAPI.getParticipantById(participantId, chatId),
         throwOnError: (error) => Boolean(error),
         enabled,
     });
@@ -230,7 +231,7 @@ const useInviteParticipant = () => {
     const queryClient = useQueryClient();
     const queryState = useMutation({
         mutationFn: ({ chatId, newParticipant }) =>
-            chatsAPI.inviteParticipantToChat(newParticipant, chatId),
+            participantsAPI.inviteParticipantToChat(newParticipant, chatId),
         onSuccess: (response, { chatId }) => {
             // Update the participants cache with the received data
             queryClient.setQueryData(
@@ -257,7 +258,7 @@ const useUpdateParticipantById = () => {
     const queryClient = useQueryClient();
     const queryState = useMutation({
         mutationFn: ({ updatedParticipant, chatId, participantId }) =>
-            chatsAPI.updateParticipantById(
+            participantsAPI.updateParticipantById(
                 updatedParticipant,
                 participantId,
                 chatId
@@ -283,7 +284,7 @@ const useDeleteParticipantFromChatById = () => {
     const queryClient = useQueryClient();
     const queryState = useMutation({
         mutationFn: ({ chatId, participantId }) =>
-            chatsAPI.deleteParticipantFromChat(participantId, chatId),
+            participantsAPI.deleteParticipantFromChat(participantId, chatId),
         onSuccess: (response, { chatId, participantId }) => {
             // Remove the participant from cache
             queryClient.removeQueries({
