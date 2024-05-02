@@ -5,6 +5,7 @@ import {
     useQueryClient,
 } from "@tanstack/react-query";
 import chatsAPI from "@/apis/chats/chatsAPI";
+import documentsAPI from "@/apis/documents/documentsAPI";
 import chatsCache from "../caches/chats";
 import { utilsCache } from "../caches";
 import api from "@/utils/constants/api";
@@ -99,7 +100,7 @@ const useUpdateChatById = () => {
 const useChatDocsData = (chatId, { enabled = true } = {}) => {
     const queryState = useQuery({
         queryKey: chatsCache.documents(chatId),
-        queryFn: () => chatsAPI.getDocsByChat(chatId),
+        queryFn: () => documentsAPI.getDocsByChat(chatId),
         throwOnError: (error) => Boolean(error),
         enabled,
     });
@@ -112,7 +113,7 @@ const useAddDocToChatById = () => {
     const queryClient = useQueryClient();
     const queryState = useMutation({
         mutationFn: ({ chatId, documents }) =>
-            chatsAPI.addDocsToChat(documents, chatId),
+            documentsAPI.addDocsToChat(documents, chatId),
         onSuccess: (response, { chatId }) => {
             // Update the documents cache with the received data
             queryClient.setQueryData(chatsCache.documents(chatId), (oldData) =>
@@ -135,7 +136,7 @@ const useDeleteDocFromChatById = () => {
     const queryClient = useQueryClient();
     const queryState = useMutation({
         mutationFn: ({ chatId, documentId }) =>
-            chatsAPI.deleteDocFromChat(documentId, chatId),
+            documentsAPI.deleteDocFromChat(documentId, chatId),
         onSuccess: (response, { chatId, documentId }) => {
             // Remove the document from cache
             queryClient.setQueryData(chatsCache.documents(chatId), (oldData) =>
