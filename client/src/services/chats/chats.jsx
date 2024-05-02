@@ -273,7 +273,7 @@ const useInfiniteParticipantDataByChat = ({
 };
 
 /** It makes a back end request to get a chat participant by id and returns the state of the query. */
-const useParticipantById = (participantId, chatId, { enabled = true }) => {
+const useParticipantById = (participantId, chatId, { enabled = true } = {}) => {
     const queryState = useQuery({
         queryKey: chatsCache.participantsDetail(chatId, participantId),
         queryFn: () => chatsAPI.getParticipantById(participantId, chatId),
