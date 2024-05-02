@@ -11,7 +11,7 @@ import { makeRequest } from "@/lib/axios";
  */
 const inviteParticipantToChat = async (newParticipant, chatId) => {
     return makeRequest({
-        url: api.urls.chats.createCreateParticipants(chatId),
+        url: api.urls.participants.createCreate(chatId),
         method: "post",
         data: newParticipant,
     });
@@ -36,7 +36,7 @@ const getParticipantsByChat = async (chatId, filtering, pagination) => {
     };
 
     return await makeRequest({
-        url: api.urls.chats.createGetAllParticipants(chatId),
+        url: api.urls.participants.createGetAll(chatId),
         method: "get",
         params,
     });
@@ -50,7 +50,7 @@ const getParticipantsByChat = async (chatId, filtering, pagination) => {
  */
 const getParticipantById = async (participantId, chatId) => {
     return await makeRequest({
-        url: api.urls.chats.createGetParticipantById(chatId, participantId),
+        url: api.urls.participants.createGetById(chatId, participantId),
         method: "get",
     });
 };
@@ -68,7 +68,7 @@ const updateParticipantById = async (
     chatId
 ) => {
     return makeRequest({
-        url: api.urls.chats.createPutParticipant(chatId, participantId),
+        url: api.urls.participants.createPut(chatId, participantId),
         method: "put",
         data: updatedParticipant,
     });
@@ -82,7 +82,7 @@ const updateParticipantById = async (
  */
 const deleteParticipantFromChat = async (participantId, chatId) => {
     return makeRequest({
-        url: api.urls.chats.createDeleteParticipant(chatId, participantId),
+        url: api.urls.participants.createDelete(chatId, participantId),
         method: "delete",
     });
 };
