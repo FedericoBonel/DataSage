@@ -5,7 +5,7 @@ export default Object.freeze({
     errorCode: {
         400: "Hm, that didn't work. It seems there's a problem with the information you provided. Please try again.",
         401: "Access Denied! Looks like you are not logged in. Make sure you're logged in with the right credentials or reach out to our support team for help.",
-        403: "Access Denied! It seems like you don't have permission to view this page. If you need it reach out to customer support.",
+        403: "Access Denied! It seems like you don't have permission to view this page. If you need it reach out to customer support or, if trying to enter a chat feature, the chat owner.",
         404: "Looks like you took a wrong turn. This page or resource doesn't exist.",
         default:
             "Uh-oh! Something went wrong on our end. If this message persists, please contact customer support.",

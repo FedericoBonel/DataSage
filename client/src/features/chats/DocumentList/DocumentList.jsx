@@ -9,7 +9,7 @@ import { ListStyles } from "./DocumentList.styles";
 import propTypes from "./DocumentList.props";
 
 /** Renders the list of documents by chat id and handles their delete dialog. */
-const DocumentList = ({ chatId }) => {
+const DocumentList = ({ chatId, showDelete }) => {
     const { selected, open, isOpen, close } = useDialog();
 
     const docsQuery = chatsServices.useChatDocsData(chatId);
@@ -19,6 +19,7 @@ const DocumentList = ({ chatId }) => {
             key={documentItem._id}
             documentItem={documentItem}
             onClickDelete={open}
+            showDelete={showDelete}
         />
     ));
 

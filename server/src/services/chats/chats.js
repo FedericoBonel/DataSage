@@ -52,7 +52,7 @@ const create = async (chat, documents, userId) => {
     // Append the ids of the documents to the pages of each document and save them
     await pagesRepository.saveAll(flatPagesByDocuments(parsedPagesPerDocument, savedChat.documents));
 
-    return chatDTO.toChatOutputDTO(savedChat);
+    return chatDTO.toChatOutputDTO(savedChat, userId);
 };
 
 /**
@@ -86,7 +86,7 @@ const get = async (
         { skip, limit: pagination.limit, sort: "-createdAt" }
     );
 
-    return savedChatsForUser.map((colaborator) => colaboratorDTO.toChatExcerptOutputDTO(colaborator));
+    return savedChatsForUser.map((colaborator) => colaboratorDTO.toChatExcerptOutputDTO(colaborator, userId));
 };
 
 /**
@@ -109,7 +109,7 @@ const updateById = async (updatedChat, chatId, userId) => {
         throw new NotFoundError(messages.errors.ROUTE_NOT_FOUND);
     }
 
-    return chatDTO.toChatOutputDTO(savedChat);
+    return chatDTO.toChatOutputDTO(savedChat, userId);
 };
 
 /**
@@ -141,7 +141,7 @@ const deleteById = async (chatId, userId) => {
         throw new NotFoundError(messages.errors.ROUTE_NOT_FOUND);
     }
 
-    return chatDTO.toChatOutputDTO(deletedChat);
+    return chatDTO.toChatOutputDTO(deletedChat, userId);
 };
 
 export default { create, get, updateById, getById, deleteById };

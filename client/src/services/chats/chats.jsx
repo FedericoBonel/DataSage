@@ -96,11 +96,12 @@ const useUpdateChatById = () => {
 };
 
 /** It makes a back end request to get the list of documents of a chat by id and returns the state of the query. */
-const useChatDocsData = (chatId) => {
+const useChatDocsData = (chatId, { enabled = true } = {}) => {
     const queryState = useQuery({
         queryKey: chatsCache.documents(chatId),
         queryFn: () => chatsAPI.getDocsByChat(chatId),
         throwOnError: (error) => Boolean(error),
+        enabled,
     });
 
     return queryState;
@@ -115,10 +116,12 @@ const useAddDocToChatById = () => {
         onSuccess: (response, { chatId }) => {
             // Update the documents cache with the received data
             queryClient.setQueryData(chatsCache.documents(chatId), (oldData) =>
-                utilsCache.mockSuccessfulRes([
-                    ...response.data,
-                    ...oldData.data,
-                ])
+                oldData
+                    ? utilsCache.mockSuccessfulRes([
+                          ...response.data,
+                          ...oldData.data,
+                      ])
+                    : utilsCache.mockSuccessfulRes([...response.data])
             );
         },
         throwOnError: (error) => error?.response?.status !== 400,

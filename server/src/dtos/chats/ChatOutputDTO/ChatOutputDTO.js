@@ -12,11 +12,16 @@ import EntityDTO from "../../utils/EntityDTO.js";
  *           required:
  *             - name
  *             - owner
+ *             - isOwner
  *           properties:
  *             name:
  *               type: string
  *               description: Name of the chat.
  *               example: Math 101 Student assistant.
+ *             isOwner:
+ *               type: boolean
+ *               description: True if the user that is requesting the resource is the owner of the resource.
+ *               example: true
  *             owner:
  *               $ref: "#/components/schemas/OwnerOutputDTO"
  */
@@ -26,6 +31,12 @@ export default class ChatOutputDTO extends EntityDTO {
      * @type {String}
      */
     name;
+
+    /**
+     * If the user that is requesting the resource is its owner or not
+     * @type {Boolean}
+     */
+    isOwner;
 
     /**
      * Creator and owner of this chat

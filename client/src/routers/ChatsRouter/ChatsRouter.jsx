@@ -1,5 +1,6 @@
 import { lazy } from "react";
 import { NavbarLayout } from "@/pages/layouts";
+import AuthorizeToChat from "@/pages/chats/layouts/AuthorizeToChat";
 import Suspense from "@/routers/components/Suspense";
 const ChatListLayout = lazy(() =>
     import("@/pages/chats/layouts/ChatListLayout")
@@ -34,11 +35,17 @@ const ChatsRouter = {
                 },
                 {
                     path: ":chatId",
-                    element: (
-                        <Suspense>
-                            <ChatConversation />
-                        </Suspense>
-                    ),
+                    element: <AuthorizeToChat />,
+                    children: [
+                        {
+                            index: true,
+                            element: (
+                                <Suspense>
+                                    <ChatConversation />
+                                </Suspense>
+                            ),
+                        },
+                    ],
                 },
                 {
                     path: `:chatId/${routes.chats.JOIN}`,
@@ -50,19 +57,31 @@ const ChatsRouter = {
                 },
                 {
                     path: `:chatId/${routes.SETTINGS}`,
-                    element: (
-                        <Suspense>
-                            <ChatSettings />
-                        </Suspense>
-                    ),
+                    element: <AuthorizeToChat />,
+                    children: [
+                        {
+                            index: true,
+                            element: (
+                                <Suspense>
+                                    <ChatSettings />
+                                </Suspense>
+                            ),
+                        },
+                    ],
                 },
                 {
                     path: `:chatId/${routes.chats.PARTICIPANTS}`,
-                    element: (
-                        <Suspense>
-                            <ChatParticipants />
-                        </Suspense>
-                    ),
+                    element: <AuthorizeToChat needsOwner />,
+                    children: [
+                        {
+                            index: true,
+                            element: (
+                                <Suspense>
+                                    <ChatParticipants />
+                                </Suspense>
+                            ),
+                        },
+                    ],
                 },
             ],
         },

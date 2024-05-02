@@ -7,7 +7,7 @@ import { messages, routes } from "@/utils/constants";
 import propTypes from "./ChatListItemMenu.props";
 
 /** Component of the popover menu of a chat list item with navigation to its settings and participant management */
-const ChatListItemMenu = ({ chatId }) => {
+const ChatListItemMenu = ({ chatId, showParticipantsManagement }) => {
     return (
         <Menu
             variant="iconButton"
@@ -28,22 +28,26 @@ const ChatListItemMenu = ({ chatId }) => {
                     />
                 </ListItem>
             </MenuItem>
-            <MenuItem
-                disableGutters
-                component={Link}
-                to={`/${routes.chats.CHATS}/${chatId}/${routes.chats.PARTICIPANTS}`}
-            >
-                <ListItem component="div">
-                    <ListItemText
-                        primary={
-                            messages.chats.list.item.settings.participants.LABEL
-                        }
-                        secondary={
-                            messages.chats.list.item.settings.participants.DESC
-                        }
-                    />
-                </ListItem>
-            </MenuItem>
+            {showParticipantsManagement && (
+                <MenuItem
+                    disableGutters
+                    component={Link}
+                    to={`/${routes.chats.CHATS}/${chatId}/${routes.chats.PARTICIPANTS}`}
+                >
+                    <ListItem component="div">
+                        <ListItemText
+                            primary={
+                                messages.chats.list.item.settings.participants
+                                    .LABEL
+                            }
+                            secondary={
+                                messages.chats.list.item.settings.participants
+                                    .DESC
+                            }
+                        />
+                    </ListItem>
+                </MenuItem>
+            )}
         </Menu>
     );
 };

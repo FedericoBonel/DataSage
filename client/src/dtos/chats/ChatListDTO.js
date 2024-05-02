@@ -6,6 +6,8 @@ export default {
     _id: propTypes.string.isRequired,
     /** Name of the chat */
     name: propTypes.string.isRequired,
+    /** If the user that is requesting the chat is the owner of the chat or not */
+    isOwner: propTypes.bool.isRequired,
     /** Date and hour of creation of the chat as an ISO string */
     createdAt: propTypes.string.isRequired,
     /** Owner of the chat */

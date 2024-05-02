@@ -12,13 +12,16 @@ import propTypes from "./AddDocumentsForm.props";
 const initialFormState = { documents: [] };
 
 /** Renders a document upload form to add documents to a chat by id. */
-const AddDocumentsForm = ({ chatId }) => {
+const AddDocumentsForm = ({ chatId, showCount }) => {
     const [docsToUpload, setDocsToUpload] = useState(initialFormState);
 
-    const docsListQuery = chatsServices.useChatDocsData(chatId);
+    const docsListQuery = chatsServices.useChatDocsData(chatId, {
+        enabled: showCount,
+    });
     const canUploadMore =
-        docsListQuery.isSuccess &&
-        chatsValidator.isUnderDocsLimit(docsListQuery.data?.data);
+        !showCount ||
+        (docsListQuery.isSuccess &&
+            chatsValidator.isUnderDocsLimit(docsListQuery.data?.data));
 
     const addDocQuery = chatsServices.useAddDocToChatById();
 
@@ -54,7 +57,7 @@ const AddDocumentsForm = ({ chatId }) => {
     );
 
     return (
-        <ShowLoader isLoading={docsListQuery.isLoading}>
+        <ShowLoader isLoading={showCount && docsListQuery.isLoading}>
             <Form
                 onSubmit={onSubmit}
                 canSubmit={

@@ -41,11 +41,13 @@ const updateParticipantToColaboratorModel = (permissions) => ({
 /**
  * Transforms a colaborator as it is stored in the database to how it should be exposed as a chat list item.
  * @param {*} colaborator The colaborator as it is stored in the database
+ * @param {string} userId The user that is requesting the resource in the database
  */
-const toChatExcerptOutputDTO = (colaborator) => {
+const toChatExcerptOutputDTO = (colaborator, userId) => {
     const dto = new ColaboratorChatExcerptOutputDTO();
     dto._id = colaborator.chat._id;
     dto.name = colaborator.chat.name;
+    dto.isOwner = colaborator.chat.owner._id.toString() === userId;
     dto.createdAt = colaborator.chat.createdAt?.toISOString();
     dto.owner = chatsDTO.toChatOwnerDTO(colaborator.chat.owner);
     return dto;
