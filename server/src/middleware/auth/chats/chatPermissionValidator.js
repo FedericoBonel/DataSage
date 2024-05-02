@@ -11,7 +11,7 @@ const chatPermissionsValidator = (permissionsNeeded) => async (req, res, next) =
     const user = req.user;
     const { chatId } = req.params;
 
-    await authServices.authorizeCollaboratorToChat(chatId, user._id, [permissionsNeeded]);
+    await authServices.authorizeCollaboratorToChat(chatId, user._id, permissionsNeeded);
 
     next();
 };
