@@ -1,5 +1,5 @@
 import { lazy } from "react";
-import { NavbarLayout } from "@/pages/layouts";
+import NavbarLayout from "@/pages/layouts/NavbarLayout";
 import AuthorizeToChat from "@/pages/chats/layouts/AuthorizeToChat";
 import Suspense from "@/routers/components/Suspense";
 const ChatListLayout = lazy(() =>

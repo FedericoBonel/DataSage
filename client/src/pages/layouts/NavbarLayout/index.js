@@ -1,1 +1,1 @@
-export { default as NavbarLayout } from "./NavbarLayout";
+export { default } from "./NavbarLayout";

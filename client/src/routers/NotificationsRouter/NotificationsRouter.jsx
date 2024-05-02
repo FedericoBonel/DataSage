@@ -1,5 +1,5 @@
 import { lazy } from "react";
-import { NavbarLayout } from "@/pages/layouts";
+import NavbarLayout from "@/pages/layouts/NavbarLayout";
 import Suspense from "@/routers/components/Suspense";
 const NotificationsList = lazy(() =>
     import("@/pages/notifications/NotificationsList")
