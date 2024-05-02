@@ -1,15 +1,11 @@
 import config from "@/config";
 
 const CHATS_RESOURCE = "chats";
-const DOCS_RESOURCE = "documents";
 const MSG_RESOURCE = "messages";
-const PARTICIPANTS_RESOURCE = "participants";
 
 export default {
     /** Chats resource name */
     RESOURCE: CHATS_RESOURCE,
-    /** Participants resource name */
-    PARTICIPANTS_RESOURCE,
     /** Endpoint to get all chats */
     GET_ALL: `${config.api.BASE_URL}/${CHATS_RESOURCE}`,
     /** Endpoint to create a chat */
@@ -22,17 +18,6 @@ export default {
     /** Creates the endpoint to delete a chat by id */
     createDelete: (chatId) =>
         `${config.api.BASE_URL}/${CHATS_RESOURCE}/${chatId}`,
-    /** Documents resource name */
-    DOCS_RESOURCE,
-    /** Creates the documents get all endpoint */
-    createGetAllDocs: (chatId) =>
-        `${config.api.BASE_URL}/${CHATS_RESOURCE}/${chatId}/${DOCS_RESOURCE}`,
-    /** Creates the documents upload endpoint */
-    createCreateDocs: (chatId) =>
-        `${config.api.BASE_URL}/${CHATS_RESOURCE}/${chatId}/${DOCS_RESOURCE}`,
-    /** Creates the document delete endpoint */
-    createDeleteDoc: (chatId, docId) =>
-        `${config.api.BASE_URL}/${CHATS_RESOURCE}/${chatId}/${DOCS_RESOURCE}/${docId}`,
     /** Messages resource name */
     MSG_RESOURCE,
     /** Creates the chat messages get all endpoint */

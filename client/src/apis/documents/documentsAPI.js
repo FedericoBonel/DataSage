@@ -8,7 +8,7 @@ import { makeRequest } from "@/lib/axios";
  */
 const getDocsByChat = async (chatId) => {
     return makeRequest({
-        url: api.urls.chats.createGetAllDocs(chatId),
+        url: api.urls.documents.createGetAll(chatId),
         method: "get",
     });
 };
@@ -22,7 +22,7 @@ const getDocsByChat = async (chatId) => {
  */
 const addDocsToChat = async (newDocs, chatId) => {
     return makeRequest({
-        url: api.urls.chats.createCreateDocs(chatId),
+        url: api.urls.documents.createCreate(chatId),
         method: "post",
         data: newDocs,
         headers: {
@@ -39,7 +39,7 @@ const addDocsToChat = async (newDocs, chatId) => {
  */
 const deleteDocFromChat = async (documentId, chatId) => {
     return makeRequest({
-        url: api.urls.chats.createDeleteDoc(chatId, documentId),
+        url: api.urls.documents.createDelete(chatId, documentId),
         method: "delete",
     });
 };

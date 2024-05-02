@@ -1,6 +1,7 @@
 import config from "@/config";
 import chatsUrls from "./urls/chats";
 import notificationsUrls from "./urls/notifications";
+import documentsUrls from "./urls/documents";
 import participantsUrls from "./urls/participants";
 import participationsUrls from "./urls/participations";
 import searchingConsts from "./searching";
@@ -15,6 +16,8 @@ export default Object.freeze({
         chats: chatsUrls,
         /** Contains all notifications resources urls */
         notifications: notificationsUrls,
+        /** Contains all documents resources urls */
+        documents: documentsUrls,
         /** Contains all participations resources urls */
         participants: participantsUrls,
         /** Contains all participations resources urls */
