@@ -1,5 +1,5 @@
 import { useState } from "react";
-import chatsServices from "@/services/chats";
+import participantsServices from "@/services/participants";
 import DeleteParticipantDialog from "../DeleteParticipantDialog";
 import UpdateParticipantDialog from "../UpdateParticipantDialog";
 import TextField from "@/components/fields/TextField";
@@ -17,10 +17,11 @@ const ParticipantList = ({ chatId }) => {
     const [textSearch, setTextSearch] = useState("");
     const onChangeSearch = (query) => setTextSearch(query);
 
-    const participantQuery = chatsServices.useInfiniteParticipantDataByChat({
-        chatId,
-        textSearch,
-    });
+    const participantQuery =
+        participantsServices.useInfiniteParticipantDataByChat({
+            chatId,
+            textSearch,
+        });
 
     const participants =
         participantQuery.isSuccess &&

@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Card, CardHeader, CardContent, CardActions } from "@mui/material";
-import chatsServices from "@/services/chats";
+import participantsServices from "@/services/participants";
 import Form from "@/components/forms/Form";
 import FormAlert from "@/components/forms/FormAlert";
 import { api, messages } from "@/utils/constants";
@@ -30,7 +30,7 @@ const formatData = (formState) => ({
 /** Renders a new participant form to add participants to a chat by id */
 const NewParticipantForm = ({ chatId }) => {
     const [participant, setParticipant] = useState(initialState);
-    const inviteQuery = chatsServices.useInviteParticipant();
+    const inviteQuery = participantsServices.useInviteParticipant();
 
     const resetForm = () => {
         inviteQuery.reset();

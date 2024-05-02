@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { DialogTitle, DialogContent, DialogActions } from "@mui/material";
-import chatsServices from "@/services/chats";
+import participantsServices from "@/services/participants";
 import Button from "@/components/actions/Button";
 import ToastMessage from "@/components/informational/ToastMessage";
 import { api, messages } from "@/utils/constants";
@@ -39,7 +39,7 @@ const UpdateParticipantDialogBody = ({ chatId, participant, onCancel }) => {
         setInitialState(participant)
     );
 
-    const updateQuery = chatsServices.useUpdateParticipantById();
+    const updateQuery = participantsServices.useUpdateParticipantById();
 
     const onToggle = (event) =>
         setUpdatedParticipant((prev) => ({

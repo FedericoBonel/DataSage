@@ -1,5 +1,5 @@
 import { Dialog } from "@mui/material";
-import chatsServices from "@/services/chats";
+import participantsServices from "@/services/participants";
 import ShowLoader from "@/components/informational/ShowLoader";
 import UpdateParticipantDialogBody from "./UpdateParticipantDialogBody";
 import propTypes from "./UpdateParticipantDialog.props";
@@ -11,7 +11,7 @@ const UpdateParticipantDialog = ({
     isOpen,
     onClose,
 }) => {
-    const participantByIdQuery = chatsServices.useParticipantById(
+    const participantByIdQuery = participantsServices.useParticipantById(
         participantId,
         chatId,
         { enabled: isOpen }
