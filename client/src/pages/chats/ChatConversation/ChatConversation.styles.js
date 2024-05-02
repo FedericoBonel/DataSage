@@ -1,4 +1,8 @@
-export const ConversationPageWrapperStyles = { height: "100vh" };
+export const ConversationPageWrapperStyles = {
+    height: "100vh",
+    bgcolor: "chatBg.main",
+    justifyContent: "center"
+};
 
 export const DocumentViewerSectionStyles = { height: "100%" };
 

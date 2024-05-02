@@ -32,7 +32,7 @@ const ChatConversation = () => {
             {/* Chat conversation section */}
             <Grid
                 xs={12}
-                md={canViewDocuments ? 6 : 12}
+                md={canViewDocuments ? 6 : 9}
                 sx={ChatConversationSectionStyles}
             >
                 <ChatConversationFeature chatId={chatId} key={chatId} />
