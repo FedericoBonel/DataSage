@@ -8,7 +8,7 @@ const verifyToken = async (req, res, next) => {
     // TODO Implement this when we have authentication
 
     req.user = {
-        _id: "6629c9afb2066717d74c3ec7",
+        _id: "661645f35333647769e601ac",
         names: "Test names",
         lastnames: "Test lastnames",
         email: "test@mail.com",
