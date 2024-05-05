@@ -13,8 +13,8 @@ const persistantLogger = winston.createLogger({
     transports: [
         // Only log to database
         new winston.transports.MongoDB({
-            db: config.db.url,
-            collection: "logs",
+            db: config.logging.dbUrl,
+            collection: config.logging.collectionName,
             options: { useUnifiedTopology: true },
         }),
     ],

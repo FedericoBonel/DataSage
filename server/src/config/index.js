@@ -75,6 +75,13 @@ isDefined(S3_BUCKET, "S3_BUCKET");
 const OPEN_AI_KEY = process.env.OPEN_AI_KEY;
 isDefined(OPEN_AI_KEY, "OPEN_AI_KEY");
 
+// Logging configuration
+const LOGGING_DB_URL = process.env.LOGGING_DB_URL;
+isDefined(LOGGING_DB_URL, "LOGGING_DB_URL");
+
+const LOGGING_DB_COLLECTION = process.env.LOGGING_DB_COLLECTION;
+isDefined(LOGGING_DB_COLLECTION, "LOGGING_DB_COLLECTION");
+
 /** Object with all configuration environment variables */
 export default Object.freeze({
     /** Current node environment (production || development) */
@@ -137,5 +144,12 @@ export default Object.freeze({
     llm: {
         /** Large language model API Key being used. (Currently OpenAI) */
         apiKey: OPEN_AI_KEY,
+    },
+    /** Logging related variables */
+    logging: {
+        /** URL for database conection with credentials */
+        dbUrl: LOGGING_DB_URL,
+        /** Logs collection name to be used. */
+        collectionName: LOGGING_DB_COLLECTION,
     },
 });

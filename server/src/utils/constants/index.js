@@ -18,6 +18,7 @@ import permissionsValidation from "./validation/permissions.js";
 import paginationValidation from "./validation/pagination.js";
 import textSearchValidation from "./validation/textSearch.js";
 import messagesValidation from "./validation/messages.js";
+import logsValidation from "./validation/logs.js";
 import colaboratorPermissions from "./permissions/colaborator.js";
 import notificationTypes from "./notifications/notificationTypes.js";
 import notificationRelatedEntities from "./notifications/relatedEntities.js";
@@ -56,6 +57,7 @@ export const validation = Object.freeze({
     pagination: paginationValidation,
     textSearch: textSearchValidation,
     messages: messagesValidation,
+    logs: logsValidation,
 });
 
 /** Exports all application permissions (These should be stored in database as well) */

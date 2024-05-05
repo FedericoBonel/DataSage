@@ -12,6 +12,7 @@ import permissionsValidation from "./validation/permissions.js";
 import paginationValidation from "./validation/pagination.js";
 import textSearchValidation from "./validation/textSearch.js";
 import messageValidation from "./validation/messages.js";
+import loggingValidation from "./validation/logging.js";
 
 /** Contains all error messages to be sent to the user. */
 export default Object.freeze({
@@ -38,6 +39,7 @@ export default Object.freeze({
         pagination: paginationValidation,
         textSearch: textSearchValidation,
         message: messageValidation,
+        logging: loggingValidation,
         BODY_VALIDATION_FAILED:
             "The request payload failed validation. Check the fields you are providing and try again.",
         ID_PROVIDED:

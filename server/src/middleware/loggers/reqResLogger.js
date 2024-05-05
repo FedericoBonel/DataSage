@@ -1,10 +1,10 @@
 import { StatusCodes } from "http-status-codes";
-import { persistantLogger, formatHTTPReqRes } from "../../utils/loggers/index.js";
-import { messages } from "../../utils/constants/index.js";
+import loggingService from "../../services/logging/logging.js";
+import { messages, validation } from "../../utils/constants/index.js";
 
-/** 
- * Middleware that captures requests and responses to log 
- * HTTP requests and all related metadata persistantly in database. 
+/**
+ * Middleware that captures requests and responses to log
+ * HTTP requests and all related metadata persistantly in database.
  */
 const reqResLogger = (req, res, next) => {
     // Get the request timestamp when it arrived to calculate overall time
@@ -16,30 +16,39 @@ const reqResLogger = (req, res, next) => {
     // Use this flag to avoid logging more than once
     let responseSent = false;
 
-    // Extend the json function to append logging
-    res.json = function (body) {
+    // Extend the json function to do logging
+    res.json = function (resBody) {
         if (!responseSent) {
             if (res.statusCode < StatusCodes.BAD_REQUEST) {
-                persistantLogger.info(
-                    messages.info.REQUEST_SUCCESS,
-                    formatHTTPReqRes(req, res, body, requestStartTime)
-                );
+                loggingService.save({
+                    level: validation.logs.levels.INFO,
+                    message: messages.info.REQUEST_SUCCESS,
+                    req,
+                    res,
+                    resBody,
+                    requestStartTime,
+                });
             } else {
-                persistantLogger.error(
-                    messages.errors.REQUEST_FAILURE,
-                    formatHTTPReqRes(req, res, body, requestStartTime, req.caughtError)
-                );
+                loggingService.save({
+                    level: validation.logs.levels.ERROR,
+                    message: messages.errors.REQUEST_FAILURE,
+                    req,
+                    res,
+                    resBody,
+                    requestStartTime,
+                    caughtError: req.caughtError,
+                });
             }
 
             responseSent = true;
         }
 
         // Call the original response function
-        return originalJsonFunc.call(this, body);
+        return originalJsonFunc.call(this, resBody);
     };
 
     // Continue processing the request
     next();
 };
 
-export default reqResLogger
+export default reqResLogger;
