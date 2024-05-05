@@ -24,6 +24,9 @@ const errorHandler = async (err, req, res, next) => {
         );
     }
 
+    // Append the object containing more information about the error to the request
+    req.caughtError = err;
+
     res.status(serverError.status).json(new ErrorPayload(serverError));
 };
 

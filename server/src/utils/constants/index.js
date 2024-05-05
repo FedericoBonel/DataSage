@@ -21,6 +21,8 @@ import messagesValidation from "./validation/messages.js";
 import colaboratorPermissions from "./permissions/colaborator.js";
 import notificationTypes from "./notifications/notificationTypes.js";
 import notificationRelatedEntities from "./notifications/relatedEntities.js";
+import loggingFormatting from "./logging/formatting.js";
+import loggingPrivateKeys from "./logging/privateBodyKeys.js";
 
 /** Object with all messages to be shown to the user */
 export const messages = Object.freeze({
@@ -65,4 +67,14 @@ export const permissions = Object.freeze({
 export const notifications = Object.freeze({
     types: notificationTypes,
     relatedEntities: notificationRelatedEntities,
+});
+
+/** Exports all constants related to logging. */
+export const logging = Object.freeze({
+    /** Contains all constants related to logging formatting */
+    formatting: loggingFormatting,
+    /** Containts all body keys that are private and should be redacted from logs */
+    privateKeys: loggingPrivateKeys,
+    /** Placeholder for redacted values */
+    REDACTED_VALUE: "*****",
 });

@@ -50,4 +50,6 @@ export default Object.freeze({
         INVALID_CREDENTIALS: "The token provided is invalid. Please authenticate and try again.",
         FORBIDDEN: "You do not have the permissions to take this action.",
     },
+    /** Message to show when a request wasn't processed successfully */
+    REQUEST_FAILURE: "Failure request",
 });
