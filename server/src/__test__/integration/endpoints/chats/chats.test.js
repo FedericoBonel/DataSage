@@ -22,16 +22,20 @@ const app = await import("../../../../../app.js");
 // Tests
 describe("Integration tests for chat management endpoints API", () => {
     const appInstance = app.default;
+
     beforeAll(async () => {
         // Connect to database
         await connect();
-        // Create dummy data
-        await createTestingData();
     });
 
     afterAll(async () => {
         // Disconnect from database
         await disconnect();
+    });
+
+    beforeEach(async () => {
+        // Create dummy data and reset between tests
+        await createTestingData();
     });
 
     describe("Integration tests for GET /chats", () => {
@@ -40,10 +44,8 @@ describe("Integration tests for chat management endpoints API", () => {
             const page = 1;
             const limit = 5;
             const chatRoute = `${config.server.urls.api}/${routes.chats.CHATS}?page=${page}&limit=${limit}`;
-
             // When
             const response = await request(appInstance).get(chatRoute).send();
-
             // Then
             expect(response.headers["content-type"]).toEqual(expect.stringContaining("json"));
             expect(response.status).toBe(StatusCodes.OK);
@@ -56,13 +58,44 @@ describe("Integration tests for chat management endpoints API", () => {
         it("Checks that a list of chats is NOT returned when requesting GET to /chats without mandatory queries", async () => {
             // Given
             const chatRoute = `${config.server.urls.api}/${routes.chats.CHATS}`;
-
             // When
             const response = await request(appInstance).get(chatRoute).send();
-
             // Then
             expect(response.headers["content-type"]).toEqual(expect.stringContaining("json"));
             expect(response.status).toBe(StatusCodes.BAD_REQUEST);
+            expect(response.body.errorMsg).toEqual(expect.any(String));
+        });
+    });
+
+    describe("Integration tests for GET /chats/:chatId", () => {
+        it("Tests that a chat is returned when an existing Id is requested", async () => {
+            // Given
+            const chatRoute = `${config.server.urls.api}/${routes.chats.CHATS}/${chats[0]._id}`;
+            // When
+            const response = await request(appInstance).get(chatRoute);
+            // Then
+            expect(response.headers["content-type"]).toEqual(expect.stringContaining("json"));
+            expect(response.status).toBe(StatusCodes.OK);
+            expect(response.body.data).toEqual(chatDetailDTOCheck);
+        });
+        it("Tests that a chat is returned when an invalid Id is requested", async () => {
+            // Given
+            const chatRoute = `${config.server.urls.api}/${routes.chats.CHATS}/invalid`;
+            // When
+            const response = await request(appInstance).get(chatRoute);
+            // Then
+            expect(response.headers["content-type"]).toEqual(expect.stringContaining("json"));
+            expect(response.status).toBe(StatusCodes.BAD_REQUEST);
+            expect(response.body.errorMsg).toEqual(expect.any(String));
+        });
+        it("Tests that a chat is returned when a non existing Id is requested", async () => {
+            // Given
+            const chatRoute = `${config.server.urls.api}/${routes.chats.CHATS}/6639f9c6458c53338c05c38c`;
+            // When
+            const response = await request(appInstance).get(chatRoute);
+            // Then
+            expect(response.headers["content-type"]).toEqual(expect.stringContaining("json"));
+            expect(response.status).toBe(StatusCodes.NOT_FOUND);
             expect(response.body.errorMsg).toEqual(expect.any(String));
         });
     });
@@ -73,13 +106,11 @@ describe("Integration tests for chat management endpoints API", () => {
         it("Checks that a chat is created after sending a correct POST request to /chats", async () => {
             // Given
             const chatName = "name";
-
             // When
             const response = await request(appInstance)
                 .post(chatRoute)
                 .field("name", chatName)
                 .attach("documents", document);
-
             // Then
             expect(response.headers["content-type"]).toEqual(expect.stringContaining("json"));
             expect(response.status).toBe(StatusCodes.CREATED);
@@ -106,29 +137,78 @@ describe("Integration tests for chat management endpoints API", () => {
         });
     });
 
-    describe("Integration tests for GET /chats/:chatId", () => {
-        it("Tests that a chat is returned when an existing Id is requested", async () => {
+    describe("Integration tests for PUT /chats/:chatId", () => {
+        const chatRoute = `${config.server.urls.api}/${routes.chats.CHATS}/${chats[0]._id}`;
+        it("Tests that the updated chat is returned when an update is correct", async () => {
+            // Given
+            const updatedChat = { name: "new name" };
             // When
-            const chatRoute = `${config.server.urls.api}/${routes.chats.CHATS}/${chats[0]._id}`;
-            const response = await request(appInstance).get(chatRoute);
+            const response = await request(appInstance).put(chatRoute).send(updatedChat);
             // Then
             expect(response.headers["content-type"]).toEqual(expect.stringContaining("json"));
             expect(response.status).toBe(StatusCodes.OK);
             expect(response.body.data).toEqual(chatDetailDTOCheck);
         });
-        it("Tests that a chat is returned when an invalid Id is requested", async () => {
+        it("Tests that the updated chat is NOT returned when an update is incorrect in its body", async () => {
+            // Given
+            const updatedChats = [{ name: "" }, { name: "nametoolongforthechatthatshouldbe32characters" }];
             // When
-            const chatRoute = `${config.server.urls.api}/${routes.chats.CHATS}/invalid`;
-            const response = await request(appInstance).get(chatRoute);
+            updatedChats.forEach(async (update) => {
+                const response = await request(appInstance).put(chatRoute).send(update);
+                // Then
+                expect(response.headers["content-type"]).toEqual(expect.stringContaining("json"));
+                expect(response.status).toBe(StatusCodes.BAD_REQUEST);
+                expect(response.body.errorMsg).toEqual(expect.any(String));
+            });
+        });
+        it("Tests that the updated chat is NOT returned when an update sends a repeated name", async () => {
+            // Given
+            const updatedChat = { name: chats[1].name };
+            // When
+            const response = await request(appInstance).put(chatRoute).send(updatedChat);
             // Then
             expect(response.headers["content-type"]).toEqual(expect.stringContaining("json"));
             expect(response.status).toBe(StatusCodes.BAD_REQUEST);
             expect(response.body.errorMsg).toEqual(expect.any(String));
         });
-        it("Tests that a chat is returned when a non existing Id is requested", async () => {
+        it("Tests that the updated chat is NOT returned when an update is sent to a non existant id", async () => {
+            // Given
+            const nonExistantChatRoute = `${config.server.urls.api}/${routes.chats.CHATS}/6639f9c6458c53338c05c38c`;
+            const updatedChat = { name: "new name" };
             // When
-            const chatRoute = `${config.server.urls.api}/${routes.chats.CHATS}/6639f9c6458c53338c05c38c`;
-            const response = await request(appInstance).get(chatRoute);
+            const response = await request(appInstance).put(nonExistantChatRoute).send(updatedChat);
+            // Then
+            expect(response.headers["content-type"]).toEqual(expect.stringContaining("json"));
+            expect(response.status).toBe(StatusCodes.NOT_FOUND);
+            expect(response.body.errorMsg).toEqual(expect.any(String));
+        });
+    });
+
+    describe("Integration tests for DELETE /chats/:chatId", () => {
+        const chatRoute = `${config.server.urls.api}/${routes.chats.CHATS}/${chats[0]._id}`;
+        it("Tests that the deleted chat is returned when a delete operation is correct", async () => {
+            // When
+            const response = await request(appInstance).delete(chatRoute);
+            // Then
+            expect(response.headers["content-type"]).toEqual(expect.stringContaining("json"));
+            expect(response.status).toBe(StatusCodes.OK);
+            expect(response.body.data).toEqual(chatDetailDTOCheck);
+        });
+        it("Tests that the deleted chat is NOT returned when a delete operation is sent to an invalid id", async () => {
+            // Given
+            const invalidChatRoute = `${config.server.urls.api}/${routes.chats.CHATS}/invalid`
+            // When
+            const response = await request(appInstance).put(chatRoute);
+            // Then
+            expect(response.headers["content-type"]).toEqual(expect.stringContaining("json"));
+            expect(response.status).toBe(StatusCodes.BAD_REQUEST);
+            expect(response.body.errorMsg).toEqual(expect.any(String));
+        });
+        it("Tests that the deleted chat is NOT returned when a delete operation is sent to a non existant id", async () => {
+            // Given
+            const nonExistantChatRoute = `${config.server.urls.api}/${routes.chats.CHATS}/6639f9c6458c53338c05c38c`;
+            // When
+            const response = await request(appInstance).delete(nonExistantChatRoute);
             // Then
             expect(response.headers["content-type"]).toEqual(expect.stringContaining("json"));
             expect(response.status).toBe(StatusCodes.NOT_FOUND);
