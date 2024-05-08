@@ -6,19 +6,24 @@ import { chatExcerptDTOCheck, chatDetailDTOCheck } from "../../utils/dtos/chats.
 import config from "../../../../config/index.js";
 import { routes } from "../../../../utils/constants/index.js";
 import { connect, disconnect } from "../../../../utils/db/inMemory.js";
+import amazonS3Mock from "../../utils/mocks/lib/amazonS3.js";
 import createTestingData from "../../utils/testData/createTestingData.js";
 import chats from "../../utils/testData/chats.js";
+import users from "../../utils/testData/users.js";
 
-// Mocked/tested modules
-jest.unstable_mockModule("../../../../lib/amazonS3.js", () => ({
-    saveFilesInS3: jest.fn(async () => "s3ImageID"),
-    getSignedURLById: jest.fn(async (fileId) => `https://example.com/${fileId}`),
-    deleteFileInS3: jest.fn(async () => undefined),
-    deleteMultipleFilesInS3: jest.fn(async () => undefined),
-}));
+// Mocked modules
+jest.unstable_mockModule("../../../../lib/amazonS3.js", () => amazonS3Mock);
+// TODO Add mock of langchain to avoid using OpenAI's API in tests
 const { saveFilesInS3 } = await import("../../../../lib/amazonS3.js");
+
+// Tested modules
 const app = await import("../../../../../app.js");
 
+const assetsPath = "src/__test__/integration/endpoints/chats/assets";
+
+const loggedInUser = users[0];
+const ownedChat = chats.find((chat) => chat.owner._id === loggedInUser._id);
+const ownedChatAnother = chats.find((chat) => chat.owner._id === loggedInUser._id && chat._id !== ownedChat._id);
 // Tests
 describe("Integration tests for chat management endpoints API", () => {
     const appInstance = app.default;
@@ -70,7 +75,7 @@ describe("Integration tests for chat management endpoints API", () => {
     describe("Integration tests for GET /chats/:chatId", () => {
         it("Tests that a chat is returned when an existing Id is requested", async () => {
             // Given
-            const chatRoute = `${config.server.urls.api}/${routes.chats.CHATS}/${chats[0]._id}`;
+            const chatRoute = `${config.server.urls.api}/${routes.chats.CHATS}/${ownedChat._id}`;
             // When
             const response = await request(appInstance).get(chatRoute);
             // Then
@@ -101,7 +106,8 @@ describe("Integration tests for chat management endpoints API", () => {
     });
 
     describe("Integration tests for POST /chats", () => {
-        const document = path.resolve("src", "__test__", "integration", "endpoints", "chats", "assets", "testFile.pdf");
+        const document = path.resolve(assetsPath, "testFile.pdf");
+        const document2 = path.resolve(assetsPath, "testFile2.pdf");
         const chatRoute = `${config.server.urls.api}/${routes.chats.CHATS}`;
         it("Checks that a chat is created after sending a correct POST request to /chats", async () => {
             // Given
@@ -110,12 +116,13 @@ describe("Integration tests for chat management endpoints API", () => {
             const response = await request(appInstance)
                 .post(chatRoute)
                 .field("name", chatName)
-                .attach("documents", document);
+                .attach("documents", document)
+                .attach("documents", document2);
             // Then
             expect(response.headers["content-type"]).toEqual(expect.stringContaining("json"));
             expect(response.status).toBe(StatusCodes.CREATED);
             expect(response.body.data).toEqual(chatDetailDTOCheck);
-            expect(saveFilesInS3).toHaveBeenCalled();
+            expect(saveFilesInS3).toHaveBeenCalledTimes(2);
         });
         it("Checks that a chat is NOT created after sending an incorrect POST request to /chats", async () => {
             // Given
@@ -138,7 +145,7 @@ describe("Integration tests for chat management endpoints API", () => {
     });
 
     describe("Integration tests for PUT /chats/:chatId", () => {
-        const chatRoute = `${config.server.urls.api}/${routes.chats.CHATS}/${chats[0]._id}`;
+        const chatRoute = `${config.server.urls.api}/${routes.chats.CHATS}/${ownedChat._id}`;
         it("Tests that the updated chat is returned when an update is correct", async () => {
             // Given
             const updatedChat = { name: "new name" };
@@ -163,7 +170,7 @@ describe("Integration tests for chat management endpoints API", () => {
         });
         it("Tests that the updated chat is NOT returned when an update sends a repeated name", async () => {
             // Given
-            const updatedChat = { name: chats[1].name };
+            const updatedChat = { name: ownedChatAnother.name };
             // When
             const response = await request(appInstance).put(chatRoute).send(updatedChat);
             // Then
@@ -185,7 +192,7 @@ describe("Integration tests for chat management endpoints API", () => {
     });
 
     describe("Integration tests for DELETE /chats/:chatId", () => {
-        const chatRoute = `${config.server.urls.api}/${routes.chats.CHATS}/${chats[0]._id}`;
+        const chatRoute = `${config.server.urls.api}/${routes.chats.CHATS}/${ownedChat._id}`;
         it("Tests that the deleted chat is returned when a delete operation is correct", async () => {
             // When
             const response = await request(appInstance).delete(chatRoute);
@@ -196,9 +203,9 @@ describe("Integration tests for chat management endpoints API", () => {
         });
         it("Tests that the deleted chat is NOT returned when a delete operation is sent to an invalid id", async () => {
             // Given
-            const invalidChatRoute = `${config.server.urls.api}/${routes.chats.CHATS}/invalid`
+            const invalidChatRoute = `${config.server.urls.api}/${routes.chats.CHATS}/invalid`;
             // When
-            const response = await request(appInstance).put(chatRoute);
+            const response = await request(appInstance).delete(invalidChatRoute);
             // Then
             expect(response.headers["content-type"]).toEqual(expect.stringContaining("json"));
             expect(response.status).toBe(StatusCodes.BAD_REQUEST);
