@@ -147,7 +147,8 @@ describe("Integration tests for chat documents management endpoints API", () => 
                 path.resolve(assetsPath, "tooManyPages.pdf"),
                 path.resolve(assetsPath, "tooHeavy.pdf"),
             ];
-            invalidDocs.forEach(async (doc) => {
+            for (let i = 0; i < invalidDocs.length; i += 1) {
+                const doc = invalidDocs[i];
                 // When
                 const response = await request(appInstance).post(documentsRoute).attach("documents", doc);
                 // Then
@@ -155,7 +156,7 @@ describe("Integration tests for chat documents management endpoints API", () => 
                 expect(response.status).toBe(StatusCodes.BAD_REQUEST);
                 expect(response.body.errorMsg).toEqual(expect.any(String));
                 expect(saveFilesInS3).not.toHaveBeenCalled();
-            });
+            }
         });
         it("Checks that a document is NOT uploaded and returned when requesting POST to a chat where the user does not have the required permissions", async () => {
             // Given

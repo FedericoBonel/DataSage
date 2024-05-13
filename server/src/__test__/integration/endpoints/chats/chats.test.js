@@ -128,7 +128,8 @@ describe("Integration tests for chat management endpoints API", () => {
             // Given
             const invalidChatNames = ["", "longerthan32charactersasItWasRequestedByTheUser"];
 
-            invalidChatNames.forEach(async (invalidChatName) => {
+            for (let i = 0; i < invalidChatNames.length; i += 1) {
+                const invalidChatName = invalidChatNames[i];
                 // When
                 const response = await request(appInstance)
                     .post(chatRoute)
@@ -140,7 +141,7 @@ describe("Integration tests for chat management endpoints API", () => {
                 expect(response.status).toBe(StatusCodes.BAD_REQUEST);
                 expect(response.body.errorMsg).toEqual(expect.any(String));
                 expect(saveFilesInS3).not.toHaveBeenCalled();
-            });
+            }
         });
     });
 
@@ -158,15 +159,20 @@ describe("Integration tests for chat management endpoints API", () => {
         });
         it("Tests that the updated chat is NOT returned when an update is incorrect in its body", async () => {
             // Given
-            const updatedChats = [{ name: "" }, { name: "nametoolongforthechatthatshouldbe32characters" }];
+            const updatedChats = [
+                { name: "" },
+                { name: "nametoolongforthechatthatshouldbe32characters" },
+                { nonName: "Hello!" },
+            ];
             // When
-            updatedChats.forEach(async (update) => {
+            for (let i = 0; i < updatedChats.length; i += 1) {
+                const update = updatedChats[i];
                 const response = await request(appInstance).put(chatRoute).send(update);
                 // Then
                 expect(response.headers["content-type"]).toEqual(expect.stringContaining("json"));
                 expect(response.status).toBe(StatusCodes.BAD_REQUEST);
                 expect(response.body.errorMsg).toEqual(expect.any(String));
-            });
+            }
         });
         it("Tests that the updated chat is NOT returned when an update sends a repeated name", async () => {
             // Given
