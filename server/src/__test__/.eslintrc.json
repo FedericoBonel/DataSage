@@ -1,0 +1,7 @@
+{
+    "rules": {
+        // If we dont allow for this in this folder it will throw error when importing testing modules.
+        "import/no-extraneous-dependencies": ["error", { "devDependencies": true }],
+        "no-await-in-loop": 0
+    }
+}

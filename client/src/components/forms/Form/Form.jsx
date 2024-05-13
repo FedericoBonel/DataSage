@@ -1,5 +1,5 @@
 import { Box } from "@mui/material";
-import { Button } from "@/components/actions";
+import Button from "@/components/actions/Button";
 import { messages } from "@/utils/constants";
 import { ActionButtonWrapperStyles } from "./Form.styles";
 import propTypes from "./Form.props";
@@ -16,6 +16,10 @@ const Form = ({
     buttonsLabels = {
         submit: messages.actions.form.SUBMIT,
         cancel: messages.actions.form.CANCEL,
+    },
+    buttonsColor = {
+        submit: "primary",
+        cancel: "error",
     },
     onSubmit,
     isSubmitting,
@@ -41,12 +45,20 @@ const Form = ({
                     isLoading={isSubmitting}
                     disabled={!canSubmit}
                     variant="text"
+                    color={buttonsColor.submit}
                 >
                     {buttonsLabels.submit}
                 </Button>
-                <Button color="error" variant="text" onClick={onCancel}>
-                    {buttonsLabels.cancel}
-                </Button>
+                {buttonsLabels.cancel && (
+                    <Button
+                        variant="text"
+                        onClick={onCancel}
+                        color={buttonsColor.cancel}
+                        disabled={isSubmitting}
+                    >
+                        {buttonsLabels.cancel}
+                    </Button>
+                )}
             </Box>
         </ComponentToRender>
     );

@@ -20,7 +20,13 @@ export const ChatMessageSenderStyles = {
 export const ChatMessageTextStyles = {
     wordBreak: "break-word",
     overflowWrap: "break-word",
-    whiteSpace: "pre-wrap"
-}
+    whiteSpace: "pre-wrap",
+};
 
-export const ChatMessageSourcesStyles = { display: "flex", gap: 1, flexWrap: "wrap" };
+export const ChatMessageSourcesStyles = {
+    display: "flex",
+    gap: 1,
+    flexWrap: "wrap",
+};
+
+export const AvatarStyles = { border: 1 };

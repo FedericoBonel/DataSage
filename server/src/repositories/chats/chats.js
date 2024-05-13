@@ -3,16 +3,33 @@ import { chat } from "../../models/chat/chat.js";
 import { page } from "../../models/page/page.js";
 import { message } from "../../models/message/message.js";
 import { colaborator } from "../../models/colaborator/colaborator.js";
-import { saveFilesInS3, getSignedURLById, deleteFileInS3 } from "../../lib/amazonS3.js";
+import { notification } from "../../models/notification/notification.js";
+import { saveFilesInS3, getSignedURLById, deleteFileInS3, deleteMultipleFilesInS3 } from "../../lib/amazonS3.js";
 import { getLLMChat } from "../../lib/langchain.js";
 
 /**
  * Gets a chat by its name and its owner id and returns it
- * @param {String} name Name of the to find
+ * @param {String} name Name of the chat to find
  * @param {String} ownerId Id of the owner of the chat
  * @returns The found chat or undefined if nothing was found
  */
-const getByNameAndOwner = async (name, ownerId) => chat.findOne({ name, "owner._id": ownerId }).lean();
+const getByNameAndOwner = async (name, ownerId) => {
+    if (!name || !ownerId) throw Error("Missing parameters");
+
+    return chat.findOne({ name, "owner._id": ownerId }).lean();
+};
+
+/**
+ * Gets a chat by its id and its owner id and returns it
+ * @param {String} chatId Id of the chat to find
+ * @param {String} ownerId Id of the owner of the chat
+ * @returns The found chat or undefined if nothing was found
+ */
+const getByIdAndOwner = async (chatId, ownerId) => {
+    if (!chatId || !ownerId) throw Error("Missing parameters");
+
+    return chat.findOne({ _id: chatId, "owner._id": ownerId }).lean();
+};
 
 /**
  * Stores all documents in the cloud store and formats them to how they should be stored and returns them.
@@ -35,9 +52,23 @@ const storeAllDocs = (documents) =>
 
 /**
  * Deletes a document from the store by its store id
- * @param {string} storeId store id
+ * @param {string} storeId store id of the file to be removed
  */
-const deleteDocFromStore = (storeId) => deleteFileInS3(storeId);
+const deleteDocFromStore = (storeId) => {
+    if (!storeId) throw Error("Missing parameters");
+
+    return deleteFileInS3(storeId);
+};
+
+/**
+ * Deletes multiple documents from the store by their store ids
+ * @param {Array.<string>} storeIds store ids of the files to be removed
+ */
+const deleteDocsFromStore = (storeIds) => {
+    if (!storeIds) throw Error("Missing parameters");
+
+    return deleteMultipleFilesInS3(storeIds);
+};
 
 /**
  * Transforms all document's store ids to signed urls
@@ -70,6 +101,7 @@ const save = async (newChat) => {
  * @returns The updated chat with all its information
  */
 const addDocsById = async (documents, chatId) => {
+    if (!chatId || !documents) throw Error("Missing parameters");
     // Save all documents into the store and add them to the chat
     const savedDocs = await storeAllDocs(documents);
 
@@ -85,7 +117,9 @@ const addDocsById = async (documents, chatId) => {
  */
 const updateByIdAndOwner = async (updates, chatId, ownerId) => {
     if (!chatId || !ownerId) throw Error("Missing parameters");
-    const oldChat = await chat.findOneAndUpdate({ _id: chatId, "owner._id": ownerId }, updates).lean();
+    const oldChat = await chat
+        .findOneAndUpdate({ _id: chatId, "owner._id": ownerId }, updates, { runValidators: true })
+        .lean();
 
     // If nothing was found return it as undefined;
     if (!oldChat) {
@@ -101,6 +135,54 @@ const updateByIdAndOwner = async (updates, chatId, ownerId) => {
     }
 
     return updatedChat;
+};
+
+/**
+ * Deletes a chat from the database by id and owner id and all of its related data
+ * @param {string} chatId The chat id to update
+ * @param {string} ownerId The chat owners id
+ * @returns The deleted chat
+ */
+const deleteByIdAndOwner = async (chatId, ownerId) => {
+    if (!chatId || !ownerId) throw Error("Missing parameters");
+    // Delete and get the chat
+    const deletedChat = await chat.findOneAndDelete({ _id: chatId, "owner._id": ownerId });
+    if (!deletedChat) {
+        return deletedChat;
+    }
+
+    const listOfDocumentsIds = [];
+    const listOfDocumentsStoreIds = [];
+    deletedChat.documents.forEach((doc) => {
+        listOfDocumentsIds.push(doc._id);
+        listOfDocumentsStoreIds.push(doc.storeId);
+    });
+
+    // Delete the chat notifications
+    await notification.deleteMany({
+        relatedEntityId: deletedChat._id,
+    });
+
+    // Get the ids of the collaborators that are going to be deleted
+    const collaboratorsIds = await colaborator
+        .aggregate()
+        .match({ "chat._id": new Types.ObjectId(chatId), "chat.owner._id": new Types.ObjectId(ownerId) })
+        .project({ _id: 1 });
+
+    // Delete the collaborators messages
+    const listOfCollaboratorsIds = collaboratorsIds.map((collab) => collab._id);
+    await message.deleteMany({ colaborator: { $in: listOfCollaboratorsIds } });
+
+    // Delete the collaborators
+    await colaborator.deleteMany({ "chat._id": chatId, "chat.owner._id": ownerId });
+
+    // Delete the pages of the chat documents
+    await page.deleteMany({ document: { $in: listOfDocumentsIds } });
+
+    // Delete the documents from the cloud
+    await deleteDocsFromStore(listOfDocumentsStoreIds);
+
+    return deletedChat;
 };
 
 /**
@@ -193,7 +275,9 @@ export default {
     save,
     addDocsById,
     getByNameAndOwner,
+    getByIdAndOwner,
     updateByIdAndOwner,
+    deleteByIdAndOwner,
     getById,
     docsToUrls,
     removeDocumentByIdAndOwner,

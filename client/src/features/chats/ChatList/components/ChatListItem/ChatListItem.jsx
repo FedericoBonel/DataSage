@@ -11,7 +11,12 @@ const ChatListItem = ({ chatItem, selected }) => {
     return (
         <ListItem
             disableGutters
-            secondaryAction={<ChatListItemMenu chatId={chatItem._id} />}
+            secondaryAction={
+                <ChatListItemMenu
+                    chatId={chatItem._id}
+                    showParticipantsManagement={chatItem.isOwner}
+                />
+            }
             disablePadding
         >
             <ListItemButton
@@ -35,6 +40,7 @@ const memoizedComponent = memo(
     (prevProps, newProps) =>
         prevProps.chatItem._id === newProps.chatItem._id &&
         prevProps.chatItem.name === newProps.chatItem.name &&
+        prevProps.chatItem.isOwner === newProps.chatItem.isOwner &&
         prevProps.selected === newProps.selected
 );
 export default memoizedComponent;

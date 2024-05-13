@@ -1,8 +1,9 @@
 import { useEffect, useState } from "react";
 import { Card, CardHeader, CardContent, CardActions } from "@mui/material";
-import { chatsServices } from "@/services/chats";
-import { Form, FormAlert } from "@/components/forms";
-import { ShowLoader } from "@/components/informational";
+import chatsServices from "@/services/chats";
+import FormAlert from "@/components/forms/FormAlert";
+import Form from "@/components/forms/Form";
+import ShowLoader from "@/components/informational/ShowLoader";
 import { messages } from "@/utils/constants";
 import { chatsValidator } from "@/utils/validators";
 import { MetadataChatForm } from "../components/MetadataChatForm";
@@ -78,6 +79,7 @@ const UpdateChatForm = ({ chatId }) => {
                             onChange: onChangeTextField,
                             value: updatedChat.name,
                         }}
+                        isSubmitting={updateQuery.isPending}
                     />
                 </CardContent>
                 {errors}

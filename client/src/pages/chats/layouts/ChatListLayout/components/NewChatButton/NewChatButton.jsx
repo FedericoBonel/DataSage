@@ -1,5 +1,5 @@
 import { LibraryAdd } from "@mui/icons-material";
-import { Button } from "@/components/actions";
+import Button from "@/components/actions/Button";
 import { routes, messages } from "@/utils/constants";
 import { NewChatButtonStyles } from "./NewChatButton.styles";
 

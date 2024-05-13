@@ -1,8 +1,8 @@
 import { Box, Drawer, Divider, Avatar } from "@mui/material";
 import { Chat } from "@mui/icons-material";
+import NavigationLink from "@/components/actions/NavigationLink";
 import { routes, messages } from "@/utils/constants";
 import logo from "@/assets/logo.svg";
-import NavbarLink from "../NavbarLink/NavbarLink";
 import NavbarLinks from "../NavbarLinks/NavbarLinks";
 import proptypes from "./Navbar.props";
 import {
@@ -10,8 +10,11 @@ import {
     NavbarDrawerListMenusStyles,
 } from "./Navbar.styles";
 
-/** Component that renders the top level navbar in the website. */
-const Navbar = ({ selectedMenu }) => {
+/**
+ * Component that renders the top level navbar in the website.
+ * All the children will be shown at the bottom of the navbar or right side if horizontal.
+ */
+const Navbar = ({ selectedMenu, children }) => {
     return (
         <Drawer sx={NavbarDrawerStyles} variant="permanent" anchor="left">
             <Box
@@ -23,7 +26,7 @@ const Navbar = ({ selectedMenu }) => {
             />
             <Divider />
             <NavbarLinks>
-                <NavbarLink
+                <NavigationLink
                     selected={selectedMenu === routes.chats.CHATS}
                     icon={<Chat fontSize="inherit" />}
                     label={messages.navbar.CHATS_OPTION}
@@ -32,7 +35,8 @@ const Navbar = ({ selectedMenu }) => {
             </NavbarLinks>
             <Divider />
             <NavbarLinks sx={NavbarDrawerListMenusStyles}>
-                <NavbarLink
+                {children}
+                <NavigationLink
                     icon={<Avatar />}
                     label={messages.navbar.SETTINGS_OPTION}
                 />

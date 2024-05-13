@@ -7,4 +7,11 @@ import { user } from "../../models/user/user.js";
  */
 const getById = async (userId) => user.findById(userId).lean();
 
-export default { getById };
+/**
+ * Gets a user by its email
+ * @param {String} email The email of the user to get
+ * @returns The user with that email if found, otherwise undefined
+ */
+const getByEmail = async (email) => user.findOne({ email }).lean();
+
+export default { getById, getByEmail };

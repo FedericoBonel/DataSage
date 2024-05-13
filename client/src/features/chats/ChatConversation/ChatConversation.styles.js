@@ -3,7 +3,6 @@ export const ChatConversationWrapperStyles = {
     display: "flex",
     flexDirection: "column",
     justifyContent: "flex-end",
-    bgcolor: "chatBg.main",
     alignItems: "stretch",
 }
 

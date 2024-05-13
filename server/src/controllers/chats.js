@@ -42,6 +42,16 @@ const getById = async (req, res) => {
     const savedChat = await chatsService.getById(chatId, user._id);
 
     return res.status(StatusCodes.OK).json(new SuccessPayload(savedChat));
-}
+};
 
-export default { create, get, updateById, getById };
+/** Controller that handles all requests related to deleting chats by id */
+const deleteById = async (req, res) => {
+    const { chatId } = req.params;
+    const user = req.user;
+
+    const deletedChat = await chatsService.deleteById(chatId, user._id);
+
+    return res.status(StatusCodes.OK).json(new SuccessPayload(deletedChat));
+};
+
+export default { create, get, updateById, getById, deleteById };

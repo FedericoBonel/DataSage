@@ -1,7 +1,8 @@
 import { useSearchParams } from "react-router-dom";
 import { Tab, Tabs, Box } from "@mui/material";
-import { chatsServices } from "@/services/chats";
-import { PdfViewer, ShowLoader } from "@/components/informational";
+import documentsServices from "@/services/documents";
+import PdfViewer from "@/components/informational/PdfViewer";
+import ShowLoader from "@/components/informational/ShowLoader";
 import {
     DocumentTabStyles,
     DocumentTabsStyles,
@@ -17,7 +18,7 @@ const ChatDocumentViewer = ({ chatId }) => {
     const selectedIndexPage =
         selectedPage && selectedPage > 0 ? selectedPage - 1 : 0;
 
-    const documentsQuery = chatsServices.useChatDocsData(chatId);
+    const documentsQuery = documentsServices.useChatDocsData(chatId);
 
     // Add the document id on URL when someone clicks a new document tab
     const onClickDoc = (e, newValue) => {

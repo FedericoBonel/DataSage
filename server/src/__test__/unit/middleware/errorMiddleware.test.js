@@ -9,10 +9,6 @@ const res = {
 };
 
 describe("Error middleware unit tests", () => {
-    beforeEach(() => {
-        // Reset all mock instances between tests
-        jest.clearAllMocks();
-    });
 
     it("tests status and json response in error handling middleware responses", () => {
         // Given

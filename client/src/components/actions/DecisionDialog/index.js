@@ -1,1 +1,1 @@
-export { default as DecisionDialog } from "./DecisionDialog";
+export { default } from "./DecisionDialog";

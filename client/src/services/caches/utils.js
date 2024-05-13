@@ -34,15 +34,19 @@ export const mockSuccessfulPaginatedRes = (oldData, newItem) => {
  * @param {*} newItem The new item to add to the first page in the first position.
  */
 export const insertInFirstPage = (oldData, newItem) => {
-    const formattedFirstPage = {
-        ...oldData.pages[0],
-        data: [newItem, ...oldData.pages[0].data],
-    };
+    const formattedFirstPage = oldData?.pages
+        ? {
+              ...oldData.pages[0],
+              data: [newItem, ...oldData.pages[0].data],
+          }
+        : {
+              data: [newItem],
+          };
+
+    const pages = oldData?.pages ? oldData.pages : [formattedFirstPage];
 
     return {
         ...oldData,
-        pages: oldData.pages.map((page, i) =>
-            i === 0 ? formattedFirstPage : page
-        ),
+        pages: pages.map((page, i) => (i === 0 ? formattedFirstPage : page)),
     };
 };

@@ -1,6 +1,6 @@
 import { Box } from "@mui/material";
-import { chatsServices } from "@/services/chats";
-import ChatMessageList from "../ChatMessageList/ChatMessageList";
+import chatsServices from "@/services/chats";
+import ChatMessageList from "../ChatMessageList";
 import ChatMessageForm from "./components/ChatMessageForm/ChatMessageForm";
 import { ChatConversationWrapperStyles } from "./ChatConversation.styles";
 import propTypes from "./ChatConversation.props";

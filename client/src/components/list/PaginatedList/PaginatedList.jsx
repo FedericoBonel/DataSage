@@ -1,8 +1,7 @@
 import { Children, forwardRef } from "react";
 import { List, Typography } from "@mui/material";
-
-import { Button } from "@/components/actions";
-import { ShowLoader } from "@/components/informational";
+import Button from "@/components/actions/Button";
+import ShowLoader from "@/components/informational/ShowLoader";
 import { messages } from "@/utils/constants";
 import { propTypes } from "./PaginatedList.props";
 import { endTypographyStyles } from "./PaginatedList.styles";

@@ -10,4 +10,6 @@ export default {
         /** True if the field should be disabled. False otherwise */
         disabled: PropTypes.bool,
     }),
+    /** True if the form is being submitted, false otherwise. If true the field will be disabled. */
+    isSubmitting: PropTypes.bool
 };

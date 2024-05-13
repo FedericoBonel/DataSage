@@ -1,1 +1,1 @@
-export { default as FileField } from "./FileField";
+export { default } from "./FileField";

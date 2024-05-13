@@ -1,6 +1,6 @@
 import { Outlet, useMatch } from "react-router-dom";
 import { Box, Divider } from "@mui/material";
-import { ChatList } from "@/features/chats";
+import ChatList from "@/features/chats/ChatList";
 import { routes } from "@/utils/constants";
 import NewChatButton from "./components/NewChatButton/NewChatButton";
 import ChatListContainer from "./components/ChatListContainer/ChatListContainer";

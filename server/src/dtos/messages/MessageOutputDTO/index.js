@@ -17,14 +17,15 @@ const toMessageSourceOutputDTO = (messageSource) => {
 /**
  * Transforms a chat message as it is stored in the database to how it should be exposed.
  * @param {*} message The chat message as it is stored in the database
+ * @param {boolean} canReadSources True if the user that is asking for the message can read sources
  */
-const toMessageOutputDTO = (message) => {
+const toMessageOutputDTO = (message, canReadSources = true) => {
     const dto = new MessageOutputDTO();
     dto._id = message._id;
     dto.content = message.content;
     dto.from = message.from;
     dto.to = message.to;
-    dto.sources = message.sources?.map(toMessageSourceOutputDTO);
+    dto.sources = canReadSources ? message.sources?.map(toMessageSourceOutputDTO) : undefined;
     dto.createdAt = message.createdAt.toISOString();
     return dto;
 };

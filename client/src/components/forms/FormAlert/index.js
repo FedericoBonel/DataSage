@@ -1,1 +1,1 @@
-export { default as FormAlert } from "./FormAlert";
+export { default } from "./FormAlert";

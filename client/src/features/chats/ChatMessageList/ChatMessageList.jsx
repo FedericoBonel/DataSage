@@ -1,10 +1,11 @@
 import { useEffect } from "react";
 import { Box, Typography, LinearProgress } from "@mui/material";
-import { chatsServices } from "@/services/chats";
-import { PaginatedList } from "@/components/list";
+import chatsServices from "@/services/chats";
+import PaginatedList from "@/components/list/PaginatedList";
 import { messages } from "@/utils/constants";
 import useScrollToBottom from "@/utils/hooks/useScrollToBottom";
 import ChatMessage from "./components/ChatMessage/ChatMessage";
+import ChatWelcome from "./components/ChatWelcome";
 import {
     ChatMessageListStyles,
     WritingResponseWrapperStyles,
@@ -38,19 +39,25 @@ const ChatMessageList = ({ chatId, isResponding }) => {
         </Box>
     );
 
+    const noMessageWelcome = chatMessagesQuery.isSuccess &&
+        chatMessagesQuery.data.pages?.[0]?.data.length === 0 && <ChatWelcome />;
+
     return (
-        <PaginatedList
-            disableEndlistMessages
-            isFetching={chatMessagesQuery.isLoading}
-            hasNextPage={chatMessagesQuery.hasNextPage}
-            isLoadingMore={chatMessagesQuery.isFetchingNextPage}
-            onLoadMore={chatMessagesQuery.fetchNextPage}
-            listContainerStyles={ChatMessageListStyles}
-            ref={chatHistoryRef}
-        >
-            {respondingLoader}
-            {messageList}
-        </PaginatedList>
+        <>
+            <PaginatedList
+                disableEndlistMessages
+                isFetching={chatMessagesQuery.isLoading}
+                hasNextPage={chatMessagesQuery.hasNextPage}
+                isLoadingMore={chatMessagesQuery.isFetchingNextPage}
+                onLoadMore={chatMessagesQuery.fetchNextPage}
+                listContainerStyles={ChatMessageListStyles}
+                ref={chatHistoryRef}
+            >
+                {respondingLoader}
+                {messageList}
+            </PaginatedList>
+            {noMessageWelcome}
+        </>
     );
 };
 

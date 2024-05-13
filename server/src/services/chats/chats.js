@@ -52,7 +52,7 @@ const create = async (chat, documents, userId) => {
     // Append the ids of the documents to the pages of each document and save them
     await pagesRepository.saveAll(flatPagesByDocuments(parsedPagesPerDocument, savedChat.documents));
 
-    return chatDTO.toChatOutputDTO(savedChat);
+    return chatDTO.toChatOutputDTO(savedChat, userId);
 };
 
 /**
@@ -64,7 +64,7 @@ const create = async (chat, documents, userId) => {
  * @param {Object} [pagination={}] Pagination options.
  * @param {number} [pagination.page=undefined] Page number.
  * @param {number} [pagination.limit=undefined] Limit per page.
- * @returns The list of chats that match the parameters.
+ * @returns The list of chats that matches the parameters.
  */
 const get = async (
     userId,
@@ -82,11 +82,11 @@ const get = async (
     const skip = calculateSkip(pagination.page, pagination.limit);
 
     const savedChatsForUser = await colaboratorRepository.getAllBy(
-        { textSearch: filtering.textSearch, chatOwnerId, userId },
+        { textSearch: filtering.textSearch, chatOwnerId, userId, hasJoined: true },
         { skip, limit: pagination.limit, sort: "-createdAt" }
     );
 
-    return savedChatsForUser.map((colaborator) => colaboratorDTO.toColaboratorOutputDTO(colaborator));
+    return savedChatsForUser.map((colaborator) => colaboratorDTO.toChatExcerptOutputDTO(colaborator, userId));
 };
 
 /**
@@ -109,7 +109,7 @@ const updateById = async (updatedChat, chatId, userId) => {
         throw new NotFoundError(messages.errors.ROUTE_NOT_FOUND);
     }
 
-    return chatDTO.toChatOutputDTO(savedChat);
+    return chatDTO.toChatOutputDTO(savedChat, userId);
 };
 
 /**
@@ -120,7 +120,7 @@ const updateById = async (updatedChat, chatId, userId) => {
  */
 const getById = async (chatId, userId) => {
     // Get the colaborator instance for the user and check that it exists.
-    const savedChatForUser = await colaboratorRepository.getByChatAndUser(chatId, userId);
+    const savedChatForUser = await colaboratorRepository.getByChatAndUser(chatId, userId, null);
     if (!savedChatForUser) {
         throw new NotFoundError(messages.errors.ROUTE_NOT_FOUND);
     }
@@ -129,4 +129,19 @@ const getById = async (chatId, userId) => {
     return colaboratorDTO.colaboratorToChatDetailsOutputDTO(savedChatForUser, userId);
 };
 
-export default { create, get, updateById, getById };
+/**
+ * Deletes a chat by id with all its related data from the system.
+ * @param {String} chatId Id of the chat to be deleted
+ * @param {String} userId Id of the owner of the chat
+ * @return The deleted chat
+ */
+const deleteById = async (chatId, userId) => {
+    const deletedChat = await chatsRepository.deleteByIdAndOwner(chatId, userId);
+    if (!deletedChat) {
+        throw new NotFoundError(messages.errors.ROUTE_NOT_FOUND);
+    }
+
+    return chatDTO.toChatOutputDTO(deletedChat, userId);
+};
+
+export default { create, get, updateById, getById, deleteById };
