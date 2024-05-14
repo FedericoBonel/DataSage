@@ -21,7 +21,7 @@ const createInputBodyValidator = (
                 },
             },
             content: {
-                optional: optionalFields.name,
+                optional: optionalFields.content,
                 isString: {
                     errorMessage: messages.errors.validation.message.INVALID_LENGTH,
                     bail: true,

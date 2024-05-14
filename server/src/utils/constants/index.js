@@ -4,8 +4,11 @@ import errorMessages from "./messages/errors.js";
 import openapiMessages from "./messages/openapi.js";
 import swaggeruiRoutes from "./routes/swaggerui.js";
 import chatsRoutes from "./routes/chats.js";
+import notificationsRoutes from "./routes/notifications.js";
 import docsRoutes from "./routes/documents.js";
 import messagesRoutes from "./routes/messages.js";
+import participantsRoutes from "./routes/participants.js";
+import participationRoutes from "./routes/participation.js";
 import chatValidation from "./validation/chat.js";
 import userValidation from "./validation/user.js";
 import documentValidation from "./validation/document.js";
@@ -15,7 +18,12 @@ import permissionsValidation from "./validation/permissions.js";
 import paginationValidation from "./validation/pagination.js";
 import textSearchValidation from "./validation/textSearch.js";
 import messagesValidation from "./validation/messages.js";
+import logsValidation from "./validation/logs.js";
 import colaboratorPermissions from "./permissions/colaborator.js";
+import notificationTypes from "./notifications/notificationTypes.js";
+import notificationRelatedEntities from "./notifications/relatedEntities.js";
+import loggingFormatting from "./logging/formatting.js";
+import loggingPrivateKeys from "./logging/privateBodyKeys.js";
 
 /** Object with all messages to be shown to the user */
 export const messages = Object.freeze({
@@ -31,8 +39,11 @@ export const messages = Object.freeze({
 export const routes = Object.freeze({
     swaggerUi: swaggeruiRoutes,
     chats: chatsRoutes,
+    notifications: notificationsRoutes,
     documents: docsRoutes,
     messages: messagesRoutes,
+    participants: participantsRoutes,
+    participation: participationRoutes,
 });
 
 /** Object with all the validation values used in the application for each entity. */
@@ -46,9 +57,26 @@ export const validation = Object.freeze({
     pagination: paginationValidation,
     textSearch: textSearchValidation,
     messages: messagesValidation,
+    logs: logsValidation,
 });
 
 /** Exports all application permissions (These should be stored in database as well) */
 export const permissions = Object.freeze({
     colaborator: colaboratorPermissions,
+});
+
+/** Exports all application notification types and related entities (These should be stored in database as well) */
+export const notifications = Object.freeze({
+    types: notificationTypes,
+    relatedEntities: notificationRelatedEntities,
+});
+
+/** Exports all constants related to logging. */
+export const logging = Object.freeze({
+    /** Contains all constants related to logging formatting */
+    formatting: loggingFormatting,
+    /** Containts all body keys that are private and should be redacted from logs */
+    privateKeys: loggingPrivateKeys,
+    /** Placeholder for redacted values */
+    REDACTED_VALUE: "*****",
 });

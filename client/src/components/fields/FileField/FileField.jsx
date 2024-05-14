@@ -1,5 +1,5 @@
 import { useDropzone } from "react-dropzone";
-import { Button } from "@/components/actions";
+import Button from "@/components/actions/Button";
 import { InputWrapperStyles } from "./FileField.styles";
 import propTypes from "./FileField.props";
 

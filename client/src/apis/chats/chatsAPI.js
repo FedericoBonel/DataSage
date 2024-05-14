@@ -46,13 +46,25 @@ const createChat = async (newChat) => {
 };
 
 /**
+ * Deletes a chat and all its data by id from the system.
+ * @param {string} chatId Id of the chat to delete
+ * @returns The server response payload with the deleted chat
+ */
+const deleteChatById = async (chatId) => {
+    return makeRequest({
+        url: api.urls.chats.createDelete(chatId),
+        method: "delete",
+    });
+};
+
+/**
  * Gets a chat by id
  * @param {string} chatId The id of the chat
  * @returns The server response payload with the chat with that id
  */
 const getChatById = async (chatId) => {
     return await makeRequest({
-        url: `${api.urls.chats.GET_ALL}/${chatId}`,
+        url: api.urls.chats.createGetById(chatId),
         method: "get",
     });
 };
@@ -66,57 +78,15 @@ const getChatById = async (chatId) => {
  */
 const updateChatById = async (updatedChat, chatId) => {
     return makeRequest({
-        url: `${api.urls.chats.GET_ALL}/${chatId}`,
+        url: api.urls.chats.createPut(chatId),
         method: "put",
         data: updatedChat,
     });
 };
 
 /**
- * Gets a chat documents by chat id
- * @param {string} chatId The id of the chat from which to get the documents
- * @returns The server response payload with the chat documents
- */
-const getDocsByChat = async (chatId) => {
-    return makeRequest({
-        url: `${api.urls.chats.GET_ALL}/${chatId}/${api.urls.chats.DOCS_RESOURCE}`,
-        method: "get",
-    });
-};
-
-/**
- * Adds a list of documents to a chat by id
- * @param {string} chatId Id of the chat to add the documents to
- * @param {object} newDocs Documents object container, should contain an attribute "documents" with the document files to upload
- * @param {Array.<File>} newDocs.documents Documents to be uploaded to the chat
- * @returns The server response payload with the newly added chat documents
- */
-const addDocsToChat = async (newDocs, chatId) => {
-    return makeRequest({
-        url: `${api.urls.chats.GET_ALL}/${chatId}/${api.urls.chats.DOCS_RESOURCE}`,
-        method: "post",
-        data: newDocs,
-        headers: {
-            "Content-Type": "multipart/form-data",
-        },
-    });
-};
-
-/**
- * Adds a list of documents to a chat by id
- * @param {string} documentId Id of the document to remove from the chat
- * @param {string} chatId Id of the chat to remove the documents from
- * @returns The server response payload with the deleted document
- */
-const deleteDocFromChat = async (documentId, chatId) => {
-    return makeRequest({
-        url: `${api.urls.chats.GET_ALL}/${chatId}/${api.urls.chats.DOCS_RESOURCE}/${documentId}`,
-        method: "delete",
-    });
-};
-
-/**
  * Gets a list of chat messages from a chat by id from the back end
+ * @param {string} chatId The Id of the chat from which to get the messages
  * @param {object} pagination Pagination parameters
  * @param {number} pagination.page Page number to get results from
  * @param {number} pagination.limit Number of results per page
@@ -129,7 +99,7 @@ const getMessagesByChat = async (chatId, pagination) => {
     };
 
     return await makeRequest({
-        url: `${api.urls.chats.GET_ALL}/${chatId}/${api.urls.chats.MSG_RESOURCE}`,
+        url: api.urls.chats.createGetAllMsgs(chatId),
         method: "get",
         params,
     });
@@ -144,7 +114,7 @@ const getMessagesByChat = async (chatId, pagination) => {
  */
 const sendMessageToChat = async (message, chatId) => {
     return makeRequest({
-        url: `${api.urls.chats.GET_ALL}/${chatId}/${api.urls.chats.MSG_RESOURCE}`,
+        url: api.urls.chats.createCreateMsgs(chatId),
         method: "post",
         data: message,
     });
@@ -153,11 +123,9 @@ const sendMessageToChat = async (message, chatId) => {
 export default {
     getChats,
     createChat,
+    deleteChatById,
     getChatById,
     updateChatById,
-    getDocsByChat,
-    addDocsToChat,
-    deleteDocFromChat,
     getMessagesByChat,
     sendMessageToChat,
 };

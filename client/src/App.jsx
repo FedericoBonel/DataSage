@@ -1,5 +1,14 @@
-import { createBrowserRouter, RouterProvider, Navigate } from "react-router-dom";
-import { ErrorRouter, NotFoundRouter, ChatsRouter } from "@/routers";
+import {
+    createBrowserRouter,
+    RouterProvider,
+    Navigate,
+} from "react-router-dom";
+import {
+    ErrorRouter,
+    NotFoundRouter,
+    ChatsRouter,
+    NotificationsRouter,
+} from "@/routers";
 import { Public, Private } from "@/routers/layouts";
 import { ErrorHandler } from "@/routers/utils";
 import { routes } from "@/utils/constants";
@@ -12,7 +21,7 @@ const router = createBrowserRouter([
             /** Route the root path to the home path */
             {
                 path: "/",
-                element: <Navigate replace to={routes.HOME}/>
+                element: <Navigate replace to={routes.HOME} />,
             },
             /** Public routes */
             {
@@ -22,7 +31,7 @@ const router = createBrowserRouter([
             /** Private routes */
             {
                 element: <Private />,
-                children: [ChatsRouter],
+                children: [ChatsRouter, NotificationsRouter],
             },
             /** Common routes */
             { path: routes.error.ERROR, children: [ErrorRouter] },

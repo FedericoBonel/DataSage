@@ -16,11 +16,13 @@ const toChatOwnerDTO = (owner) => {
 /**
  * Transforms a chat as it is stored in the database to how it should be exposed.
  * @param {*} chat The chat as it is stored in the database
+ * @param {string} userId The id of the user that is requesting the chat
  */
-const toChatOutputDTO = (chat) => {
+const toChatOutputDTO = (chat, userId) => {
     const dto = new ChatOutputDTO();
     dto._id = chat._id;
     dto.name = chat.name;
+    dto.isOwner = chat.owner._id.toString() === userId;
     dto.createdAt = chat.createdAt.toISOString();
     dto.owner = toChatOwnerDTO(chat.owner);
     return dto;

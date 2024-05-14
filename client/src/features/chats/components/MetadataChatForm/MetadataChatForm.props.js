@@ -8,4 +8,6 @@ export default {
         /** Function be executed when the name field changes. Receives the onChange event of the field. */
         onChange: PropTypes.func,
     }),
+    /** True if the form is being submitted, false otherwise. If true it disables the fields */
+    isSubmitting: PropTypes.bool,
 };

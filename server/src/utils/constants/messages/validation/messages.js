@@ -10,4 +10,6 @@ export default Object.freeze({
     INVALID_LENGTH_DB: `The length of the message to store in database is invalid. It must be a string between ${chatMessageValidation.MIN_LENGTH} and ${chatMessageValidation.MAX_LENGTH_DB} characters`,
     /** Message to be shown when there are too many sources being provided for a message */
     TOO_MANY_SOURCES: `You can only provide up to ${chatMessageValidation.sources.LIMIT} sources for a message.`,
+    /** Message to be shown when a new message being created does not provide a collaborator reference. */
+    INVALID_COLLABORATOR: "You need to provide a collaborator for your message."
 });

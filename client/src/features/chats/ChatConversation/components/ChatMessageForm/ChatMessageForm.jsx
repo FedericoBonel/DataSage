@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { IconButton } from "@mui/material";
 import { Send } from "@mui/icons-material";
-import { TextField } from "@/components/fields";
+import TextField from "@/components/fields/TextField";
 import { messages, api } from "@/utils/constants";
 import propTypes from "./ChatMessageForm.props";
 

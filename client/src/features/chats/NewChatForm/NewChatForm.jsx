@@ -1,8 +1,9 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Card, CardHeader, CardContent, CardActions } from "@mui/material";
-import { chatsServices } from "@/services/chats";
-import { Form, FormAlert } from "@/components/forms";
+import chatsServices from "@/services/chats";
+import FormAlert from "@/components/forms/FormAlert";
+import Form from "@/components/forms/Form";
 import { messages, routes } from "@/utils/constants";
 import { chatsValidator } from "@/utils/validators";
 import { DocumentsChatForm } from "../components/DocumentsChatForm";
@@ -72,6 +73,7 @@ const NewChatForm = () => {
                     onChange: onFileSelection,
                     documents: newChat.documents,
                 }}
+                isSubmitting={createQuery.isPending}
             />
             <CardContent>
                 <MetadataChatForm
@@ -79,6 +81,7 @@ const NewChatForm = () => {
                         onChange: onChangeTextField,
                         value: newChat.name,
                     }}
+                    isSubmitting={createQuery.isPending}
                 />
             </CardContent>
             {errors}

@@ -1,12 +1,18 @@
-import chatValidationErrorMessages from "./validation/chat.js";
-import userValidationErrorMessages from "./validation/user.js";
-import documentValidationErrorMessages from "./validation/document.js";
-import pageValidationErrorMessages from "./validation/page.js";
-import colaboratorValidationErrorMessages from "./validation/colaborator.js";
-import permissionsValidationErrorMessages from "./validation/permissions.js";
-import paginationValidationErrorMessages from "./validation/pagination.js";
-import textSearchValidationErrorMessages from "./validation/textSearch.js";
-import messageValidationErrorMessages from "./validation/messages.js";
+import chatValidaton from "./validation/chat.js";
+import userValidation from "./validation/user.js";
+import docValidation from "./validation/document.js";
+import pageValidation from "./validation/page.js";
+import collabValidation from "./validation/colaborator.js";
+import participantValidation from "./validation/participant.js";
+import participationValidation from "./validation/participation.js";
+import relEntityTypeValidation from "./validation/relatedEntityType.js";
+import notificationValidation from "./validation/notification.js";
+import notificationTypeValidation from "./validation/notificationType.js";
+import permissionsValidation from "./validation/permissions.js";
+import paginationValidation from "./validation/pagination.js";
+import textSearchValidation from "./validation/textSearch.js";
+import messageValidation from "./validation/messages.js";
+import loggingValidation from "./validation/logging.js";
 
 /** Contains all error messages to be sent to the user. */
 export default Object.freeze({
@@ -19,15 +25,21 @@ export default Object.freeze({
     createServerInitializationError: (error) => `An error happened during server initialization: ${error}`,
     /** Errors related to input validation */
     validation: {
-        chat: chatValidationErrorMessages,
-        user: userValidationErrorMessages,
-        document: documentValidationErrorMessages,
-        page: pageValidationErrorMessages,
-        colaborator: colaboratorValidationErrorMessages,
-        permissions: permissionsValidationErrorMessages,
-        pagination: paginationValidationErrorMessages,
-        textSearch: textSearchValidationErrorMessages,
-        message: messageValidationErrorMessages,
+        chat: chatValidaton,
+        user: userValidation,
+        document: docValidation,
+        page: pageValidation,
+        colaborator: collabValidation,
+        participant: participantValidation,
+        participation: participationValidation,
+        relatedEntityType: relEntityTypeValidation,
+        notification: notificationValidation,
+        notificationType: notificationTypeValidation,
+        permissions: permissionsValidation,
+        pagination: paginationValidation,
+        textSearch: textSearchValidation,
+        message: messageValidation,
+        logging: loggingValidation,
         BODY_VALIDATION_FAILED:
             "The request payload failed validation. Check the fields you are providing and try again.",
         ID_PROVIDED:
@@ -40,4 +52,6 @@ export default Object.freeze({
         INVALID_CREDENTIALS: "The token provided is invalid. Please authenticate and try again.",
         FORBIDDEN: "You do not have the permissions to take this action.",
     },
+    /** Message to show when a request wasn't processed successfully */
+    REQUEST_FAILURE: "Failure request",
 });

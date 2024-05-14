@@ -18,6 +18,6 @@ export default Object.freeze({
         /** Message to be shown when the permissions for a colaborator id is invalid */
         INVALID_ID: "You need to provide the colaborator permission id as a string.",
         /** Message to be shown when the amount of permissions for a colaborator is invalid */
-        INVALID_AMOUNT: `You need to provide from ${1} permissions up to ${colaboratorValidation.permissions.MAX_AMOUNT}`,
+        INVALID_AMOUNT: `You need to provide from ${0} permissions up to ${colaboratorValidation.permissions.MAX_AMOUNT}`,
     },
 });

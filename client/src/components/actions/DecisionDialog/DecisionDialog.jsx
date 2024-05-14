@@ -4,7 +4,7 @@ import {
     DialogContent,
     DialogActions,
 } from "@mui/material";
-import { Button } from "../Button";
+import Button from "../Button";
 import { messages } from "@/utils/constants";
 import propTypes from "./DecisionDialog.props";
 
@@ -29,7 +29,12 @@ const DecisionDialog = ({
                 <Button onClick={onClose} color="error" variant="text">
                     {buttonLabels.cancel}
                 </Button>
-                <Button onClick={onAccept} isLoading={isAccepting} color="primary" variant="text">
+                <Button
+                    onClick={onAccept}
+                    isLoading={isAccepting}
+                    color="primary"
+                    variant="text"
+                >
                     {buttonLabels.accept}
                 </Button>
             </DialogActions>

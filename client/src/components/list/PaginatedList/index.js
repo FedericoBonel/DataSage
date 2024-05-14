@@ -1,1 +1,1 @@
-export { default as PaginatedList } from "./PaginatedList";
+export { default } from "./PaginatedList";

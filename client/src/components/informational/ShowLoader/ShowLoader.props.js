@@ -1,6 +1,6 @@
 import PropTypes from "prop-types";
 
-export const propTypes = {
+export default {
     /** This should be true whenever its children are loading. */
     isLoading: PropTypes.bool,
     /** Optional, Message to be shown to the user while loading. */

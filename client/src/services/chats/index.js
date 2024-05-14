@@ -1,1 +1,1 @@
-export {default as chatsServices} from "./chats";
+export { default } from "./chats";

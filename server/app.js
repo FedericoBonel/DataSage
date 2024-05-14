@@ -4,8 +4,8 @@ import compression from "compression";
 import config from "./src/config/index.js";
 import rateLimitMiddleware from "./src/middleware/ratelimit.js";
 import securityMiddleware from "./src/middleware/security.js";
-import httpLoggerMiddleware from "./src/middleware/httpLogger.js";
-import { errorHandlingMiddleware } from "./src/middleware/errors/index.js";
+import httpLoggerMiddleware from "./src/middleware/loggers/index.js";
+import errorHandlingMiddleware from "./src/middleware/errors/index.js";
 import configRoutes from "./src/routers/index.js";
 
 /** Configured server application */

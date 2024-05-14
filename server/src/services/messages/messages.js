@@ -5,7 +5,8 @@ import pagesRepository from "../../repositories/pages/pages.js";
 import messagesDTO from "../../dtos/messages/index.js";
 import { chatMemoryFrom, getQAChain } from "./utils/index.js";
 import { NotFoundError } from "../../utils/errors/index.js";
-import { messages, validation } from "../../utils/constants/index.js";
+import { messages, validation, permissions } from "../../utils/constants/index.js";
+import verifyChatPermissions from "../../utils/permissions/verifyChatPermissions.js";
 import calculateSkip from "../../utils/db/calculateSkip.js";
 
 /**
@@ -56,7 +57,12 @@ const generateResponse = async (prompt, chatId, userId) => {
     ]);
 
     return messagesDTO.toMessageOutputDTO(
-        newMessages.find((message) => message.from === validation.messages.actors.AI)
+        newMessages.find((message) => message.from === validation.messages.actors.AI),
+        verifyChatPermissions(
+            [permissions.colaborator.readDocs],
+            foundColaborator.permissions,
+            foundColaborator.chat.owner._id.toString() === foundColaborator.user._id.toString()
+        )
     );
 };
 
@@ -67,7 +73,7 @@ const generateResponse = async (prompt, chatId, userId) => {
  * @param {Object} [pagination={}] Pagination options.
  * @param {number} [pagination.page=undefined] Page number.
  * @param {number} [pagination.limit=undefined] Limit per page.
- * @returns The chat history that match the parameters.
+ * @returns The chat history that matches the parameters.
  */
 const getByChatId = async (userId, chatId, pagination = { page: 1, limit: 10 }) => {
     const foundColaborator = await colaboratorsRepository.getByChatAndUser(chatId, userId);
@@ -81,7 +87,16 @@ const getByChatId = async (userId, chatId, pagination = { page: 1, limit: 10 }) 
         { skip, limit: pagination.limit, sort: "-createdAt" }
     );
 
-    return chatHistory.map((message) => messagesDTO.toMessageOutputDTO(message));
+    return chatHistory.map((message) =>
+        messagesDTO.toMessageOutputDTO(
+            message,
+            verifyChatPermissions(
+                [permissions.colaborator.readDocs],
+                foundColaborator.permissions,
+                foundColaborator.chat.owner._id.toString() === foundColaborator.user._id.toString()
+            )
+        )
+    );
 };
 
 export default { generateResponse, getByChatId };

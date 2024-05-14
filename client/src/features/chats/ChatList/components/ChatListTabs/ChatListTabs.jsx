@@ -17,12 +17,12 @@ const ChatListTabs = ({ value, onClickTab }) => {
             <Tab
                 icon={<Share />}
                 value={api.searching.chats.owner[1]}
-                label={messages.chats.filtering.ownership.SHARED}
+                label={messages.chats.list.filtering.ownership.SHARED}
             />
             <Tab
                 icon={<Verified />}
                 value={api.searching.chats.owner[0]}
-                label={messages.chats.filtering.ownership.OWNED}
+                label={messages.chats.list.filtering.ownership.OWNED}
             />
         </Tabs>
     );

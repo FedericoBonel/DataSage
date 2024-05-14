@@ -10,6 +10,7 @@ const messageSchema = new Schema(
         colaborator: {
             type: Types.ObjectId,
             ref: COLAB_MODEL_NAME,
+            required: [true, messages.errors.validation.message.INVALID_COLLABORATOR],
         },
         from: {
             type: String,

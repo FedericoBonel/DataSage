@@ -1,5 +1,5 @@
 import { Unstable_Grid2 as Grid } from "@mui/material";
-import { NewChatForm } from "@/features/chats";
+import NewChatForm from "@/features/chats/NewChatForm";
 import { NewChatFormContainerStyles } from "./NewChat.styles";
 
 /** Component that renders the new chat page. */

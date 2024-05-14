@@ -1,5 +1,9 @@
 import config from "@/config";
-import chatsConsts from "./chats";
+import chatsUrls from "./urls/chats";
+import notificationsUrls from "./urls/notifications";
+import documentsUrls from "./urls/documents";
+import participantsUrls from "./urls/participants";
+import participationsUrls from "./urls/participations";
 import searchingConsts from "./searching";
 
 export default Object.freeze({
@@ -8,7 +12,16 @@ export default Object.freeze({
     /** Api URLs and resources */
     urls: {
         BASE: config.api.BASE_URL,
-        chats: chatsConsts,
+        /** Contains all chats resources urls */
+        chats: chatsUrls,
+        /** Contains all notifications resources urls */
+        notifications: notificationsUrls,
+        /** Contains all documents resources urls */
+        documents: documentsUrls,
+        /** Contains all participations resources urls */
+        participants: participantsUrls,
+        /** Contains all participations resources urls */
+        participations: participationsUrls,
     },
     /** API validation related constants */
     validation: {
@@ -38,6 +51,29 @@ export default Object.freeze({
             actor: ["AI", "Human"],
             /** Maximum length of a user message */
             MESSAGE_MAX_LENGTH: 4096,
+        },
+        /** Api participants management endpoints related constants */
+        participants: {
+            /** The allowed actions that can be selected as permissions for participants of a chat (NOTE: This should be in sync with the servers permissions)*/
+            allowedActions: {
+                /** The permission that allows for reading documents */
+                READ_DOCS: "read_docs",
+                /** THe permission that allows for uploading documents */
+                UPLOAD_DOCS: "upload_docs",
+            },
+        },
+        /** Api notifications management endpoints related constants */
+        notifications: {
+            /** Types of notifications */
+            types: {
+                /** Notification type for a new chat invitation */
+                CHAT_INVITATION: "chat_invitation",
+            },
+            /** Types of related entities */
+            relatedTypes: {
+                /** Related type for a chat */
+                chat: "chat",
+            },
         },
     },
 });

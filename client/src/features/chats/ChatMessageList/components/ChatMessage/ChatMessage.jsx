@@ -16,6 +16,7 @@ import {
     ChatMessageSenderStyles,
     ChatMessageSourcesStyles,
     ChatMessageTextStyles,
+    AvatarStyles,
 } from "./ChatMessage.styles";
 import propTypes from "./ChatMessage.props.js";
 
@@ -27,7 +28,10 @@ const ChatMessage = ({ chatMessage }) => {
         <Box sx={ChatMessageItemTopStyles}>
             {/* Sender */}
             <Box sx={ChatMessageSenderStyles}>
-                <Avatar src={isAI ? dataSageProfileImg : undefined} />
+                <Avatar
+                    src={isAI ? dataSageProfileImg : undefined}
+                    sx={AvatarStyles}
+                />
                 <Typography component="p" variant="H6">
                     {isAI
                         ? messages.chats.messages.actors.AI

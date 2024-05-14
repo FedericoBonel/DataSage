@@ -2,7 +2,7 @@ import { memo, useEffect } from "react";
 import { Box, useTheme } from "@mui/material";
 import { Viewer, SpecialZoomLevel } from "@react-pdf-viewer/core";
 import { defaultLayoutPlugin as useDefaultLayoutPlugin } from "@react-pdf-viewer/default-layout";
-import PdfViewerToolbar from "../PdfViewerToolbar/PdfViewerToolbar";
+import PdfViewerToolbar from "../PdfViewerToolbar";
 import useJumpToPagePlugin from "./plugins/JumpToPagePlugin";
 import { ViewerWrapperStyles } from "./PdfViewer.styles";
 import propTypes from "./PdfViewer.props";

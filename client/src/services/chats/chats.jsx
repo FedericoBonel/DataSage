@@ -4,8 +4,9 @@ import {
     useMutation,
     useQueryClient,
 } from "@tanstack/react-query";
-import { chatsAPI } from "@/apis/chats";
-import { chatsCache, utilsCache } from "../caches";
+import chatsAPI from "@/apis/chats/chatsAPI";
+import chatsCache from "../caches/chats";
+import { utilsCache } from "../caches";
 import api from "@/utils/constants/api";
 
 /** It makes a back end request to get the list of all chats and returns the state of the query.*/
@@ -94,62 +95,6 @@ const useUpdateChatById = () => {
     return queryState;
 };
 
-/** It makes a back end request to get the list of documents of a chat by id and returns the state of the query. */
-const useChatDocsData = (chatId) => {
-    const queryState = useQuery({
-        queryKey: chatsCache.documents(chatId),
-        queryFn: () => chatsAPI.getDocsByChat(chatId),
-        throwOnError: (error) => Boolean(error),
-    });
-
-    return queryState;
-};
-
-/** It creates and provides the state to upload documents to chats. */
-const useAddDocToChatById = () => {
-    const queryClient = useQueryClient();
-    const queryState = useMutation({
-        mutationFn: ({ chatId, documents }) =>
-            chatsAPI.addDocsToChat(documents, chatId),
-        onSuccess: (response, { chatId }) => {
-            // Update the documents cache with the received data
-            queryClient.setQueryData(chatsCache.documents(chatId), (oldData) =>
-                utilsCache.mockSuccessfulRes([
-                    ...response.data,
-                    ...oldData.data,
-                ])
-            );
-        },
-        throwOnError: (error) => error?.response?.status !== 400,
-    });
-
-    return queryState;
-};
-
-/** It creates and provides the state to upload documents to chats. */
-const useDeleteDocFromChatById = () => {
-    const queryClient = useQueryClient();
-    const queryState = useMutation({
-        mutationFn: ({ chatId, documentId }) =>
-            chatsAPI.deleteDocFromChat(documentId, chatId),
-        onSuccess: (response, { chatId, documentId }) => {
-            // Remove the document from cache
-            queryClient.setQueryData(chatsCache.documents(chatId), (oldData) =>
-                utilsCache.mockSuccessfulRes(
-                    oldData.data.filter((doc) => doc._id !== documentId)
-                )
-            );
-            // Invalidate its list
-            queryClient.invalidateQueries({
-                queryKey: chatsCache.documents(chatId),
-            });
-        },
-        throwOnError: (error) => error?.response?.status !== 400,
-    });
-
-    return queryState;
-};
-
 /** It makes a back end request to get the list of all chats and returns the state of the query.*/
 const useInfiniteMessageDataByChat = ({ chatId, page = 1, limit = 10 }) => {
     const queryState = useInfiniteQuery({
@@ -224,14 +169,31 @@ const useSendMessageToChat = () => {
     return queryState;
 };
 
+/** It creates and provides the state to delete chats by id. */
+const useDeleteChatById = () => {
+    const queryClient = useQueryClient();
+    const queryState = useMutation({
+        mutationFn: ({ chatId }) => chatsAPI.deleteChatById(chatId),
+        onSuccess: (response, { chatId }) => {
+            // Remove the chat from cache
+            queryClient.removeQueries({ queryKey: chatsCache.detail(chatId) });
+            // Invalidate the chat lists
+            queryClient.invalidateQueries({
+                queryKey: chatsCache.lists(),
+            });
+        },
+        throwOnError: (error) => Boolean(error),
+    });
+
+    return queryState;
+};
+
 export default {
     useInfiniteChatData,
     useCreateChat,
+    useDeleteChatById,
     useUpdateChatById,
     useChatById,
-    useAddDocToChatById,
-    useChatDocsData,
-    useDeleteDocFromChatById,
     useInfiniteMessageDataByChat,
     useSendMessageToChat,
 };
