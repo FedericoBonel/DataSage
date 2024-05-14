@@ -25,6 +25,9 @@ const toChatOutputDTO = (chat, userId) => {
     dto.isOwner = chat.owner._id.toString() === userId;
     dto.createdAt = chat.createdAt.toISOString();
     dto.owner = toChatOwnerDTO(chat.owner);
+    // If this function is being used, it must be the chat owner since it has access to the chat it self and not a collaborator
+    dto.hasJoined = chat.owner._id.toString() === userId;
+    dto.permissions = chat.owner._id.toString() === userId ? [] : undefined;
     return dto;
 };
 

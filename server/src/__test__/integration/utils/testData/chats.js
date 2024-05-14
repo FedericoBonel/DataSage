@@ -118,4 +118,25 @@ export default [
         createdAt: new Date(),
         updatedAt: new Date(),
     },
+    {
+        _id: "66431cbb3b3d919c0412dccb",
+        name: "My little chat",
+        owner: {
+            _id: "6629c9afb2066717d74c3ec7",
+            names: "jane",
+            lastnames: "smith",
+        },
+        documents: [
+            {
+                name: "certificado.pdf",
+                storeId: "ae4d429e-0307-4072-97de-2efcf7758jaja",
+                size: 22269,
+                _id: "66330b4a1d31e5dfc2f78b1e",
+                createdAt: new Date(),
+                updatedAt: new Date(),
+            },
+        ],
+        createdAt: new Date(),
+        updatedAt: new Date(),
+    },
 ];

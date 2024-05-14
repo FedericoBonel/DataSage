@@ -52,7 +52,7 @@ import { ApiError } from "../errors/index.js";
  *           schema:
  *             $ref: '#/components/schemas/ErrorPayload'
  *     404Response:
- *       description: Some of the data (body property, parameter or identifier) provided is not found in the system.
+ *       description: Some of the data (URL, body property, parameter or identifier) provided is not found in the system.
  *       content:
  *         application/json:
  *           schema:

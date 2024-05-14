@@ -1,4 +1,3 @@
-import { jest } from "@jest/globals";
 import request from "supertest";
 import { StatusCodes } from "http-status-codes";
 import config from "../../../../config/index.js";

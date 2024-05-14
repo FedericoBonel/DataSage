@@ -77,7 +77,7 @@ chatsRouter
      *                     - data
      *                   properties:
      *                     data:
-     *                       $ref: '#/components/schemas/ChatOutputDTO'
+     *                       $ref: '#/components/schemas/ChatDetailsOutputDTO'
      *       400:
      *         $ref: '#/components/responses/400Response'
      */
@@ -163,7 +163,7 @@ chatsRouter
      *                     - data
      *                   properties:
      *                     data:
-     *                       $ref: '#/components/schemas/ChatOutputDTO'
+     *                       $ref: '#/components/schemas/ChatDetailsOutputDTO'
      *       400:
      *         $ref: '#/components/responses/400Response'
      *       404:
@@ -197,7 +197,7 @@ chatsRouter
      *                     - data
      *                   properties:
      *                     data:
-     *                       $ref: '#/components/schemas/ChatOutputDTO'
+     *                       $ref: '#/components/schemas/ChatDetailsOutputDTO'
      *       400:
      *         $ref: '#/components/responses/400Response'
      *       404:

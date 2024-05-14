@@ -70,6 +70,29 @@ export default [
         createdAt: new Date(),
         updatedAt: new Date(),
     },
+    {
+        _id: "66431c98bb5c6e824f94d113",
+        user: {
+            _id: "661645f35333647769e601ac",
+            names: "john",
+            lastnames: "doe",
+            email: "john.doe@example.com",
+        },
+        chat: {
+            _id: "66431cbb3b3d919c0412dccb",
+            name: "My little chat",
+            owner: {
+                _id: "6629c9afb2066717d74c3ec7",
+                names: "jane",
+                lastnames: "smith",
+            },
+            createdAt: new Date(),
+        },
+        permissions: [],
+        hasJoined: false,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+    },
 
     // Janes collaborations
     {
@@ -140,5 +163,28 @@ export default [
         permissions: [],
         createdAt: new Date("2024-04-14T03:55:23.851Z"),
         updatedAt: new Date("2024-04-25T02:15:25.449Z"),
+    },
+    {
+        _id: "66431c98bb5c6e824f94d113",
+        user: {
+            _id: "6629c9afb2066717d74c3ec7",
+            names: "jane",
+            lastnames: "smith",
+            email: "jane.smith@example.com",
+        },
+        chat: {
+            _id: "66431cbb3b3d919c0412dccb",
+            name: "My little chat",
+            owner: {
+                _id: "6629c9afb2066717d74c3ec7",
+                names: "jane",
+                lastnames: "smith",
+            },
+            createdAt: new Date(),
+        },
+        permissions: [],
+        hasJoined: true,
+        createdAt: new Date(),
+        updatedAt: new Date(),
     },
 ];
