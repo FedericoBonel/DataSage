@@ -131,6 +131,10 @@ const getById = async (participantId, chatId, userId) => {
  * @returns The participant after being updated and as it should be exposed to the web.
  */
 const updateById = async (updatedParticipant, participantId, chatId, userId) => {
+    if (participantId === userId) {
+        throw new BadRequestError(messages.errors.validation.participant.UPDATING_ONESELF);
+    }
+
     const savedPermissions = await permissionsRepository.getByAllowedActions(updatedParticipant.permissions);
     if (savedPermissions.length !== updatedParticipant.permissions.length) {
         throw new NotFoundError(messages.errors.ROUTE_NOT_FOUND);

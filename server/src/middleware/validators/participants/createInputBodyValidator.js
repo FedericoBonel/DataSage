@@ -65,7 +65,7 @@ const createInputBodyValidator = (
         };
     }
 
-    return [expressValidator.checkSchema(schema, ["body"]), checkValidator];
+    return [expressValidator.checkExact(expressValidator.checkSchema(schema, ["body"])), checkValidator];
 };
 
 export default createInputBodyValidator;
