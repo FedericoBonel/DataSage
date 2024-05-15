@@ -3,6 +3,18 @@ import { validation, messages } from "../../utils/constants/index.js";
 
 const MODEL_NAME = "User";
 
+const passwordSchema = new Schema(
+    {
+        content: {
+            type: String,
+            minlength: validation.user.password.MIN_LENGTH,
+            maxlength: validation.user.password.MAX_LENGTH,
+            required: [true, messages.errors.validation.user.password.INVALID],
+        },
+    },
+    { timestamps: { updatedAt: true, createdAt: false } }
+);
+
 const userSchema = new Schema(
     {
         names: {
@@ -25,9 +37,7 @@ const userSchema = new Schema(
             required: [true, messages.errors.validation.user.email.INVALID],
         },
         password: {
-            type: String,
-            minlength: validation.user.password.MIN_LENGTH,
-            maxlength: validation.user.password.MAX_LENGTH,
+            type: passwordSchema,
             required: [true, messages.errors.validation.user.password.INVALID],
         },
         isAdmin: {

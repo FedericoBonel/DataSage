@@ -47,6 +47,9 @@ isDefined(RATELIMIT_MAX_REQUESTS, "RATELIMIT_MAX_REQUESTS");
 const JWT_SECRET = process.env.JWT_SECRET;
 isDefined(JWT_SECRET, "JWT_SECRET");
 
+const BCRYPT_SALT_ROUNDS = process.env.BCRYPT_SALT_ROUNDS;
+isDefined(BCRYPT_SALT_ROUNDS, "BCRYPT_SALT_ROUNDS");
+
 // OpenAI configuration
 const TEST_URL = process.env.OPEN_API_TEST_URL;
 isDefined(TEST_URL, "TEST_URL");
@@ -117,6 +120,11 @@ export default Object.freeze({
             /** Password for the first admin account */
             password: ADMIN_PASSWORD,
         },
+    },
+    /** bcrypt related variables */
+    bcrypt: {
+        /** Number of rounds to use in the bcrypts algorithm */
+        saltRounds: Number(BCRYPT_SALT_ROUNDS),
     },
     /** JSON Web Token related variables */
     jwt: {

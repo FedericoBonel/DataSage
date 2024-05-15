@@ -1,3 +1,7 @@
+import bcrypt from "bcrypt";
+
+const testingPasswordSalt = 2;
+
 /** Testing data for users */
 export default [
     {
@@ -5,7 +9,7 @@ export default [
         names: "john",
         lastnames: "doe",
         email: "john.doe@example.com",
-        password: "testingPassword",
+        password: { content: await bcrypt.hash("testingPassword", testingPasswordSalt) },
         isAdmin: false,
         createdAt: new Date("2024-04-25T03:10:39.273Z"),
         updatedAt: new Date("2024-04-25T03:10:39.273Z"),
@@ -15,7 +19,7 @@ export default [
         names: "jane",
         lastnames: "smith",
         email: "jane.smith@example.com",
-        password: "testingPassword",
+        password: { content: await bcrypt.hash("testingPassword", testingPasswordSalt) },
         isAdmin: false,
         createdAt: new Date("2024-04-25T03:10:39.273Z"),
         updatedAt: new Date("2024-04-25T03:10:39.273Z"),

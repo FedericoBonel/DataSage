@@ -3,6 +3,7 @@ import infoMessages from "./messages/info.js";
 import errorMessages from "./messages/errors.js";
 import openapiMessages from "./messages/openapi.js";
 import swaggeruiRoutes from "./routes/swaggerui.js";
+import authRoutes from "./routes/auth.js";
 import chatsRoutes from "./routes/chats.js";
 import notificationsRoutes from "./routes/notifications.js";
 import docsRoutes from "./routes/documents.js";
@@ -38,6 +39,7 @@ export const messages = Object.freeze({
 /** Object with all the routes used in the application without "/" (i.g. the route in the api "/entity" would be in routes.entity as "entity") */
 export const routes = Object.freeze({
     swaggerUi: swaggeruiRoutes,
+    auth: authRoutes,
     chats: chatsRoutes,
     notifications: notificationsRoutes,
     documents: docsRoutes,
