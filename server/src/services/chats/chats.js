@@ -35,7 +35,7 @@ const create = async (chat, documents, userId) => {
     // Verify that the user exists and get their information
     const user = await usersRepository.getById(userId);
     if (!user) {
-        throw new UnauthorizedError(messages.errors.auth.INVALID_CREDENTIALS);
+        throw new UnauthorizedError(messages.errors.auth.INVALID_TOKEN);
     }
 
     // Parse the documents into pages and check that they dont have more than the allowed amount of pages

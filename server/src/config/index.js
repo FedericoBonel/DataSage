@@ -44,8 +44,20 @@ const RATELIMIT_MAX_REQUESTS = process.env.RATELIMIT_MAX_REQUESTS;
 isDefined(RATELIMIT_MAX_REQUESTS, "RATELIMIT_MAX_REQUESTS");
 
 // Authorization configuration
-const JWT_SECRET = process.env.JWT_SECRET;
-isDefined(JWT_SECRET, "JWT_SECRET");
+const JWT_ACCESS_SECRET = process.env.JWT_ACCESS_SECRET;
+isDefined(JWT_ACCESS_SECRET, "JWT_ACCESS_SECRET");
+
+const JWT_ACCESS_EXPIRES_MIN = process.env.JWT_ACCESS_EXPIRES_MIN;
+isDefined(JWT_ACCESS_EXPIRES_MIN, "JWT_ACCESS_EXPIRES_MIN");
+
+const JWT_REFRESH_NAME = process.env.JWT_REFRESH_NAME;
+isDefined(JWT_REFRESH_NAME, "JWT_REFRESH_NAME");
+
+const JWT_REFRESH_EXPIRES_DAYS = process.env.JWT_REFRESH_EXPIRES_DAYS;
+isDefined(JWT_REFRESH_EXPIRES_DAYS, "JWT_REFRESH_EXPIRES_DAYS");
+
+const JWT_REFRESH_SECRET = process.env.JWT_REFRESH_SECRET;
+isDefined(JWT_REFRESH_SECRET, "JWT_REFRESH_SECRET");
 
 const BCRYPT_SALT_ROUNDS = process.env.BCRYPT_SALT_ROUNDS;
 isDefined(BCRYPT_SALT_ROUNDS, "BCRYPT_SALT_ROUNDS");
@@ -128,8 +140,16 @@ export default Object.freeze({
     },
     /** JSON Web Token related variables */
     jwt: {
-        /** JWT secret */
-        secret: JWT_SECRET,
+        /** The refresh token cookie name */
+        refreshTokenKey: JWT_REFRESH_NAME,
+        /** The refresh token duration in days */
+        refreshTokenDaysDuration: Number(JWT_REFRESH_EXPIRES_DAYS),
+        /** The refresh token cookie secret */
+        refreshTokenSecret: JWT_REFRESH_SECRET,
+        /** Access token secret */
+        accessTokenSecret: JWT_ACCESS_SECRET,
+        /** The access token duration in minutes */
+        accessTokenMinDuration: Number(JWT_REFRESH_EXPIRES_DAYS),
     },
     /** Swagger UI configuration related variables */
     swagger: {

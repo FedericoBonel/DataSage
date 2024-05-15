@@ -48,8 +48,13 @@ export default Object.freeze({
     },
     /** Errors related to authentication */
     auth: {
+        /** Error to be shown when a request is providing invalid email or password */
+        INVALID_CREDENTIALS: "Sorry, your password or email was incorrect. Please double-check your password and email and try again.",
+        /** Error to be shown when an authentication request is requesting login for a non verified user */
+        NON_VERIFIED: "Sorry, it seems your account is not verified, please check your email and follow the verification steps and try again.",
         /** Error to be shown when a request had an invalid token attached to it. */
-        INVALID_CREDENTIALS: "The token provided is invalid. Please authenticate and try again.",
+        INVALID_TOKEN: "The token provided is invalid. Please authenticate and try again.",
+        /** Error to be shown when the user does not have the permissions to take an action */
         FORBIDDEN: "You do not have the permissions to take this action.",
     },
     /** Message to show when a request wasn't processed successfully */
