@@ -59,4 +59,35 @@ authRouter
      */
     .post(authValidators.loginBodyValidator, authController.login);
 
+authRouter
+    .route(`/${routes.auth.LOGOUT}`)
+    /**
+     * @openapi
+     * /auth/logout:
+     *   post:
+     *     tags: [User Authentication and Authorization]
+     *     security: [{cookieAuth: []}]
+     *     summary: Logs a user out of the system and deletes their refresh token from the browser cookies.
+     *     description: Logs a user out of the system and deletes their refresh token from the browser cookies.
+     *                  <br />This endpoint should be used when a user stops using the system and decides to finish their session early (before token expiration), in a client this normally would be done in a logout button.
+     *                  <br />Once you do this your refresh token will be invalidated. The access token may still be used but because its lifetime is very short it should stop being valid soon after this request.
+     *     responses:
+     *       200:
+     *         description: The user has successfully logged out and a response with a cookie invalidation header for the refresh token is returned.
+     *         headers:
+     *           Set-Cookie:
+     *             description: Removes the refresh token from the cookies.
+     *             schema:
+     *               type: string
+     *               example: refresh_token=nonvalid; Max-Age=-1; Path=/; Expires=Thu, 01 Jan 1970 00:00:00 GMT;; SameSite=None; Secure; HttpOnly
+     *         content:
+     *           application/json:
+     *             schema:
+     *               $ref: '#/components/schemas/SuccessApiPayload'
+     *       401:
+     *         description: The refresh token appended to the request is not present if present but expired then a 200 response is returned with the cookie removal header.
+     *         $ref: '#/components/responses/401Response'
+     */
+    .post(authController.logout);
+
 export default authRouter;

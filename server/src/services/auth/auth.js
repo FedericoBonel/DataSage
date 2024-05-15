@@ -44,6 +44,22 @@ const authenticate = async (credentials) => {
 };
 
 /**
+ * UnAuthenticates (logs out) a user by their refresh token
+ * 
+ * NOTE: Currently it only checks for the token existence and could be done in controller level.
+ * However, since this could change and add more business logic
+ * this service layer function is defined
+ * @param {String} refreshToken The refresh token that identifies the user that is logging off
+ * @throws {UnauthorizedError} If the refresh token is non existent
+ */
+const unauthenticate = async (refreshToken) => {
+    // If no refresh token has been provided then there is no point on calling this endpoint
+    if (!refreshToken) {
+        throw new UnauthorizedError(messages.errors.auth.NO_REFRESH_TOKEN);
+    }
+}
+
+/**
  * Authorizes a user to do some action in a chat
  *
  * NOTE: If the user is the owner of the chat then no actions are checked. They are allowed full access.
@@ -74,4 +90,4 @@ const authorizeCollaboratorToChat = async (chatId, userId, requiredActions) => {
     return colaboratorInstance;
 };
 
-export default { authorizeCollaboratorToChat, authenticate };
+export default { authorizeCollaboratorToChat, authenticate, unauthenticate };

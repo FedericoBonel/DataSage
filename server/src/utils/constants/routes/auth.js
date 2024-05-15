@@ -4,4 +4,6 @@ export default Object.freeze({
     AUTH: "auth",
     /** Route to login resource */
     LOGIN: "login",
+    /** Route to logout resource */
+    LOGOUT: "logout",
 });

@@ -54,6 +54,8 @@ export default Object.freeze({
         NON_VERIFIED: "Sorry, it seems your account is not verified, please check your email and follow the verification steps and try again.",
         /** Error to be shown when a request had an invalid token attached to it. */
         INVALID_TOKEN: "The token provided is invalid. Please authenticate and try again.",
+        /** Error to be shown when a request did not have a refresh token attached to it. */
+        NO_REFRESH_TOKEN: "No refresh token was provided, you don't need to be logged out.",
         /** Error to be shown when the user does not have the permissions to take an action */
         FORBIDDEN: "You do not have the permissions to take this action.",
     },

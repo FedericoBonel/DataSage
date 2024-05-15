@@ -1,4 +1,6 @@
 import request from "supertest";
+import jwtUtils from "jsonwebtoken";
+import { v4 as uuid } from "uuid";
 import { StatusCodes } from "http-status-codes";
 import { accessTokenDTOCheck } from "../../utils/dtos/tokens.js";
 import config from "../../../../config/index.js";
@@ -10,9 +12,11 @@ import { nonEncryptedUsers } from "../../utils/testData/users.js";
 // Tested modules
 const app = await import("../../../../../app.js");
 
+const testingJwtSecret = uuid();
 const userToLogin = nonEncryptedUsers[0];
 const anotherUser = nonEncryptedUsers[1];
 const nonVerifiedUser = nonEncryptedUsers.find((user) => !user.verified);
+const refreshToken = jwtUtils.sign({ _id: userToLogin._id }, testingJwtSecret);
 
 describe("Integration tests for user authentication and authorizations endpoints API", () => {
     const appInstance = app.default;
@@ -64,7 +68,7 @@ describe("Integration tests for user authentication and authorizations endpoints
             const incorrectPayloads = [
                 { email: userToLogin.email, password: "randomPass$1" },
                 { email: anotherUser.email, password: userToLogin.password.content },
-                {email: "nonexistentemail@email.com", password: "password#1AS"}
+                { email: "nonexistentemail@email.com", password: "password#1AS" },
             ];
             for (let i = 0; i < incorrectPayloads.length; i += 1) {
                 const incorrectPayload = incorrectPayloads[i];
@@ -94,6 +98,48 @@ describe("Integration tests for user authentication and authorizations endpoints
                 expect(response.status).toBe(StatusCodes.BAD_REQUEST);
                 expect(response.body.errorMsg).toEqual(expect.any(String));
             }
+        });
+    });
+
+    describe("Integration tests for POST /auth/logout", () => {
+        const logoutRoute = `${config.server.urls.api}/${routes.auth.AUTH}/${routes.auth.LOGOUT}`;
+        const refreshTokenCookie = refreshToken;
+        it("Checks that a user can logout", async () => {
+            // When
+            const response = await request(appInstance)
+                .post(logoutRoute)
+                .set("Cookie", [`${config.jwt.refreshTokenKey}=${refreshTokenCookie}`]);
+            // Then
+            expect(response.status).toBe(StatusCodes.OK);
+            expect(response.headers["content-type"]).toEqual(expect.stringContaining("json"));
+            expect(response.headers["set-cookie"]).toEqual(
+                expect.arrayContaining([expect.stringContaining(config.jwt.refreshTokenKey)])
+            );
+        });
+        it("Checks that a user can not logout when they haven't provided a token from which to logout", async () => {
+            // When
+            const response = await request(appInstance).post(logoutRoute);
+            // Then
+            expect(response.status).toBe(StatusCodes.UNAUTHORIZED);
+            expect(response.headers["content-type"]).toEqual(expect.stringContaining("json"));
+            expect(response.headers["set-cookie"]).not.toEqual(
+                expect.arrayContaining([expect.stringContaining(config.jwt.refreshTokenKey)])
+            );
+            expect(response.body.errorMsg).toEqual(expect.any(String));
+        });
+        it("Checks that a user can not logout when they provide an incorrect cookie name", async () => {
+            // When
+            const response = await request(appInstance)
+                .post(logoutRoute)
+                .set("Cookie", [`refesh_cookie=${refreshTokenCookie}`]);
+            // Then
+            // Then
+            expect(response.status).toBe(StatusCodes.UNAUTHORIZED);
+            expect(response.headers["content-type"]).toEqual(expect.stringContaining("json"));
+            expect(response.headers["set-cookie"]).not.toEqual(
+                expect.arrayContaining([expect.stringContaining(config.jwt.refreshTokenKey)])
+            );
+            expect(response.body.errorMsg).toEqual(expect.any(String));
         });
     });
 });

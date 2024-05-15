@@ -47,7 +47,6 @@ const openAPIConfig = {
         security: [
             {
                 bearerAuth: [],
-                cookieAuth: [],
             },
         ],
     },
