@@ -48,12 +48,14 @@ if (!noAdminUsersExist) {
 // Check if there is an Admin already and create one for testing otherwise
 const adminUserExists = await user.findOne({ isAdmin: true }).lean();
 if (!adminUserExists) {
+    const hashedPass = await bcrypt.hash(config.server.admin.password, config.bcrypt.saltRounds);
+
     await user.create({
         names: "admin",
         lastnames: "admin",
         email: config.server.admin.email?.toLowerCase(),
         password: {
-            content: await bcrypt(config.server.admin.password, config.bcrypt.saltRounds),
+            content: hashedPass,
         },
         isAdmin: true,
         verified: true,

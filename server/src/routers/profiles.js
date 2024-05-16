@@ -1,5 +1,6 @@
 import { Router } from "express";
 import profilesController from "../controllers/profiles.js";
+import profileValidators from "../middleware/validators/profiles/index.js";
 
 const profileRouter = Router();
 
@@ -35,6 +36,39 @@ profileRouter
      *       401:
      *         $ref: '#/components/responses/401Response'
      */
-    .get(profilesController.get);
+    .get(profilesController.get)
+    /**
+     * @openapi
+     * /profile:
+     *   patch:
+     *     tags: [User Profile]
+     *     summary: Updates the logged in user profile information.
+     *     description: Updates the logged in user profile information. This could be used in a client to update a user registered information in something like a profile settings page or similar. If the password is updated all issued tokens will be invalid and a new authentication will be required.
+     *     requestBody:
+     *       required: true
+     *       content:
+     *         application/json:
+     *           schema:
+     *             $ref: '#/components/schemas/UpdateProfileSchema'
+     *     responses:
+     *       200:
+     *         description: The request was successful and the updated user profile information is returned. If the password was updated all tokens will be invalid and a new authentication will be required.
+     *         content:
+     *           application/json:
+     *             schema:
+     *               allOf:
+     *                 - $ref: '#/components/schemas/SuccessApiPayload'
+     *                 - type: object
+     *                   required:
+     *                     - data
+     *                   properties:
+     *                     data:
+     *                       $ref: "#/components/schemas/ProfileDTO"
+     *       400:
+     *         $ref: '#/components/responses/400Response'
+     *       401:
+     *         $ref: '#/components/responses/401Response'
+     */
+    .patch(profileValidators.updateProfileValidator, profilesController.update);
 
 export default profileRouter;

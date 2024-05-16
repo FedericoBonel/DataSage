@@ -1,5 +1,6 @@
 import { StatusCodes } from "http-status-codes";
 import profilesServices from "../services/profiles/profiles.js";
+import userServices from "../services/users/users.js";
 import { SuccessPayload } from "../utils/responsebodies/index.js";
 
 /** Controller that handles all requests that ask for the logged in user profile information */
@@ -11,4 +12,14 @@ const get = async (req, res) => {
     return res.status(StatusCodes.OK).json(new SuccessPayload(profileInformation));
 };
 
-export default { get };
+/** Controller that handles all requests that ask to update the logged in user profile information */
+const update = async (req, res) => {
+    const loggedInUser = req.user;
+    const updates = req.body;
+
+    const profileInformation = await userServices.updateById(updates, loggedInUser._id);
+
+    return res.status(StatusCodes.OK).json(new SuccessPayload(profileInformation));
+};
+
+export default { get, update };
