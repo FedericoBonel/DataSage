@@ -121,4 +121,4 @@ const authorizeCollaboratorToChat = async (chatId, userId, requiredActions) => {
     return colaboratorInstance;
 };
 
-export default { authorizeCollaboratorToChat, authenticate, unauthenticate, refreshToken, validateAccessToken };
+export default { authenticate, unauthenticate, refreshToken, validateAccessToken, authorizeCollaboratorToChat };

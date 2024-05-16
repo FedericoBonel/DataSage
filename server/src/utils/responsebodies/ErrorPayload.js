@@ -40,7 +40,7 @@ import { ApiError } from "../errors/index.js";
  *           schema:
  *             $ref: '#/components/schemas/ErrorPayload'
  *     401Response:
- *       description: The authentication token attached to the application is non-existent or invalid.
+ *       description: The access token attached to the request is non-existent or invalid.
  *       content:
  *         application/json:
  *           schema:

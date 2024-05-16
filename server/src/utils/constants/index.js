@@ -4,6 +4,7 @@ import errorMessages from "./messages/errors.js";
 import openapiMessages from "./messages/openapi.js";
 import swaggeruiRoutes from "./routes/swaggerui.js";
 import authRoutes from "./routes/auth.js";
+import profilesRoutes from "./routes/profiles.js";
 import chatsRoutes from "./routes/chats.js";
 import notificationsRoutes from "./routes/notifications.js";
 import docsRoutes from "./routes/documents.js";
@@ -40,6 +41,7 @@ export const messages = Object.freeze({
 export const routes = Object.freeze({
     swaggerUi: swaggeruiRoutes,
     auth: authRoutes,
+    profiles: profilesRoutes,
     chats: chatsRoutes,
     notifications: notificationsRoutes,
     documents: docsRoutes,

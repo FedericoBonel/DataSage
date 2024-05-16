@@ -3,7 +3,7 @@ import authController from "../controllers/auth.js";
 import authValidators from "../middleware/validators/auth/index.js";
 import { routes } from "../utils/constants/index.js";
 
-const authRouter = Router({ mergeParams: true });
+const authRouter = Router();
 
 /**
  * @openapi
