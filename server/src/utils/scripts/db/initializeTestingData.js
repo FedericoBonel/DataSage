@@ -56,6 +56,7 @@ if (!adminUserExists) {
             content: await bcrypt(config.server.admin.password, config.bcrypt.saltRounds),
         },
         isAdmin: true,
+        verified: true,
     });
     logger.info("Initializing testing data - Added admin user with the provided email and password");
 }

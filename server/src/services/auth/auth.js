@@ -8,6 +8,7 @@ import { ForbiddenError, NotFoundError, UnauthorizedError } from "../../utils/er
 import { messages } from "../../utils/constants/index.js";
 import verifyPermissions from "../../utils/permissions/verifyChatPermissions.js";
 import { daysToSeconds, minutesToSeconds } from "../../utils/time/converters.js";
+import { verifyUserJWT } from "./utils/index.js";
 
 /**
  * Authenticates a user by user email and password
@@ -65,31 +66,8 @@ const unauthenticate = async (refreshToken) => {
  * @returns The new access token
  */
 const refreshToken = async (receivedRefreshToken) => {
-    let tokenPayload;
-    try {
-        // Verify the token has been signed with our secret
-        tokenPayload = jwtUtils.verify(receivedRefreshToken, config.jwt.refreshTokenSecret);
-    } catch (error) {
-        throw new UnauthorizedError(messages.errors.auth.INVALID_TOKEN);
-    }
-
-    // Verify the user the token belongs to has not changed their password and that it exists
-    let user;
-    try {
-        user = await usersRepository.getById(String(tokenPayload._id));
-    } catch (error) {
-        throw new UnauthorizedError(messages.errors.auth.INVALID_TOKEN);
-    }
-    if (
-        !(
-            user &&
-            tokenPayload.iat &&
-            Math.floor(user.password.updatedAt.getTime() / 1000) <= tokenPayload.iat &&
-            user.verified
-        )
-    ) {
-        throw new UnauthorizedError(messages.errors.auth.INVALID_TOKEN);
-    }
+    // Verify the token
+    const user = await verifyUserJWT(receivedRefreshToken, config.jwt.refreshTokenSecret);
 
     // Sign access token and return it
     const accessToken = jwtUtils.sign({ _id: user._id.toString() }, config.jwt.accessTokenSecret, {
@@ -97,6 +75,19 @@ const refreshToken = async (receivedRefreshToken) => {
     });
 
     return authDTO.toAccessTokenDTO(accessToken);
+};
+
+/**
+ * Validates a user access token payload and generates and returns the user information if valid
+ * @param {String} accessToken The access token to be validated
+ * @returns The user the token belongs to and its public information
+ */
+const validateAccessToken = async (accessToken) => {
+    // Verify the token
+    const validatedUser = await verifyUserJWT(accessToken, config.jwt.accessTokenSecret);
+
+    // Return the found user
+    return authDTO.toReqUser(validatedUser);
 };
 
 /**
@@ -130,4 +121,4 @@ const authorizeCollaboratorToChat = async (chatId, userId, requiredActions) => {
     return colaboratorInstance;
 };
 
-export default { authorizeCollaboratorToChat, authenticate, unauthenticate, refreshToken };
+export default { authorizeCollaboratorToChat, authenticate, unauthenticate, refreshToken, validateAccessToken };

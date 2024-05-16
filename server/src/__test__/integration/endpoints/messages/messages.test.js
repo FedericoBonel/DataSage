@@ -4,6 +4,7 @@ import { StatusCodes } from "http-status-codes";
 import config from "../../../../config/index.js";
 import { routes, permissions } from "../../../../utils/constants/index.js";
 import { connect, disconnect } from "../../../../utils/db/inMemory.js";
+import { createCommonAuthHeaders } from "../../utils/headers/index.js";
 import amazonS3Mock from "../../utils/mocks/lib/amazonS3.js";
 import { getQAChainDefaultMock, qAChainObjectMock } from "../../utils/mocks/services/messages/utils/getQAChain.js";
 import createTestingData from "../../utils/testData/createTestingData.js";
@@ -40,6 +41,7 @@ const noReadPermissionChat = colaborator.find(
 
 describe("Integration tests for chat messages management endpoints API", () => {
     const appInstance = app.default;
+    let headers;
 
     beforeAll(async () => {
         // Connect to database
@@ -54,6 +56,8 @@ describe("Integration tests for chat messages management endpoints API", () => {
     beforeEach(async () => {
         // Create dummy data and reset between tests
         await createTestingData();
+        // Login the user
+        headers = createCommonAuthHeaders(loggedInUser);
     });
 
     describe("Integration tests for GET /chats/:chatId/messages", () => {
@@ -62,7 +66,7 @@ describe("Integration tests for chat messages management endpoints API", () => {
         const msgsRoute = `${config.server.urls.api}/${routes.chats.CHATS}/${usersChat._id}/${routes.messages.MESSAGES}`;
         it("Checks that a list of chat messages is returned when requesting GET to a valid and existing chat Id", async () => {
             // When
-            const response = await request(appInstance).get(`${msgsRoute}?limit=${limit}&page=${page}`);
+            const response = await request(appInstance).get(`${msgsRoute}?limit=${limit}&page=${page}`).set(headers);
             // Then
             expect(response.headers["content-type"]).toEqual(expect.stringContaining("json"));
             expect(response.status).toBe(StatusCodes.OK);
@@ -78,7 +82,7 @@ describe("Integration tests for chat messages management endpoints API", () => {
             // Given
             const anotherUserChat = `${config.server.urls.api}/${routes.chats.CHATS}/${noReadPermissionChat._id}/${routes.messages.MESSAGES}?page=${page}&limit=${limit}`;
             // When
-            const response = await request(appInstance).get(anotherUserChat);
+            const response = await request(appInstance).get(anotherUserChat).set(headers);
             // Then
             expect(response.headers["content-type"]).toEqual(expect.stringContaining("json"));
             expect(response.status).toBe(StatusCodes.OK);
@@ -92,7 +96,7 @@ describe("Integration tests for chat messages management endpoints API", () => {
             // Given
             const invalidRoute = `${config.server.urls.api}/${routes.chats.CHATS}/invalid/${routes.messages.MESSAGES}`;
             // When
-            const response = await request(appInstance).get(invalidRoute);
+            const response = await request(appInstance).get(invalidRoute).set(headers);
             // Then
             expect(response.headers["content-type"]).toEqual(expect.stringContaining("json"));
             expect(response.status).toBe(StatusCodes.BAD_REQUEST);
@@ -102,7 +106,7 @@ describe("Integration tests for chat messages management endpoints API", () => {
             // Given
             const invalidRoute = `${config.server.urls.api}/${routes.chats.CHATS}/6639f9c6458c53338c05c38c/${routes.messages.MESSAGES}?limit=${limit}&page=${page}`;
             // When
-            const response = await request(appInstance).get(invalidRoute);
+            const response = await request(appInstance).get(invalidRoute).set(headers);
             // Then
             expect(response.headers["content-type"]).toEqual(expect.stringContaining("json"));
             expect(response.status).toBe(StatusCodes.NOT_FOUND);
@@ -112,7 +116,7 @@ describe("Integration tests for chat messages management endpoints API", () => {
             // Given
             const invalidRoute = `${config.server.urls.api}/${routes.chats.CHATS}/${nonInvitedChats[0].chat._id}/${routes.messages.MESSAGES}?limit=${limit}&page=${page}`;
             // When
-            const response = await request(appInstance).get(invalidRoute);
+            const response = await request(appInstance).get(invalidRoute).set(headers);
             // Then
             expect(response.headers["content-type"]).toEqual(expect.stringContaining("json"));
             expect(response.status).toBe(StatusCodes.NOT_FOUND);
@@ -125,7 +129,7 @@ describe("Integration tests for chat messages management endpoints API", () => {
         const message = { content: "Hello" };
         it("Checks that a message is sent to an existent chat created by the user", async () => {
             // When
-            const response = await request(appInstance).post(msgsRoute).send(message);
+            const response = await request(appInstance).post(msgsRoute).set(headers).send(message);
             // Then
             expect(response.headers["content-type"]).toEqual(expect.stringContaining("json"));
             expect(response.status).toBe(StatusCodes.CREATED);
@@ -138,7 +142,7 @@ describe("Integration tests for chat messages management endpoints API", () => {
             // Given
             const nonExistentRoute = `${config.server.urls.api}/${routes.chats.CHATS}/6639f9c6458c53338c05c38c/${routes.messages.MESSAGES}`;
             // When
-            const response = await request(appInstance).post(nonExistentRoute).send(message);
+            const response = await request(appInstance).post(nonExistentRoute).set(headers).send(message);
             // Then
             expect(response.headers["content-type"]).toEqual(expect.stringContaining("json"));
             expect(response.status).toBe(StatusCodes.NOT_FOUND);
@@ -150,7 +154,7 @@ describe("Integration tests for chat messages management endpoints API", () => {
             // Given
             const invalidChat = `${config.server.urls.api}/${routes.chats.CHATS}/invalid/${routes.messages.MESSAGES}`;
             // When
-            const response = await request(appInstance).post(invalidChat).send(message);
+            const response = await request(appInstance).post(invalidChat).set(headers).send(message);
             // Then
             expect(response.headers["content-type"]).toEqual(expect.stringContaining("json"));
             expect(response.status).toBe(StatusCodes.BAD_REQUEST);
@@ -162,7 +166,7 @@ describe("Integration tests for chat messages management endpoints API", () => {
             // Given
             const nonExistentRoute = `${config.server.urls.api}/${routes.chats.CHATS}/${nonInvitedChats[0].chat._id}/${routes.messages.MESSAGES}`;
             // When
-            const response = await request(appInstance).post(nonExistentRoute).send(message);
+            const response = await request(appInstance).post(nonExistentRoute).set(headers).send(message);
             // Then
             expect(response.headers["content-type"]).toEqual(expect.stringContaining("json"));
             expect(response.status).toBe(StatusCodes.NOT_FOUND);
@@ -174,7 +178,7 @@ describe("Integration tests for chat messages management endpoints API", () => {
             // Given
             const anotherUserChat = `${config.server.urls.api}/${routes.chats.CHATS}/${noReadPermissionChat._id}/${routes.messages.MESSAGES}`;
             // When
-            const response = await request(appInstance).post(anotherUserChat).send(message);
+            const response = await request(appInstance).post(anotherUserChat).set(headers).send(message);
             // Then
             expect(response.headers["content-type"]).toEqual(expect.stringContaining("json"));
             expect(response.status).toBe(StatusCodes.CREATED);
@@ -188,7 +192,7 @@ describe("Integration tests for chat messages management endpoints API", () => {
             const invalidMessages = [{ nothing: "" }, { content: "" }];
             // When
             for (let i = 0; i < invalidMessages.length; i += 1) {
-                const response = await request(appInstance).post(msgsRoute).send(invalidMessages[i]);
+                const response = await request(appInstance).post(msgsRoute).set(headers).send(invalidMessages[i]);
                 // Then
                 expect(response.headers["content-type"]).toEqual(expect.stringContaining("json"));
                 expect(response.status).toBe(StatusCodes.BAD_REQUEST);

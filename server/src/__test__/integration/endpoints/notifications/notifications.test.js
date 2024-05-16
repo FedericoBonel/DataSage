@@ -3,6 +3,7 @@ import { StatusCodes } from "http-status-codes";
 import config from "../../../../config/index.js";
 import { routes } from "../../../../utils/constants/index.js";
 import { connect, disconnect } from "../../../../utils/db/inMemory.js";
+import { createCommonAuthHeaders } from "../../utils/headers/index.js";
 import createTestingData from "../../utils/testData/createTestingData.js";
 import notifications from "../../utils/testData/notifications.js";
 import users from "../../utils/testData/users.js";
@@ -23,6 +24,7 @@ const anothersNotification = notifications.find((notification) => notification.t
 
 describe("Integration tests for notifications management endpoints API", () => {
     const appInstance = app.default;
+    let headers;
 
     beforeAll(async () => {
         // Connect to database
@@ -37,6 +39,8 @@ describe("Integration tests for notifications management endpoints API", () => {
     beforeEach(async () => {
         // Create dummy data and reset between tests
         await createTestingData();
+        // Log in the user
+        headers = createCommonAuthHeaders(loggedInUser);
     });
 
     describe("Integration tests for GET /notifications", () => {
@@ -45,7 +49,7 @@ describe("Integration tests for notifications management endpoints API", () => {
         const notificationsRoute = `${config.server.urls.api}/${routes.notifications.NOTIFICATIONS}?page=${page}&limit=${limit}`;
         it("Checks that a user can read their list of notifications", async () => {
             // When
-            const response = await request(appInstance).get(notificationsRoute);
+            const response = await request(appInstance).get(notificationsRoute).set(headers);
             // Then
             expect(response.headers["content-type"]).toEqual(expect.stringContaining("json"));
             expect(response.status).toBe(StatusCodes.OK);
@@ -61,7 +65,7 @@ describe("Integration tests for notifications management endpoints API", () => {
             const invalidIsRead = "thisisnotboolean";
             const invalidRoute = `${config.server.urls.api}/${routes.notifications.NOTIFICATIONS}?page=${invalidPage}&limit=${invalidLimit}&isRead=${invalidIsRead}`;
             // When
-            const response = await request(appInstance).get(invalidRoute);
+            const response = await request(appInstance).get(invalidRoute).set(headers);
             // Then
             expect(response.headers["content-type"]).toEqual(expect.stringContaining("json"));
             expect(response.status).toBe(StatusCodes.BAD_REQUEST);
@@ -76,8 +80,8 @@ describe("Integration tests for notifications management endpoints API", () => {
             const isNotReadRoute = `${config.server.urls.api}/${routes.notifications.NOTIFICATIONS}?page=${filterPage}&limit=${filterLimit}&isRead=${isNotRead}`;
             const isReadRoute = `${config.server.urls.api}/${routes.notifications.NOTIFICATIONS}?page=${filterPage}&limit=${filterLimit}&isRead=${isRead}`;
             // When
-            const responseIsNotRead = await request(appInstance).get(isNotReadRoute);
-            const responseIsRead = await request(appInstance).get(isReadRoute);
+            const responseIsNotRead = await request(appInstance).get(isNotReadRoute).set(headers);
+            const responseIsRead = await request(appInstance).get(isReadRoute).set(headers);
             // Then
             expect(responseIsNotRead.headers["content-type"]).toEqual(expect.stringContaining("json"));
             expect(responseIsNotRead.status).toBe(StatusCodes.OK);
@@ -104,7 +108,7 @@ describe("Integration tests for notifications management endpoints API", () => {
         const notificationsCountRoute = `${config.server.urls.api}/${routes.notifications.NOTIFICATIONS}/${routes.notifications.NOT_READ}`;
         it("Checks that a user can read their number of not read notifications", async () => {
             // When
-            const response = await request(appInstance).get(notificationsCountRoute);
+            const response = await request(appInstance).get(notificationsCountRoute).set(headers);
             // Then
             expect(response.headers["content-type"]).toEqual(expect.stringContaining("json"));
             expect(response.status).toBe(StatusCodes.OK);
@@ -122,7 +126,7 @@ describe("Integration tests for notifications management endpoints API", () => {
             for (let i = 0; i < updates.length; i += 1) {
                 const update = updates[i];
                 // When
-                const response = await request(appInstance).put(notificationsRoute).send(update);
+                const response = await request(appInstance).put(notificationsRoute).set(headers).send(update);
                 // Then
                 expect(response.headers["content-type"]).toEqual(expect.stringContaining("json"));
                 expect(response.status).toBe(StatusCodes.OK);
@@ -146,7 +150,10 @@ describe("Integration tests for notifications management endpoints API", () => {
             for (let i = 0; i < invalidNotifications.length; i += 1) {
                 const invalidNotification = invalidNotifications[i];
                 // When
-                const response = await request(appInstance).put(notificationsRoute).send(invalidNotification);
+                const response = await request(appInstance)
+                    .put(notificationsRoute)
+                    .set(headers)
+                    .send(invalidNotification);
                 // Then
                 expect(response.headers["content-type"]).toEqual(expect.stringContaining("json"));
                 expect(response.status).toBe(StatusCodes.BAD_REQUEST);
@@ -157,7 +164,7 @@ describe("Integration tests for notifications management endpoints API", () => {
             // Given
             const invalidId = `${config.server.urls.api}/${routes.notifications.NOTIFICATIONS}/invalid`;
             // When
-            const response = await request(appInstance).put(invalidId).send(updatedNotification);
+            const response = await request(appInstance).put(invalidId).set(headers).send(updatedNotification);
             // Then
             expect(response.headers["content-type"]).toEqual(expect.stringContaining("json"));
             expect(response.status).toBe(StatusCodes.BAD_REQUEST);
@@ -167,7 +174,10 @@ describe("Integration tests for notifications management endpoints API", () => {
             // Given
             const otherUserNotification = `${config.server.urls.api}/${routes.notifications.NOTIFICATIONS}/${anothersNotification._id}`;
             // When
-            const response = await request(appInstance).put(otherUserNotification).send(updatedNotification);
+            const response = await request(appInstance)
+                .put(otherUserNotification)
+                .set(headers)
+                .send(updatedNotification);
             // Then
             expect(response.headers["content-type"]).toEqual(expect.stringContaining("json"));
             expect(response.status).toBe(StatusCodes.NOT_FOUND);
@@ -177,7 +187,10 @@ describe("Integration tests for notifications management endpoints API", () => {
             // Given
             const notFoundNotification = `${config.server.urls.api}/${routes.notifications.NOTIFICATIONS}/6639f9c6458c53338c05c38c`;
             // When
-            const response = await request(appInstance).put(notFoundNotification).send(updatedNotification);
+            const response = await request(appInstance)
+                .put(notFoundNotification)
+                .set(headers)
+                .send(updatedNotification);
             // Then
             expect(response.headers["content-type"]).toEqual(expect.stringContaining("json"));
             expect(response.status).toBe(StatusCodes.NOT_FOUND);
@@ -189,7 +202,7 @@ describe("Integration tests for notifications management endpoints API", () => {
         const notificationsRoute = `${config.server.urls.api}/${routes.notifications.NOTIFICATIONS}/${notReadNotification._id}`;
         it("Checks that a user can delete one of their notifications", async () => {
             // When
-            const response = await request(appInstance).delete(notificationsRoute);
+            const response = await request(appInstance).delete(notificationsRoute).set(headers);
             // Then
             expect(response.headers["content-type"]).toEqual(expect.stringContaining("json"));
             expect(response.status).toBe(StatusCodes.OK);
@@ -199,7 +212,7 @@ describe("Integration tests for notifications management endpoints API", () => {
             // Given
             const invalidId = `${config.server.urls.api}/${routes.notifications.NOTIFICATIONS}/invalid`;
             // When
-            const response = await request(appInstance).delete(invalidId);
+            const response = await request(appInstance).delete(invalidId).set(headers);
             // Then
             expect(response.headers["content-type"]).toEqual(expect.stringContaining("json"));
             expect(response.status).toBe(StatusCodes.BAD_REQUEST);
@@ -209,7 +222,7 @@ describe("Integration tests for notifications management endpoints API", () => {
             // Given
             const otherUserNotification = `${config.server.urls.api}/${routes.notifications.NOTIFICATIONS}/${anothersNotification._id}`;
             // When
-            const response = await request(appInstance).delete(otherUserNotification);
+            const response = await request(appInstance).delete(otherUserNotification).set(headers);
             // Then
             expect(response.headers["content-type"]).toEqual(expect.stringContaining("json"));
             expect(response.status).toBe(StatusCodes.NOT_FOUND);
@@ -219,11 +232,11 @@ describe("Integration tests for notifications management endpoints API", () => {
             // Given
             const notFoundNotification = `${config.server.urls.api}/${routes.notifications.NOTIFICATIONS}/6639f9c6458c53338c05c38c`;
             // When
-            const response = await request(appInstance).delete(notFoundNotification);
+            const response = await request(appInstance).delete(notFoundNotification).set(headers);
             // Then
             expect(response.headers["content-type"]).toEqual(expect.stringContaining("json"));
             expect(response.status).toBe(StatusCodes.NOT_FOUND);
             expect(response.body.errorMsg).toEqual(expect.any(String));
-        })
+        });
     });
 });

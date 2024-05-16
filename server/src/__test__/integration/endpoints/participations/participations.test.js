@@ -3,6 +3,7 @@ import { StatusCodes } from "http-status-codes";
 import config from "../../../../config/index.js";
 import { routes } from "../../../../utils/constants/index.js";
 import { connect, disconnect } from "../../../../utils/db/inMemory.js";
+import { createCommonAuthHeaders } from "../../utils/headers/index.js";
 import createTestingData from "../../utils/testData/createTestingData.js";
 import users from "../../utils/testData/users.js";
 import colaborator from "../../utils/testData/colaborator.js";
@@ -32,6 +33,7 @@ const joinedChat = joinedColabs[0].chat;
 
 describe("Integration tests for chat participations management endpoints API", () => {
     const appInstance = app.default;
+    let headers;
 
     beforeAll(async () => {
         // Connect to database
@@ -46,13 +48,15 @@ describe("Integration tests for chat participations management endpoints API", (
     beforeEach(async () => {
         // Create dummy data and reset between tests
         await createTestingData();
+        // Log in the user
+        headers = createCommonAuthHeaders(loggedInUser);
     });
 
     describe("Integration tests for POST /chats/:chatId/participants/participation", () => {
         const invitationRoute = `${config.server.urls.api}/${routes.chats.CHATS}/${nonJoinedChat._id}/${routes.participants.PARTICIPANTS}/${routes.participation.PARTICIPATION}`;
         it("Checks that a user can accept a chat invitation to a chat it has been invited to", async () => {
             // When
-            const response = await request(appInstance).post(invitationRoute);
+            const response = await request(appInstance).post(invitationRoute).set(headers);
             // Then
             expect(response.headers["content-type"]).toEqual(expect.stringContaining("json"));
             expect(response.status).toBe(StatusCodes.CREATED);
@@ -62,7 +66,7 @@ describe("Integration tests for chat participations management endpoints API", (
             // Given
             const nonInvitedRoute = `${config.server.urls.api}/${routes.chats.CHATS}/${nonInvitedChats[0].chat._id}/${routes.participants.PARTICIPANTS}/${routes.participation.PARTICIPATION}`;
             // When
-            const response = await request(appInstance).post(nonInvitedRoute);
+            const response = await request(appInstance).post(nonInvitedRoute).set(headers);
             // Then
             expect(response.headers["content-type"]).toEqual(expect.stringContaining("json"));
             expect(response.status).toBe(StatusCodes.NOT_FOUND);
@@ -72,7 +76,7 @@ describe("Integration tests for chat participations management endpoints API", (
             // Given
             const joinedRoute = `${config.server.urls.api}/${routes.chats.CHATS}/${joinedChat._id}/${routes.participants.PARTICIPANTS}/${routes.participation.PARTICIPATION}`;
             // When
-            const response = await request(appInstance).post(joinedRoute);
+            const response = await request(appInstance).post(joinedRoute).set(headers);
             // Then
             expect(response.headers["content-type"]).toEqual(expect.stringContaining("json"));
             expect(response.status).toBe(StatusCodes.NOT_FOUND);
@@ -82,7 +86,7 @@ describe("Integration tests for chat participations management endpoints API", (
             // Given
             const joinedRoute = `${config.server.urls.api}/${routes.chats.CHATS}/6639f9c6458c53338c05c38c/${routes.participants.PARTICIPANTS}/${routes.participation.PARTICIPATION}`;
             // When
-            const response = await request(appInstance).post(joinedRoute);
+            const response = await request(appInstance).post(joinedRoute).set(headers);
             // Then
             expect(response.headers["content-type"]).toEqual(expect.stringContaining("json"));
             expect(response.status).toBe(StatusCodes.NOT_FOUND);
@@ -92,7 +96,7 @@ describe("Integration tests for chat participations management endpoints API", (
             // Given
             const joinedRoute = `${config.server.urls.api}/${routes.chats.CHATS}/invalid/${routes.participants.PARTICIPANTS}/${routes.participation.PARTICIPATION}`;
             // When
-            const response = await request(appInstance).post(joinedRoute);
+            const response = await request(appInstance).post(joinedRoute).set(headers);
             // Then
             expect(response.headers["content-type"]).toEqual(expect.stringContaining("json"));
             expect(response.status).toBe(StatusCodes.BAD_REQUEST);
@@ -104,7 +108,7 @@ describe("Integration tests for chat participations management endpoints API", (
         const invitationRoute = `${config.server.urls.api}/${routes.chats.CHATS}/${joinedChat._id}/${routes.participants.PARTICIPANTS}/${routes.participation.PARTICIPATION}`;
         it("Checks that a user can leave a chat it has accessed", async () => {
             // When
-            const response = await request(appInstance).delete(invitationRoute);
+            const response = await request(appInstance).delete(invitationRoute).set(headers);
             // Then
             expect(response.headers["content-type"]).toEqual(expect.stringContaining("json"));
             expect(response.status).toBe(StatusCodes.OK);
@@ -114,7 +118,7 @@ describe("Integration tests for chat participations management endpoints API", (
             // Given
             const nonJoinedRoute = `${config.server.urls.api}/${routes.chats.CHATS}/${nonJoinedChat._id}/${routes.participants.PARTICIPANTS}/${routes.participation.PARTICIPATION}`;
             // When
-            const response = await request(appInstance).delete(nonJoinedRoute);
+            const response = await request(appInstance).delete(nonJoinedRoute).set(headers);
             // Then
             expect(response.headers["content-type"]).toEqual(expect.stringContaining("json"));
             expect(response.status).toBe(StatusCodes.NOT_FOUND);
@@ -124,7 +128,7 @@ describe("Integration tests for chat participations management endpoints API", (
             // Given
             const nonInvitedRoute = `${config.server.urls.api}/${routes.chats.CHATS}/${nonInvitedChats[0].chat._id}/${routes.participants.PARTICIPANTS}/${routes.participation.PARTICIPATION}`;
             // When
-            const response = await request(appInstance).delete(nonInvitedRoute);
+            const response = await request(appInstance).delete(nonInvitedRoute).set(headers);
             // Then
             expect(response.headers["content-type"]).toEqual(expect.stringContaining("json"));
             expect(response.status).toBe(StatusCodes.NOT_FOUND);
@@ -134,7 +138,7 @@ describe("Integration tests for chat participations management endpoints API", (
             // Given
             const nonExistent = `${config.server.urls.api}/${routes.chats.CHATS}/6639f9c6458c53338c05c38c/${routes.participants.PARTICIPANTS}/${routes.participation.PARTICIPATION}`;
             // When
-            const response = await request(appInstance).delete(nonExistent);
+            const response = await request(appInstance).delete(nonExistent).set(headers);
             // Then
             expect(response.headers["content-type"]).toEqual(expect.stringContaining("json"));
             expect(response.status).toBe(StatusCodes.NOT_FOUND);
@@ -144,7 +148,7 @@ describe("Integration tests for chat participations management endpoints API", (
             // Given
             const invalidChat = `${config.server.urls.api}/${routes.chats.CHATS}/invalid/${routes.participants.PARTICIPANTS}/${routes.participation.PARTICIPATION}`;
             // When
-            const response = await request(appInstance).delete(invalidChat);
+            const response = await request(appInstance).delete(invalidChat).set(headers);
             // Then
             expect(response.headers["content-type"]).toEqual(expect.stringContaining("json"));
             expect(response.status).toBe(StatusCodes.BAD_REQUEST);
