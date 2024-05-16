@@ -45,7 +45,7 @@ const authenticate = async (credentials) => {
 
 /**
  * UnAuthenticates (logs out) a user by their refresh token
- * 
+ *
  * NOTE: Currently it only checks for the token existence and could be done in controller level.
  * However, since this could change and add more business logic
  * this service layer function is defined
@@ -57,7 +57,47 @@ const unauthenticate = async (refreshToken) => {
     if (!refreshToken) {
         throw new UnauthorizedError(messages.errors.auth.NO_REFRESH_TOKEN);
     }
-}
+};
+
+/**
+ * Validates a user refresh token and generates a new user access token if valid
+ * @param {String} receivedRefreshToken The refresh token from the user that is refreshing their access token
+ * @returns The new access token
+ */
+const refreshToken = async (receivedRefreshToken) => {
+    let tokenPayload;
+    try {
+        // Verify the token has been signed with our secret
+        tokenPayload = jwtUtils.verify(receivedRefreshToken, config.jwt.refreshTokenSecret);
+    } catch (error) {
+        throw new UnauthorizedError(messages.errors.auth.INVALID_TOKEN);
+    }
+
+    // Verify the user the token belongs to has not changed their password and that it exists
+    let user;
+    try {
+        user = await usersRepository.getById(String(tokenPayload._id));
+    } catch (error) {
+        throw new UnauthorizedError(messages.errors.auth.INVALID_TOKEN);
+    }
+    if (
+        !(
+            user &&
+            tokenPayload.iat &&
+            Math.floor(user.password.updatedAt.getTime() / 1000) <= tokenPayload.iat &&
+            user.verified
+        )
+    ) {
+        throw new UnauthorizedError(messages.errors.auth.INVALID_TOKEN);
+    }
+
+    // Sign access token and return it
+    const accessToken = jwtUtils.sign({ _id: user._id.toString() }, config.jwt.accessTokenSecret, {
+        expiresIn: minutesToSeconds(config.jwt.accessTokenMinDuration),
+    });
+
+    return authDTO.toAccessTokenDTO(accessToken);
+};
 
 /**
  * Authorizes a user to do some action in a chat
@@ -90,4 +130,4 @@ const authorizeCollaboratorToChat = async (chatId, userId, requiredActions) => {
     return colaboratorInstance;
 };
 
-export default { authorizeCollaboratorToChat, authenticate, unauthenticate };
+export default { authorizeCollaboratorToChat, authenticate, unauthenticate, refreshToken };

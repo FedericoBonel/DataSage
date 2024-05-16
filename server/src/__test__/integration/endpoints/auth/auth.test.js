@@ -1,6 +1,5 @@
 import request from "supertest";
 import jwtUtils from "jsonwebtoken";
-import { v4 as uuid } from "uuid";
 import { StatusCodes } from "http-status-codes";
 import { accessTokenDTOCheck } from "../../utils/dtos/tokens.js";
 import config from "../../../../config/index.js";
@@ -12,14 +11,13 @@ import { nonEncryptedUsers } from "../../utils/testData/users.js";
 // Tested modules
 const app = await import("../../../../../app.js");
 
-const testingJwtSecret = uuid();
 const userToLogin = nonEncryptedUsers[0];
 const anotherUser = nonEncryptedUsers[1];
 const nonVerifiedUser = nonEncryptedUsers.find((user) => !user.verified);
-const refreshToken = jwtUtils.sign({ _id: userToLogin._id }, testingJwtSecret);
 
 describe("Integration tests for user authentication and authorizations endpoints API", () => {
     const appInstance = app.default;
+    let refreshToken;
 
     beforeAll(async () => {
         // Connect to database
@@ -34,6 +32,8 @@ describe("Integration tests for user authentication and authorizations endpoints
     beforeEach(async () => {
         // Create dummy data and reset between tests
         await createTestingData();
+        // Sign an access token
+        refreshToken = jwtUtils.sign({ _id: userToLogin._id }, config.jwt.refreshTokenSecret);
     });
 
     describe("Integration tests for POST /auth/login", () => {
@@ -88,6 +88,8 @@ describe("Integration tests for user authentication and authorizations endpoints
                 { email: "undefined", password: userToLogin.password.content },
                 { email: "valid@email.com", password: "verylongpasswordthatcouldbeproblematicifnotcontrolled" },
                 { email: anotherUser.email, password: { $set: { password: "newPassWord$1" } } },
+                { email: { $ne: 1 }, password: userToLogin.password },
+                { email: "{ $ne: 1 }", password: userToLogin.password },
             ];
             for (let i = 0; i < invalidPayloads.length; i += 1) {
                 const incorrectPayload = invalidPayloads[i];
@@ -103,12 +105,11 @@ describe("Integration tests for user authentication and authorizations endpoints
 
     describe("Integration tests for POST /auth/logout", () => {
         const logoutRoute = `${config.server.urls.api}/${routes.auth.AUTH}/${routes.auth.LOGOUT}`;
-        const refreshTokenCookie = refreshToken;
         it("Checks that a user can logout", async () => {
             // When
             const response = await request(appInstance)
                 .post(logoutRoute)
-                .set("Cookie", [`${config.jwt.refreshTokenKey}=${refreshTokenCookie}`]);
+                .set("Cookie", [`${config.jwt.refreshTokenKey}=${refreshToken}`]);
             // Then
             expect(response.status).toBe(StatusCodes.OK);
             expect(response.headers["content-type"]).toEqual(expect.stringContaining("json"));
@@ -131,7 +132,7 @@ describe("Integration tests for user authentication and authorizations endpoints
             // When
             const response = await request(appInstance)
                 .post(logoutRoute)
-                .set("Cookie", [`refesh_cookie=${refreshTokenCookie}`]);
+                .set("Cookie", [`refesh_cookie=${refreshToken}`]);
             // Then
             // Then
             expect(response.status).toBe(StatusCodes.UNAUTHORIZED);
@@ -140,6 +141,90 @@ describe("Integration tests for user authentication and authorizations endpoints
                 expect.arrayContaining([expect.stringContaining(config.jwt.refreshTokenKey)])
             );
             expect(response.body.errorMsg).toEqual(expect.any(String));
+        });
+    });
+
+    describe("Integration tests for GET /auth/refresh", () => {
+        const refreshRoute = `${config.server.urls.api}/${routes.auth.AUTH}/${routes.auth.REFRESH}`;
+        it("Checks that a user can refresh their access token when providing a valid refresh token", async () => {
+            // When
+            const response = await request(appInstance)
+                .get(refreshRoute)
+                .set("Cookie", [`${config.jwt.refreshTokenKey}=${refreshToken}`]);
+            // Then
+            expect(response.status).toBe(StatusCodes.OK);
+            expect(response.headers["content-type"]).toEqual(expect.stringContaining("json"));
+            expect(response.body.data).toEqual(accessTokenDTOCheck);
+        });
+        it("Checks that a user can not refresh their access token when providing a refresh token with an invalid signature", async () => {
+            // Given
+            const invalidToken = jwtUtils.sign({ _id: userToLogin._id }, "nonvalidsecret");
+            // When
+            const response = await request(appInstance)
+                .get(refreshRoute)
+                .set("Cookie", [`${config.jwt.refreshTokenKey}=${invalidToken}`]);
+            // Then
+            expect(response.status).toBe(StatusCodes.UNAUTHORIZED);
+            expect(response.headers["content-type"]).toEqual(expect.stringContaining("json"));
+            expect(response.body.errorMsg).toEqual(expect.any(String));
+        });
+        it("Checks that a user can not refresh an access token when not providing a refresh token", async () => {
+            // When
+            const response = await request(appInstance).get(refreshRoute);
+            // Then
+            expect(response.status).toBe(StatusCodes.UNAUTHORIZED);
+            expect(response.headers["content-type"]).toEqual(expect.stringContaining("json"));
+            expect(response.body.errorMsg).toEqual(expect.any(String));
+        });
+        it("Checks that a user can not refresh an access token when providing an incorrect cookie name", async () => {
+            // When
+            const response = await request(appInstance)
+                .get(refreshRoute)
+                .set("Cookie", [`refesh_cookie=${refreshToken}`]);
+            // Then
+            expect(response.status).toBe(StatusCodes.UNAUTHORIZED);
+            expect(response.headers["content-type"]).toEqual(expect.stringContaining("json"));
+            expect(response.body.errorMsg).toEqual(expect.any(String));
+        });
+        it("Checks that a user can not refresh an access token when providing an incorrect token payload", async () => {
+            // Given
+            const invalidTokens = [
+                jwtUtils.sign({ _id: "invalid" }, config.jwt.refreshTokenSecret),
+                jwtUtils.sign({ _id: "6639f9c6458c53338c05c38c" }, config.jwt.refreshTokenSecret),
+                jwtUtils.sign({ _id: { $set: { password: { content: "myown" } } } }, config.jwt.refreshTokenSecret),
+            ];
+            for (let i = 0; i < invalidTokens.length; i += 1) {
+                const invalidToken = invalidTokens[i];
+                // When
+                const response = await request(appInstance)
+                    .get(refreshRoute)
+                    .set("Cookie", [`refresh_token=${invalidToken}`]);
+                // Then
+                expect(response.status).toBe(StatusCodes.UNAUTHORIZED);
+                expect(response.headers["content-type"]).toEqual(expect.stringContaining("json"));
+                expect(response.body.errorMsg).toEqual(expect.any(String));
+            }
+        });
+        it("Checks that a user can not refresh an access token when providing an expired refresh token", async () => {
+            // Given
+            const invalidTokens = [
+                jwtUtils.sign({ _id: userToLogin._id }, config.jwt.refreshTokenSecret, { noTimestamp: true }),
+                jwtUtils.sign(
+                    { _id: userToLogin._id, iat: new Date().getTime() / 1000 - 10 },
+                    config.jwt.refreshTokenSecret
+                ),
+            ];
+            for (let i = 0; i < invalidTokens.length; i += 1) {
+                const invalidToken = invalidTokens[i];
+                // When
+                const response = await request(appInstance)
+                    .get(refreshRoute)
+                    .set("Cookie", [`refresh_token=${invalidToken}`]);
+                // Then
+                expect(response.status).toBe(StatusCodes.UNAUTHORIZED);
+                expect(response.headers["content-type"]).toEqual(expect.stringContaining("json"));
+                expect(response.body.errorMsg).toEqual(expect.any(String));
+            }
         });
     });
 });

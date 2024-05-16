@@ -90,4 +90,37 @@ authRouter
      */
     .post(authController.logout);
 
+authRouter
+    .route(`/${routes.auth.REFRESH}`)
+    /**
+     * @openapi
+     * /auth/refresh:
+     *   get:
+     *     tags: [User Authentication and Authorization]
+     *     security: [{cookieAuth: []}]
+     *     summary: Refreshes a user access token and returns it.
+     *     description: Refreshes a user access token based on the user refresh token and returns it.
+     *                  <br />This endpoint should be used with the HTTP Only cookie that contains the refresh token (the cookie will be automatically appended to every request once you authenticate so you shouldn't need to do anything to send it), if the refresh token is still valid, then a new access token will be returned.
+     *                  <br />This normally should be used when the previous access token expired and, in a client, it should be implemented in a way that it is transparent for the final user (i.g. if using axios use response interceptors).
+     *                  <br />If the refresh token is invalid, it means the user session has reached its time limit and a new authentication with user credentials should be done by the final user, so in that case a 401 response will be returned and the client should redirect the user to the login page.
+     *     responses:
+     *       200:
+     *         description: The user has successfully refreshed the access token and the new access token is returned in the response body.
+     *         content:
+     *           application/json:
+     *             schema:
+     *               allOf:
+     *                 - $ref: '#/components/schemas/SuccessApiPayload'
+     *                 - type: object
+     *                   required:
+     *                     - data
+     *                   properties:
+     *                     data:
+     *                       $ref: "#/components/schemas/AccessTokenDTO"
+     *       401:
+     *         description: The refresh token appended to the request is not present or invalid. A new authentication with user credentials should be done to get a new access token by using the login endpoint.
+     *         $ref: '#/components/responses/401Response'
+     */
+    .get(authController.refresh);
+
 export default authRouter;

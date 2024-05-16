@@ -6,4 +6,6 @@ export default Object.freeze({
     LOGIN: "login",
     /** Route to logout resource */
     LOGOUT: "logout",
+    /** Route to refresh token resource */
+    REFRESH: "refresh",
 });

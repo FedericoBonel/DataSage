@@ -1,9 +1,7 @@
 import { StatusCodes } from "http-status-codes";
 import authServices from "../services/auth/auth.js";
 import config from "../config/index.js";
-import { messages } from "../utils/constants/index.js";
 import { SuccessPayload } from "../utils/responsebodies/index.js";
-import { UnauthorizedError } from "../utils/errors/index.js";
 import { daysToMiliseconds } from "../utils/time/converters.js";
 
 const refreshTokenCookieConfig = {
@@ -39,4 +37,14 @@ const logout = async (req, res) => {
     return res.status(StatusCodes.OK).json(new SuccessPayload());
 };
 
-export default { login, logout };
+
+/** Controller that handles all requests that ask to refresh an access token */
+const refresh = async (req, res) => {
+    const refreshToken = req.cookies?.[config.jwt.refreshTokenKey];
+
+    const accessToken = await authServices.refreshToken(refreshToken);
+
+    return res.status(StatusCodes.OK).json(new SuccessPayload(accessToken));
+};
+
+export default { login, logout, refresh };
