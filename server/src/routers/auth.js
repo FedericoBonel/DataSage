@@ -170,4 +170,46 @@ authRouter
      */
     .post(profilesValidators.signUpValidator, authController.signup);
 
+authRouter
+    .route(`/${routes.auth.VERIFY}`)
+    /**
+     * @openapi
+     * /auth/verify:
+     *   post:
+     *     tags: [User Authentication and Authorization]
+     *     security: []
+     *     summary: Verifies a user account and returns its public information.
+     *     description: Verifies a user account and returns its public information.
+     *                  When a user signs up using the sign up resource exposed in this API they will receive an email with a link to the verification link you have provided to the sign up resource.
+     *                  The link you provide will get injected a query parameter called "verificationCode", you should extract this parameter in the page you link in the sign up resource and provide it to this endpoint to verify the users account. 
+     *                  <br />Therefore this endpoint should be used in the verification page you link the user to from the signup resource.
+     *     parameters:
+     *       - in: query
+     *         name: verificationCode
+     *         required: true
+     *         description: The verification code the user received in their email. You should extract this code from the query parameter "verificationCode" appended to whatever link you provided in the signup resource and send it here.
+     *         schema:
+     *           type: string
+     *           example: code123412314-12!3789SKJDL$)8-18927.
+     *     responses:
+     *       200:
+     *         description: The user has been successfuly verified and its public information is returned. After doing this the user can log in the system.
+     *         content:
+     *           application/json:
+     *             schema:
+     *               allOf:
+     *                 - $ref: '#/components/schemas/SuccessApiPayload'
+     *                 - type: object
+     *                   required:
+     *                     - data
+     *                   properties:
+     *                     data:
+     *                       $ref: "#/components/schemas/ProfileDTO"
+     *       400:
+     *         $ref: '#/components/responses/400Response'
+     *       404:
+     *         $ref: '#/components/responses/400Response'
+     */
+    .post(authValidators.userVerificationValidator, authController.verify);
+
 export default authRouter;

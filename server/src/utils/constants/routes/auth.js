@@ -10,4 +10,6 @@ export default Object.freeze({
     REFRESH: "refresh",
     /** Route to the signup resource */
     SIGNUP: "signup",
+    /** Route to the account verification resource */
+    VERIFY: "verify",
 });

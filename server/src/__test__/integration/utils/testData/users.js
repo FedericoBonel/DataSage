@@ -35,6 +35,7 @@ export const nonEncryptedUsers = [
         createdAt: new Date("2024-04-25T03:10:39.273Z"),
         updatedAt: new Date("2024-04-25T03:10:39.273Z"),
         verified: false,
+        verificationCode: "6814d3f3-f617-4bbf-ac2f-3ae45cabd3c7",
     },
 ];
 

@@ -1,3 +1,4 @@
 import loginBodyValidator from "./loginBodyValidator.js";
+import userVerificationValidator from "./userVerificationValidator.js";
 
-export default { loginBodyValidator };
+export default { loginBodyValidator, userVerificationValidator };

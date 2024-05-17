@@ -1,4 +1,5 @@
 import userValues from "../../validation/user.js";
+import authValues from "../../validation/auth.js";
 
 /** Contains all user validation error messages to be used in the application. */
 export default Object.freeze({
@@ -18,5 +19,9 @@ export default Object.freeze({
         INVALID: `The user password content must be a strong password with a string with a length between ${userValues.password.MIN_LENGTH} and ${userValues.password.MAX_LENGTH} characters that includes a minimum of: 1 lowercase character, 1 uppercase character, 1 number, and 1 symbol.`,
         /** Message to be shown when the user password object is not provided */
         INVALID_OBJECT: "You must provide a password for the user",
+    },
+    verificationCode: {
+        /** Message to be shown when a user verification code is invalid */
+        INVALID: `The user verification code must be a string with a length between ${authValues.verificationCode.MIN_LENGTH} and ${authValues.verificationCode.MAX_LENGTH} characters`,
     },
 });

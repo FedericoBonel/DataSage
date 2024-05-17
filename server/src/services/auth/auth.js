@@ -124,6 +124,26 @@ const validateAccessToken = async (accessToken) => {
 };
 
 /**
+ * Verifies a user by verification code.
+ * @param {String} verificationCode The verification code of the user
+ * @returns The verified user information
+ */
+const verifyUser = async (verificationCode) => {
+    // Find the user by verification code
+    const foundUser = await usersRepository.getByVerificationCode(verificationCode);
+    if (!foundUser) {
+        throw new NotFoundError(messages.errors.ROUTE_NOT_FOUND);
+    }
+
+    foundUser.verified = true;
+
+    // Update their verification status
+    const updatedUser = await usersRepository.updateById(foundUser, foundUser._id);
+
+    return profilesDTO.toProfileDTO(updatedUser);
+};
+
+/**
  * Authorizes a user to do some action in a chat
  *
  * NOTE: If the user is the owner of the chat then no actions are checked. They are allowed full access.
@@ -160,5 +180,6 @@ export default {
     unauthenticate,
     refreshToken,
     validateAccessToken,
+    verifyUser,
     authorizeCollaboratorToChat,
 };

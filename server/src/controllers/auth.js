@@ -56,4 +56,13 @@ const signup = async (req, res) => {
     return res.status(StatusCodes.CREATED).json(new SuccessPayload(registeredUser));
 };
 
-export default { login, logout, refresh, signup };
+/** Controller that handles all requests that ask to verify a user in the system */
+const verify = async (req, res) => {
+    const { verificationCode } = req.query;
+
+    const verifiedUser = await authServices.verifyUser(verificationCode);
+
+    return res.status(StatusCodes.OK).json(new SuccessPayload(verifiedUser));
+};
+
+export default { login, logout, refresh, signup, verify };

@@ -310,4 +310,54 @@ describe("Integration tests for user authentication and authorizations endpoints
             }
         });
     });
+
+    describe("Integration tests for POST /auth/verify", () => {
+        const verificationCode = nonVerifiedUser.verificationCode;
+        const verifyRoute = `${config.server.urls.api}/${routes.auth.AUTH}/${routes.auth.VERIFY}?verificationCode=${verificationCode}`;
+        it("Checks that a user can verify their account", async () => {
+            // When
+            const response = await request(appInstance).post(verifyRoute);
+            // Then
+            expect(response.status).toBe(StatusCodes.OK);
+            expect(response.headers["content-type"]).toEqual(expect.stringContaining("json"));
+            expect(response.body.data).toEqual(profileDTOCheck);
+            expect(response.body.data.names).toBe(nonVerifiedUser.names);
+            expect(response.body.data.lastnames).toBe(nonVerifiedUser.lastnames);
+            expect(response.body.data.email).toBe(nonVerifiedUser.email);
+        });
+        it("Checks that a user can not verify their account when providing a non existent code", async () => {
+            // Given
+            const nonExisentCode = "neverexists";
+            const nonExistant = `${config.server.urls.api}/${routes.auth.AUTH}/${routes.auth.VERIFY}?verificationCode=${nonExisentCode}`;
+            // When
+            const response = await request(appInstance).post(nonExistant);
+            // Then
+            expect(response.status).toBe(StatusCodes.NOT_FOUND);
+            expect(response.headers["content-type"]).toEqual(expect.stringContaining("json"));
+            expect(response.body.errorMsg).toEqual(expect.any(String));
+        });
+        it("Checks that a user can not verify their account when providing an invalid code", async () => {
+            // Given
+            const invalidCodes = ["short", ""];
+            for (let i = 0; i < invalidCodes.length; i += 1) {
+                const invalidCode = invalidCodes[i];
+                const invalidRoute = `${config.server.urls.api}/${routes.auth.AUTH}/${routes.auth.VERIFY}?verificationCode=${invalidCode}`;
+                // When
+                const response = await request(appInstance).post(invalidRoute);
+                // Then
+                expect(response.status).toBe(StatusCodes.BAD_REQUEST);
+                expect(response.headers["content-type"]).toEqual(expect.stringContaining("json"));
+                expect(response.body.errorMsg).toEqual(expect.any(String));
+            }
+        });
+        it("Checks that a user can not verify their account when not providing a code", async () => {
+            const invalidRoute = `${config.server.urls.api}/${routes.auth.AUTH}/${routes.auth.VERIFY}?verCode=codethatcouldbevalid`;
+            // When
+            const response = await request(appInstance).post(invalidRoute);
+            // Then
+            expect(response.status).toBe(StatusCodes.BAD_REQUEST);
+            expect(response.headers["content-type"]).toEqual(expect.stringContaining("json"));
+            expect(response.body.errorMsg).toEqual(expect.any(String));
+        });
+    });
 });

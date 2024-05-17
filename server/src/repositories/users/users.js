@@ -28,7 +28,7 @@ const save = async (newUser) => {
     const savedUser = await user.create(newUser);
 
     return savedUser;
-}
+};
 
 /**
  * Updates a user by its id
@@ -38,16 +38,24 @@ const save = async (newUser) => {
 const updateById = async (updates, userId) => {
     if (!updates || !userId) throw new Error("Missing params");
 
+    const formattedUpdates = { ...updates };
+
+    if (updates.verified) {
+        // If the user is getting verified, unset the current verification code
+        formattedUpdates.$unset = { verificationCode: "" };
+        delete formattedUpdates.verificationCode;
+    }
+
     // Update the user
-    const oldUser = await user.findByIdAndUpdate(userId, updates).lean();
+    const oldUser = await user.findByIdAndUpdate(userId, formattedUpdates).lean();
 
     if (!oldUser) {
         return oldUser;
     }
-    
+
     // Simulate the updated user
     const updatedUser = { ...oldUser, ...updates, updatedAt: new Date() };
-    
+
     // Check if the names or lastnames changed and update where it denormalizes
     if (
         (updates.names && oldUser.names !== updates.names) ||
@@ -105,8 +113,18 @@ const updateById = async (updates, userId) => {
         await colaborator.updateMany({ "user._id": userId }, { user: updatedUser }, { runValidators: true });
     }
 
-
     return updatedUser;
 };
 
-export default { getById, getByEmail, updateById, save };
+/**
+ * Gets a user by their verification code
+ * @param {String} verificationCode The verification code assigned to the user
+ * @returns The user with that verification code or null if not found
+ */
+const getByVerificationCode = async (verificationCode) => {
+    if (!verificationCode) throw new Error("Missing params");
+
+    return user.findOne({ verificationCode }).lean();
+};
+
+export default { getById, getByEmail, updateById, save, getByVerificationCode };
