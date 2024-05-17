@@ -22,4 +22,13 @@ const update = async (req, res) => {
     return res.status(StatusCodes.OK).json(new SuccessPayload(profileInformation));
 };
 
-export default { get, update };
+/** Controller that handles all requests that ask to delete the logged in user and all its information from the system. */
+const deleteUser = async (req, res) => {
+    const loggedInUser = req.user;
+
+    const deletedUser = await userServices.deleteById(loggedInUser._id);
+
+    return res.status(StatusCodes.OK).json(new SuccessPayload(deletedUser));
+}
+
+export default { get, update, deleteUser };

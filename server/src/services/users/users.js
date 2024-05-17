@@ -30,4 +30,19 @@ const updateById = async (updates, userId) => {
     return profilesDTO.toProfileDTO(updatedUser);
 };
 
-export default { updateById };
+/**
+ * Deletes a user by id
+ * @param {String} userId The id of the user being deleted
+ * @returns The deleted user public information.
+ */
+const deleteById = async (userId) => {
+    const deletedUser = await usersRepository.deleteById(userId);
+
+    if (!deletedUser) {
+        throw new NotFoundError(messages.errors.ROUTE_NOT_FOUND);
+    }
+
+    return profilesDTO.toProfileDTO(deletedUser);
+};
+
+export default { updateById, deleteById };

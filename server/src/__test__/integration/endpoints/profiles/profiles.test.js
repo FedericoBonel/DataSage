@@ -1,4 +1,5 @@
 import request from "supertest";
+import jwtUtils from "jsonwebtoken";
 import { StatusCodes } from "http-status-codes";
 import config from "../../../../config/index.js";
 import { routes } from "../../../../utils/constants/index.js";
@@ -86,6 +87,36 @@ describe("Integration tests for chat participations management endpoints API", (
                 expect(response.status).toBe(StatusCodes.BAD_REQUEST);
                 expect(response.body.errorMsg).toEqual(expect.any(String));
             }
+        });
+    });
+
+    describe("Integration tests for DELETE /profile", () => {
+        const profileRoute = `${config.server.urls.api}/${routes.profiles.PROFILE}`;
+        it("Checks that a user can delete their account", async () => {
+            // When
+            const response = await request(appInstance).delete(profileRoute).set(headers);
+            // Then
+            expect(response.headers["content-type"]).toEqual(expect.stringContaining("json"));
+            expect(response.status).toBe(StatusCodes.OK);
+            expect(response.body.data).toEqual(profileDTOCheck);
+            expect(response.body.data._id).toEqual(loggedInUser._id);
+            expect(response.body.data.email).toEqual(loggedInUser.email);
+            expect(response.body.data.names).toEqual(loggedInUser.names);
+            expect(response.body.data.lastnames).toEqual(loggedInUser.lastnames);
+        });
+        it("Checks that a user can not delete their account with an expired token", async () => {
+            // Given
+            const expiredToken = jwtUtils.sign({ _id: loggedInUser._id }, config.jwt.accessTokenSecret, {
+                expiresIn: "1ms",
+            });
+            // When
+            const response = await request(appInstance)
+                .delete(profileRoute)
+                .set({ authorization: `Bearer ${expiredToken}` });
+            // Then
+            expect(response.headers["content-type"]).toEqual(expect.stringContaining("json"));
+            expect(response.status).toBe(StatusCodes.UNAUTHORIZED);
+            expect(response.body.errorMsg).toEqual(expect.any(String));
         });
     });
 });

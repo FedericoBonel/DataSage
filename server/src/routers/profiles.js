@@ -69,6 +69,32 @@ profileRouter
      *       401:
      *         $ref: '#/components/responses/401Response'
      */
-    .patch(profileValidators.updateProfileValidator, profilesController.update);
+    .patch(profileValidators.updateProfileValidator, profilesController.update)
+    /**
+     * @openapi
+     * /profile:
+     *   delete:
+     *     tags: [User Profile]
+     *     summary: Deletes the logged in user and all of its account information (including chats, messages, and chats participants and participations).
+     *     description: Deletes the logged in user and all of its account information (including chats, messages, and chats participants and participations). This could be used in a client to allow the logged in user to delete their account and all their stored information.
+     *                  <br />Since this operation is non reversable the client should ask the user asked if they are sure about commiting this action.
+     *     responses:
+     *       200:
+     *         description: The request was successful and the deleted user profile information is returned. All issued tokens for this user (refresh and access) are invalid after this operation.
+     *         content:
+     *           application/json:
+     *             schema:
+     *               allOf:
+     *                 - $ref: '#/components/schemas/SuccessApiPayload'
+     *                 - type: object
+     *                   required:
+     *                     - data
+     *                   properties:
+     *                     data:
+     *                       $ref: "#/components/schemas/ProfileDTO"
+     *       401:
+     *         $ref: '#/components/responses/401Response'
+     */
+    .delete(profilesController.deleteUser);
 
 export default profileRouter;

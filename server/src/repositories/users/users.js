@@ -1,7 +1,11 @@
+import { Types } from "mongoose";
 import { user } from "../../models/user/user.js";
 import { chat } from "../../models/chat/chat.js";
 import { colaborator } from "../../models/colaborator/colaborator.js";
 import { notification } from "../../models/notification/notification.js";
+import { page } from "../../models/page/page.js";
+import { message } from "../../models/message/message.js";
+import { deleteMultipleFilesInS3 } from "../../lib/amazonS3.js";
 
 /**
  * Gets a user by its id
@@ -127,4 +131,55 @@ const getByVerificationCode = async (verificationCode) => {
     return user.findOne({ verificationCode }).lean();
 };
 
-export default { getById, getByEmail, updateById, save, getByVerificationCode };
+/**
+ * Deletes a user by id and all its information from the system (chats, collaborators, etc.).
+ * This includes denormalized data.
+ * @param {String} userId Id of the user being deleted
+ * @returns The deleted user or null if no user was found
+ */
+const deleteById = async (userId) => {
+    const castedId = new Types.ObjectId(userId);
+
+    // Delete the user and verify it exists
+    const deletedUser = await user.findByIdAndDelete(castedId);
+
+    if (!deletedUser) {
+        return deletedUser;
+    }
+
+    // Get the documents from the chats the user owns
+    const documentsArray = await chat.aggregate().match({ "owner._id": castedId }).project({ _id: 0, documents: 1 });
+    const documentsObjects = documentsArray.flatMap((item) => item.documents);
+    const documentsIds = documentsObjects.map((doc) => doc._id);
+    const documentsStoreIds = documentsObjects.map((doc) => doc.storeId);
+
+    // Get the user collaborators (from the chats they own or they participate in)
+    const collabsArray = await colaborator
+        .aggregate()
+        .match({ $or: [{ "user._id": castedId }, { "chat.owner._id": castedId }] })
+        .project({ _id: 1 });
+    const collabsIds = collabsArray.map((collab) => collab._id);
+
+    // Delete all the pages from the chats the user owns
+    if (documentsIds.length > 0) await page.deleteMany({ document: { $in: documentsIds } });
+
+    // Delete all the messages sent by this user or any user that participates in chats owned by this user
+    if (collabsIds.length > 0) await message.deleteMany({ colaborator: { $in: collabsIds } });
+
+    // Delete all the collaborators related to this user
+    if (collabsIds.length > 0)
+        await colaborator.deleteMany({ $or: [{ "user._id": castedId }, { "chat.owner._id": castedId }] });
+
+    // Delete all the chats owned by this user
+    await chat.deleteMany({ "owner._id": castedId });
+
+    // Delete all notifications sent or received by this user
+    await notification.deleteMany({ $or: [{ "to._id": castedId }, { "from._id": castedId }] });
+
+    // Delete all the documents uploaded to the chats owned by this user from the cloud store
+    if (documentsStoreIds.length > 0) await deleteMultipleFilesInS3(documentsStoreIds);
+
+    return deletedUser;
+};
+
+export default { getById, getByEmail, updateById, save, getByVerificationCode, deleteById };
