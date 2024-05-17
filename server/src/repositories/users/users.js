@@ -18,11 +18,26 @@ const getById = async (userId) => user.findById(userId).lean();
 const getByEmail = async (email) => user.findOne({ email }).lean();
 
 /**
+ * Saves a user in the database
+ * @param {*} newUser The user to be saved in database
+ * @returns The saved user
+ */
+const save = async (newUser) => {
+    if (!newUser) throw new Error("Missing params");
+
+    const savedUser = await user.create(newUser);
+
+    return savedUser;
+}
+
+/**
  * Updates a user by its id
  * @param {*} updates Updates to be applied to the user
  * @param {String} userId The id of the user to be updated
  */
 const updateById = async (updates, userId) => {
+    if (!updates || !userId) throw new Error("Missing params");
+
     // Update the user
     const oldUser = await user.findByIdAndUpdate(userId, updates).lean();
 
@@ -94,4 +109,4 @@ const updateById = async (updates, userId) => {
     return updatedUser;
 };
 
-export default { getById, getByEmail, updateById };
+export default { getById, getByEmail, updateById, save };

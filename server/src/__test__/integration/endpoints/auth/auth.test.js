@@ -1,12 +1,19 @@
+import { jest } from "@jest/globals";
 import request from "supertest";
 import jwtUtils from "jsonwebtoken";
 import { StatusCodes } from "http-status-codes";
-import { accessTokenDTOCheck } from "../../utils/dtos/tokens.js";
 import config from "../../../../config/index.js";
 import { routes } from "../../../../utils/constants/index.js";
 import { connect, disconnect } from "../../../../utils/db/inMemory.js";
+import { accessTokenDTOCheck } from "../../utils/dtos/tokens.js";
+import { profileDTOCheck } from "../../utils/dtos/profiles.js";
+import emailsRepositoryMock from "../../utils/mocks/repositories/emails/email.js";
 import createTestingData from "../../utils/testData/createTestingData.js";
 import { nonEncryptedUsers } from "../../utils/testData/users.js";
+
+// Mocked modules
+jest.unstable_mockModule("../../../../repositories/emails/emails.js", () => emailsRepositoryMock);
+const emailsRepository = await import("../../../../repositories/emails/emails.js");
 
 // Tested modules
 const app = await import("../../../../../app.js");
@@ -224,6 +231,82 @@ describe("Integration tests for user authentication and authorizations endpoints
                 expect(response.status).toBe(StatusCodes.UNAUTHORIZED);
                 expect(response.headers["content-type"]).toEqual(expect.stringContaining("json"));
                 expect(response.body.errorMsg).toEqual(expect.any(String));
+            }
+        });
+    });
+
+    describe("Integration tests for POST /auth/singup", () => {
+        const verificationLink = "https://example.com/account/verify";
+        const signupRoute = `${config.server.urls.api}/${routes.auth.AUTH}/${routes.auth.SIGNUP}?verificationLink=${verificationLink}`;
+        const newUser = { email: "valid@example.com", password: "valid$Pass1", names: "names", lastnames: "lastnames" };
+        it("Checks that a user can signup to the system", async () => {
+            // When
+            const response = await request(appInstance).post(signupRoute).send(newUser);
+            // Then
+            expect(response.status).toBe(StatusCodes.CREATED);
+            expect(response.headers["content-type"]).toEqual(expect.stringContaining("json"));
+            expect(response.body.data).toEqual(profileDTOCheck);
+            expect(response.body.data.names).toBe(newUser.names);
+            expect(response.body.data.lastnames).toBe(newUser.lastnames);
+            expect(response.body.data.email).toBe(newUser.email);
+            expect(emailsRepository.default.saveVerificationEmail).toHaveBeenCalledTimes(1);
+        });
+        it("Checks that a user can not signup when providing an email that is already used by another verified user", async () => {
+            // Given
+            const invalidMail = {
+                email: userToLogin.email,
+                password: "valid$Pass1",
+                names: "names",
+                lastnames: "lastnames",
+            };
+            // When
+            const response = await request(appInstance).post(signupRoute).send(invalidMail);
+            // Then
+            expect(response.status).toBe(StatusCodes.BAD_REQUEST);
+            expect(response.headers["content-type"]).toEqual(expect.stringContaining("json"));
+            expect(response.body.errorMsg).toEqual(expect.any(String));
+            expect(emailsRepository.default.saveVerificationEmail).not.toHaveBeenCalled();
+        });
+        it("Checks that a user can not sign up when providing invalid data", async () => {
+            // Given
+            const invalidUsers = [
+                {
+                    email: "invalidemail.com",
+                    password: "valid$Pass1",
+                    names: "names",
+                    lastnames: "lastnames",
+                },
+                {
+                    email: { $set: { email: userToLogin.email } },
+                    password: "valid$Pass1",
+                    names: "names",
+                    lastnames: "lastnames",
+                },
+                {
+                    password: "valid$Pass1",
+                },
+                {
+                    email: "inval@idemail.com",
+                    password: "unsecurepass",
+                    names: "names",
+                    lastnames: "lastnames",
+                },
+                {
+                    email: "invalidemail.com",
+                    password: "unsecurepass",
+                    names: 123,
+                    lastnames: false,
+                },
+            ];
+            for (let i = 0; i < invalidUsers.length; i += 1) {
+                const invalidUser = invalidUsers[i];
+                // When
+                const response = await request(appInstance).post(signupRoute).send(invalidUser);
+                // Then
+                expect(response.status).toBe(StatusCodes.BAD_REQUEST);
+                expect(response.headers["content-type"]).toEqual(expect.stringContaining("json"));
+                expect(response.body.errorMsg).toEqual(expect.any(String));
+                expect(emailsRepository.default.saveVerificationEmail).not.toHaveBeenCalled();
             }
         });
     });

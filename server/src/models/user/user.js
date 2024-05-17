@@ -49,7 +49,11 @@ const userSchema = new Schema(
             type: Boolean,
             default: false,
             required: false,
-        }
+        },
+        verificationCode: {
+            type: String,
+            required: false,
+        },
     },
     { timestamps: true }
 );

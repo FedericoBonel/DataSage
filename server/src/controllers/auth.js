@@ -37,7 +37,6 @@ const logout = async (req, res) => {
     return res.status(StatusCodes.OK).json(new SuccessPayload());
 };
 
-
 /** Controller that handles all requests that ask to refresh an access token */
 const refresh = async (req, res) => {
     const refreshToken = req.cookies?.[config.jwt.refreshTokenKey];
@@ -47,4 +46,14 @@ const refresh = async (req, res) => {
     return res.status(StatusCodes.OK).json(new SuccessPayload(accessToken));
 };
 
-export default { login, logout, refresh };
+/** Controller that handles all requests that ask to signup a new user and register it in the system */
+const signup = async (req, res) => {
+    const newUser = req.body;
+    const { verificationLink } = req.query;
+
+    const registeredUser = await authServices.register(newUser, verificationLink);
+
+    return res.status(StatusCodes.CREATED).json(new SuccessPayload(registeredUser));
+};
+
+export default { login, logout, refresh, signup };

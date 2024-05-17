@@ -45,6 +45,7 @@ export default Object.freeze({
         ID_PROVIDED:
             "You have provided an '_id' field for a resource that does not accepts id fields. Please remove it and try again.",
         INVALID_ID: "You have provided an invalid id.",
+        INVALID_URL: "You have provided an invalid URL."
     },
     /** Errors related to authentication */
     auth: {
@@ -61,4 +62,6 @@ export default Object.freeze({
     },
     /** Message to show when a request wasn't processed successfully */
     REQUEST_FAILURE: "Failure request",
+    /** Message to show when an email wasn't sent successfully */
+    EMAIL_FAILURE: "There was a problem sending an email to the user",
 });

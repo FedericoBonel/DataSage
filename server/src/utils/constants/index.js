@@ -11,6 +11,7 @@ import docsRoutes from "./routes/documents.js";
 import messagesRoutes from "./routes/messages.js";
 import participantsRoutes from "./routes/participants.js";
 import participationRoutes from "./routes/participation.js";
+import authValidation from "./validation/auth.js";
 import chatValidation from "./validation/chat.js";
 import userValidation from "./validation/user.js";
 import documentValidation from "./validation/document.js";
@@ -26,6 +27,7 @@ import notificationTypes from "./notifications/notificationTypes.js";
 import notificationRelatedEntities from "./notifications/relatedEntities.js";
 import loggingFormatting from "./logging/formatting.js";
 import loggingPrivateKeys from "./logging/privateBodyKeys.js";
+import createUserVerification from "./emails/createUserVerification.js";
 
 /** Object with all messages to be shown to the user */
 export const messages = Object.freeze({
@@ -52,6 +54,7 @@ export const routes = Object.freeze({
 
 /** Object with all the validation values used in the application for each entity. */
 export const validation = Object.freeze({
+    auth: authValidation,
     chat: chatValidation,
     user: userValidation,
     document: documentValidation,
@@ -83,4 +86,16 @@ export const logging = Object.freeze({
     privateKeys: loggingPrivateKeys,
     /** Placeholder for redacted values */
     REDACTED_VALUE: "*****",
+});
+
+/** Exports all constants related to emails */
+export const email = Object.freeze({
+    /**
+     * The function that creates and formats the contents for a user verification email
+     * @param {String} receiverEmail The email of the receiver
+     * @param {String} receiverNames The first and middle names of the receiver
+     * @param {String} verificationCode The verification code to be sent to the receiver
+     * @param {String} verifiationLink The verification link to be sent to the receiver with the verification code
+     */
+    createUserVerification,
 });

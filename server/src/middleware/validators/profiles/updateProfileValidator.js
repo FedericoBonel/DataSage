@@ -1,86 +1,4 @@
-import expressValidator from "express-validator";
-import checkValidator from "../utils/checkValidation.js";
-import { validation, messages } from "../../../utils/constants/index.js";
-
-/**
- * Creates a set of middlewares to validate profile update payloads.
- * @param optionalFields Fields that could be optional, by default none are.
- * @param fieldsToCheck Fields that should be checked in the payload. By default all are.
- * @returns The middleware that verifies the payload against the accepted schema.
- */
-const createInputBodyValidator = () => [
-    expressValidator.checkExact(
-        expressValidator.checkSchema(
-            {
-                names: {
-                    optional: true,
-                    isString: {
-                        errorMessage: messages.errors.validation.user.names.INVALID_LENGTH,
-                        bail: true,
-                    },
-                    isLength: {
-                        options: {
-                            min: validation.user.names.MIN_LENGTH,
-                            max: validation.user.names.MAX_LENGTH,
-                        },
-                        errorMessage: messages.errors.validation.user.names.INVALID_LENGTH,
-                        bail: true,
-                    },
-                    toLowerCase: true,
-                },
-                lastnames: {
-                    optional: true,
-                    isString: {
-                        errorMessage: messages.errors.validation.user.lastnames.INVALID_LENGTH,
-                        bail: true,
-                    },
-                    isLength: {
-                        options: {
-                            min: validation.user.names.MIN_LENGTH,
-                            max: validation.user.names.MAX_LENGTH,
-                        },
-                        errorMessage: messages.errors.validation.user.lastnames.INVALID_LENGTH,
-                        bail: true,
-                    },
-                    toLowerCase: true,
-                },
-                email: {
-                    optional: true,
-                    isEmail: {
-                        errorMessage: messages.errors.validation.user.email.INVALID,
-                        bail: true,
-                    },
-                    normalizeEmail: true,
-                    isLength: {
-                        options: {
-                            min: validation.user.email.MIN_LENGTH,
-                            max: validation.user.email.MAX_LENGTH,
-                        },
-                        errorMessage: messages.errors.validation.user.email.INVALID,
-                        bail: true,
-                    },
-                    toLowerCase: true,
-                },
-                password: {
-                    optional: true,
-                    isStrongPassword: {
-                        bail: true,
-                        errorMessage: messages.errors.validation.user.password.INVALID,
-                    },
-                    isLength: {
-                        options: {
-                            max: validation.user.password.MAX_LENGTH,
-                        },
-                        errorMessage: messages.errors.validation.user.password.INVALID,
-                        bail: true,
-                    },
-                },
-            },
-            ["body"]
-        )
-    ),
-    checkValidator,
-];
+import createInputBodyValidator from "./createInputBodyValidator.js";
 
 /**
  * @openapi
@@ -110,6 +28,8 @@ const createInputBodyValidator = () => [
 /**
  * Middleware that validates request payload fields for login requests
  */
-const updateProfileValidator = [...createInputBodyValidator()];
+const updateProfileValidator = [
+    ...createInputBodyValidator({ names: true, lastnames: true, email: true, password: true }),
+];
 
 export default updateProfileValidator;

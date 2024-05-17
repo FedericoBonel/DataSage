@@ -1,6 +1,7 @@
 import { Router } from "express";
 import authController from "../controllers/auth.js";
 import authValidators from "../middleware/validators/auth/index.js";
+import profilesValidators from "../middleware/validators/profiles/index.js";
 import { routes } from "../utils/constants/index.js";
 
 const authRouter = Router();
@@ -122,5 +123,51 @@ authRouter
      *         $ref: '#/components/responses/401Response'
      */
     .get(authController.refresh);
+
+authRouter
+    .route(`/${routes.auth.SIGNUP}`)
+    /**
+     * @openapi
+     * /auth/signup:
+     *   post:
+     *     tags: [User Authentication and Authorization]
+     *     security: []
+     *     summary: Registers a new user and returns its public information.
+     *     description: Registers a new user, sends a verification email to their email and returns its public information.
+     *                  The user will be unverified by default and will need to verify their account by following the instructions sent to their email (for more information look at the verify endpoint).
+     *                  <br />This endpoint could be used in the registration page in a client.
+     *     parameters:
+     *       - in: query
+     *         name: verificationLink
+     *         required: true
+     *         description: The link to be sent to the user in the verification email. This link will get appended a query param with the name "verificationCode" that will contain the verification code to be sent to the verification endpoint exposed in this API.
+     *                      <br />The link you provide should link the user to the verification page in your client where you will extract the "verificationCode" and request the verification endpoint exposed in this API with it.
+     *         schema:
+     *           type: string
+     *           example: https://myclient.com/auth/verify.
+     *     requestBody:
+     *       required: true
+     *       content:
+     *         application/json:
+     *           schema:
+     *             $ref: '#/components/schemas/SignUpSchema'
+     *     responses:
+     *       201:
+     *         description: The user has been successfuly registered and its public information is returned.
+     *         content:
+     *           application/json:
+     *             schema:
+     *               allOf:
+     *                 - $ref: '#/components/schemas/SuccessApiPayload'
+     *                 - type: object
+     *                   required:
+     *                     - data
+     *                   properties:
+     *                     data:
+     *                       $ref: "#/components/schemas/ProfileDTO"
+     *       400:
+     *         $ref: '#/components/responses/400Response'
+     */
+    .post(profilesValidators.signUpValidator, authController.signup);
 
 export default authRouter;

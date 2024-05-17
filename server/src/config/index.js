@@ -97,8 +97,26 @@ isDefined(LOGGING_DB_URL, "LOGGING_DB_URL");
 const LOGGING_DB_COLLECTION = process.env.LOGGING_DB_COLLECTION;
 isDefined(LOGGING_DB_COLLECTION, "LOGGING_DB_COLLECTION");
 
+// Email configuration
+const EMAIL_HOST = process.env.EMAIL_HOST;
+isDefined(EMAIL_HOST, "EMAIL_HOST");
+
+const EMAIL_PORT = process.env.EMAIL_PORT;
+isDefined(EMAIL_PORT, "EMAIL_PORT");
+
+const EMAIL_USER = process.env.EMAIL_USER;
+isDefined(EMAIL_USER, "EMAIL_USER");
+
+const EMAIL_PASSWORD = process.env.EMAIL_PASSWORD;
+isDefined(EMAIL_PASSWORD, "EMAIL_PASSWORD");
+
 /** Object with all configuration environment variables */
 export default Object.freeze({
+    /** Process related variables */
+    process: {
+        /** PID of the server process */
+        id: process.pid
+    },
     /** Current node environment (production || development) */
     node_environment: process.env.NODE_ENV,
     /** Server configuration related variables */
@@ -179,5 +197,19 @@ export default Object.freeze({
         dbUrl: LOGGING_DB_URL,
         /** Logs collection name to be used. */
         collectionName: LOGGING_DB_COLLECTION,
+    },
+    /** Email configuration related variables */
+    mail: {
+        /** Email service provider */
+        host: EMAIL_HOST,
+        /** The SMTP port to be used in the server */
+        port: Number(EMAIL_PORT),
+        /** The auth user for the host provided */
+        auth: {
+            /** The email user credential */
+            user: EMAIL_USER,
+            /** The email password credential */
+            pass: EMAIL_PASSWORD,
+        },
     },
 });

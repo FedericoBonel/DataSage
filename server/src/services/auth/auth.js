@@ -1,14 +1,47 @@
+import { v4 as uuid } from "uuid";
 import bcrypt from "bcrypt";
 import jwtUtils from "jsonwebtoken";
 import usersRepository from "../../repositories/users/users.js";
 import colaboratorsRepository from "../../repositories/colaborators/colaborators.js";
+import emailsRepository from "../../repositories/emails/emails.js";
 import authDTO from "../../dtos/auth/index.js";
+import profilesDTO from "../../dtos/profiles/index.js";
 import config from "../../config/index.js";
-import { ForbiddenError, NotFoundError, UnauthorizedError } from "../../utils/errors/index.js";
+import { BadRequestError, ForbiddenError, NotFoundError, UnauthorizedError } from "../../utils/errors/index.js";
 import { messages } from "../../utils/constants/index.js";
 import verifyPermissions from "../../utils/permissions/verifyChatPermissions.js";
 import { daysToSeconds, minutesToSeconds } from "../../utils/time/converters.js";
 import { verifyUserJWT } from "./utils/index.js";
+
+/**
+ * Registers a new user and sends their verification email.
+ * @param {{names: string, lastnames: string, email: string, password: string}} newUser The user to be registered
+ * @param {string} verificationLink The verification link to be sent to the user in the verification email
+ * @returns The stored user in database
+ */
+const register = async (newUser, verificationLink) => {
+    // Check that a verified user with the same email does not exist
+    const foundUser = await usersRepository.getByEmail(newUser.email);
+    if (foundUser) {
+        // If the user is verified, throw error, otherwise delete it to override it
+        if (foundUser.verified) {
+            throw new BadRequestError(messages.errors.validation.user.email.INVALID);
+        } else {
+            await usersRepository.deleteById(foundUser._id);
+        }
+    }
+
+    // Encrypt the password and generate the verification code
+    const userToSave = { ...newUser };
+    userToSave.password = await bcrypt.hash(newUser.password, config.bcrypt.saltRounds);
+    userToSave.verificationCode = uuid();
+
+    // Send the verification email
+    const savedUser = await usersRepository.save(profilesDTO.toUserModel(userToSave));
+    emailsRepository.saveVerificationEmail(verificationLink, newUser, userToSave.verificationCode);
+
+    return profilesDTO.toProfileDTO(savedUser);
+};
 
 /**
  * Authenticates a user by user email and password
@@ -121,4 +154,11 @@ const authorizeCollaboratorToChat = async (chatId, userId, requiredActions) => {
     return colaboratorInstance;
 };
 
-export default { authenticate, unauthenticate, refreshToken, validateAccessToken, authorizeCollaboratorToChat };
+export default {
+    register,
+    authenticate,
+    unauthenticate,
+    refreshToken,
+    validateAccessToken,
+    authorizeCollaboratorToChat,
+};

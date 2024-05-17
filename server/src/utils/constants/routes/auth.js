@@ -8,4 +8,6 @@ export default Object.freeze({
     LOGOUT: "logout",
     /** Route to refresh token resource */
     REFRESH: "refresh",
+    /** Route to the signup resource */
+    SIGNUP: "signup",
 });

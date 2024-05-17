@@ -11,7 +11,7 @@ export default Object.freeze({
         INVALID_LENGTH: `The user last names must be a string between ${userValues.lastnames.MIN_LENGTH} and ${userValues.lastnames.MAX_LENGTH}`,
     },
     email: {
-        INVALID: `The email must be a valid email as a string with a maximum length of ${userValues.email.MAX_LENGTH}`,
+        INVALID: `The email must be a valid unique email with a maximum length of ${userValues.email.MAX_LENGTH}`,
     },
     password: {
         /** Message to be shown when the user password content is invalid */
