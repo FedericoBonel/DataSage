@@ -9,8 +9,10 @@ import {
     ChatsRouter,
     NotificationsRouter,
 } from "@/routers";
-import { Public, Private } from "@/routers/layouts";
 import { ErrorHandler } from "@/routers/utils";
+// TODO Move this usage to the routers layer to follow architecture
+import Public from "@/pages/auth/layouts/Public";
+import Private from "@/pages/auth/layouts/Private";
 import { routes } from "@/utils/constants";
 
 /** Application provider, it routes all client side requests to diferent pages. */

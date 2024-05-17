@@ -1,4 +1,5 @@
 import config from "@/config";
+import profileUrls from "./urls/profile";
 import chatsUrls from "./urls/chats";
 import notificationsUrls from "./urls/notifications";
 import documentsUrls from "./urls/documents";
@@ -12,6 +13,8 @@ export default Object.freeze({
     /** Api URLs and resources */
     urls: {
         BASE: config.api.BASE_URL,
+        /** Contains all profile resources urls */
+        profile: profileUrls,
         /** Contains all chats resources urls */
         chats: chatsUrls,
         /** Contains all notifications resources urls */
