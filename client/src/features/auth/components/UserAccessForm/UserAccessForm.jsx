@@ -1,5 +1,5 @@
 import TextField from "@/components/fields/TextField";
-import { messages } from "@/utils/constants";
+import { api, messages } from "@/utils/constants";
 import propTypes from "./UserAccessForm.props";
 import { FieldStyles } from "./UserAccessForm.styles";
 
@@ -21,6 +21,10 @@ const UserAccessForm = ({ emailField, passwordField, isSubmitting }) => {
                 helperText={emailField.helperText}
                 disabled={isSubmitting}
                 validator={emailField.validator}
+                inputProps={{
+                    minLength: api.validation.auth.EMAIL_MIN_LENGTH,
+                    maxLength: api.validation.auth.EMAIL_MAX_LENGTH,
+                }}
             />
             <TextField
                 fullWidth
@@ -35,6 +39,10 @@ const UserAccessForm = ({ emailField, passwordField, isSubmitting }) => {
                 helperText={passwordField.helperText}
                 disabled={isSubmitting}
                 validator={passwordField.validator}
+                inputProps={{
+                    minLength: api.validation.auth.PASS_MIN_LENGTH,
+                    maxLength: api.validation.auth.PASS_MAX_LENGTH,
+                }}
             />
             {!passwordField.hideConfirmPassword && (
                 <TextField
@@ -47,6 +55,10 @@ const UserAccessForm = ({ emailField, passwordField, isSubmitting }) => {
                     helperText={passwordField.confirmHelperText}
                     disabled={isSubmitting}
                     validator={passwordField.confirmPasswordValidator}
+                    inputProps={{
+                        minLength: api.validation.auth.PASS_MIN_LENGTH,
+                        maxLength: api.validation.auth.PASS_MAX_LENGTH,
+                    }}
                 />
             )}
         </>

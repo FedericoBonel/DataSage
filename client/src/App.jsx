@@ -5,6 +5,7 @@ import {
 } from "react-router-dom";
 import {
     ErrorRouter,
+    AccountRouter,
     AuthRouter,
     NotFoundRouter,
     ChatsRouter,
@@ -33,7 +34,7 @@ const router = createBrowserRouter([
             /** Private routes */
             {
                 element: <Private />,
-                children: [ChatsRouter, NotificationsRouter],
+                children: [AccountRouter, ChatsRouter, NotificationsRouter],
             },
             /** Common routes */
             { path: routes.error.ERROR, children: [ErrorRouter] },

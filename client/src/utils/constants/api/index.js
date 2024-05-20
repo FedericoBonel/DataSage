@@ -31,11 +31,26 @@ export default Object.freeze({
     },
     /** API validation related constants */
     validation: {
+        /** Api account management endpoints related constants */
+        accounts: {
+            /** Minimum length for user's first and middle names  */
+            NAMES_MIN_LENGTH: 1,
+            /** Maximum length for user's first and middle names  */
+            NAMES_MAX_LENGTH: 64,
+            /** Minimum length for user's last names  */
+            LASTNAMES_MIN_LENGTH: 1,
+            /** Maximum length for user's last names  */
+            LASTNAMES_MAX_LENGTH: 64,
+        },
         /** Api authentication and authorization management endpoints related constants */
         auth: {
-            /** Minimum length for passwords  */
+            /** Minimum length for user's emails in the login form  */
+            EMAIL_MIN_LENGTH: 4,
+            /** Maximum length for user's emails in the login form  */
+            EMAIL_MAX_LENGTH: 32,
+            /** Minimum length for passwords in the login form */
             PASS_MIN_LENGTH: 8,
-            /** Maximum length for passwords  */
+            /** Maximum length for passwords in the login form */
             PASS_MAX_LENGTH: 32,
         },
         /** Api chats management endpoints related constants */

@@ -42,7 +42,7 @@ const AccountLink = () => {
             disableGutters
             divider
             component={Link}
-            to={`/${routes.auth.ACCOUNT}/${routes.SETTINGS}`}
+            to={`/${routes.accounts.ACCOUNT}/${routes.SETTINGS}`}
         >
             <ListItem component="div" secondaryAction={<ArrowForwardIos />}>
                 <ListItemIcon>

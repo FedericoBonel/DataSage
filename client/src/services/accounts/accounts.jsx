@@ -1,5 +1,6 @@
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import accountsAPI from "@/apis/accounts/accountsAPI";
+import { utilsCache } from "../caches";
 import profilesCache from "../caches/profiles";
 
 /** It makes a back end request to get the logged in user and account information and returns the state of the query.*/
@@ -20,4 +21,26 @@ const useAccountData = () => {
     return queryState;
 };
 
-export default { useAccountData };
+/** It creates and returns the state to update user account information in the back end. */
+const useUpdateAccount = () => {
+    const queryClient = useQueryClient();
+    const queryState = useMutation({
+        mutationFn: ({ names, lastnames, email, password }) =>
+            accountsAPI.updateAccountInformation({
+                names,
+                lastnames,
+                email,
+                password,
+            }),
+        onSuccess: (response) =>
+            queryClient.setQueryData(
+                profilesCache.profile(),
+                utilsCache.mockSuccessfulRes(response?.data)
+            ),
+        throwOnError: (error) => error?.response?.status !== 400,
+    });
+
+    return queryState;
+};
+
+export default { useAccountData, useUpdateAccount };
