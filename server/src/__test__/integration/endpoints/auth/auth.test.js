@@ -90,10 +90,10 @@ describe("Integration tests for user authentication and authorizations endpoints
         it("Checks that a user can not login when they provide invalid payloads", async () => {
             // Given
             const invalidPayloads = [
-                { nonemail: userToLogin.email, password: "randomPass" },
+                { nonemail: userToLogin.email, password: "rass" },
                 { email: anotherUser.email, email2: userToLogin.password.content },
                 { email: "undefined", password: userToLogin.password.content },
-                { email: "valid@email.com", password: "verylongpasswordthatcouldbeproblematicifnotcontrolled" },
+                { email: "valid@email.com", password: "ver" },
                 { email: anotherUser.email, password: { $set: { password: "newPassWord$1" } } },
                 { email: { $ne: 1 }, password: userToLogin.password },
                 { email: "{ $ne: 1 }", password: userToLogin.password },

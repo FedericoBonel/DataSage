@@ -167,7 +167,7 @@ export default Object.freeze({
         /** Access token secret */
         accessTokenSecret: JWT_ACCESS_SECRET,
         /** The access token duration in minutes */
-        accessTokenMinDuration: Number(JWT_REFRESH_EXPIRES_DAYS),
+        accessTokenMinDuration: Number(JWT_ACCESS_EXPIRES_MIN),
     },
     /** Swagger UI configuration related variables */
     swagger: {

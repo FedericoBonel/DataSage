@@ -8,7 +8,7 @@ const FormAlert = ({ error }) => {
         <MUIAlert severity="error">
             <AlertTitle>{error?.errorMsg}</AlertTitle>
             {error?.errors?.map((error, index) => (
-                <Typography variant="caption" key={index} color="black">
+                <Typography variant="caption" key={index} color="text">
                     {error.msg}
                 </Typography>
             ))}

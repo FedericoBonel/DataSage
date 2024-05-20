@@ -4,6 +4,7 @@ import warnings from "./messages/en/warnings";
 import info from "./messages/en/info";
 import actions from "./messages/en/actions";
 import navbar from "./messages/en/navbar";
+import auth from "./messages/en/auth";
 import chats from "./messages/en/chats";
 import notifications from "./messages/en/notifications";
 import chatsRoutes from "./routes/chats";
@@ -24,6 +25,8 @@ export const messages = Object.freeze({
     actions,
     /** Contains all messages to be shown in the navbar of the application. */
     navbar,
+    /** Contains all messages to be shown in the auth section of the application. */
+    auth,
     /** Contains all messages to be shown in the chats section of the application. */
     chats,
     /** Contains all messages to be shown in the notifications section of the application */

@@ -1,7 +1,9 @@
-import { useParams, Link as RRLink } from "react-router-dom";
+import { useParams, Link as RRLink, Navigate } from "react-router-dom";
+import { useQueryClient } from "@tanstack/react-query";
 import { Unstable_Grid2 as Grid, Typography, Link, Box } from "@mui/material";
 import error from "@/assets/error.png";
 import { messages, routes } from "@/utils/constants";
+import cookies from "@/utils/cookies/auth"
 import {
     GridItemStyles,
     ErrorImageContainerStyles,
@@ -21,6 +23,16 @@ const link = {
 /** Error page component */
 const ErrorPage = () => {
     const { code } = useParams();
+    
+    const queryClient = useQueryClient();
+
+    // If the error was an anauthorized it means the user logged off send them to log in page
+    if (code === "401") {
+        cookies.removeAccessToken();
+        queryClient.cancelQueries();
+        queryClient.clear();
+        return <Navigate to={`/${routes.auth.AUTH}/${routes.auth.LOGIN}`} replace={true} />;
+    }
 
     const errorMessage =
         messages.errors.errorCode[code] || messages.errors.errorCode.default;

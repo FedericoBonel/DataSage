@@ -20,12 +20,13 @@ const createInputBodyValidator = () => [
                 },
                 password: {
                     optional: false,
-                    isStrongPassword: {
-                        bail: true,
+                    isString: {
                         errorMessage: messages.errors.validation.user.password.INVALID,
+                        bail: true,
                     },
                     isLength: {
                         options: {
+                            min: validation.user.password.MIN_LENGTH,
                             max: validation.user.password.MAX_LENGTH,
                         },
                         errorMessage: messages.errors.validation.user.password.INVALID,

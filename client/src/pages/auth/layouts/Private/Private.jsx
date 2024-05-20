@@ -17,7 +17,10 @@ import { routes } from "@/utils/constants";
  */
 const Private = () => {
     return (
-        <AuthorizeUser requiresUser onFailedRedirectTo={routes.auth.LOGIN} />
+        <AuthorizeUser
+            requiresUser
+            onFailedRedirectTo={`/${routes.auth.AUTH}/${routes.auth.LOGIN}`}
+        />
     );
 };
 

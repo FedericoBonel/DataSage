@@ -11,6 +11,10 @@ const userVerificationValidator = [
             {
                 verificationCode: {
                     optional: false,
+                    isString: {
+                        errorMessage: messages.errors.validation.user.verificationCode.INVALID,
+                        bail: true,
+                    },
                     isLength: {
                         options: {
                             min: validation.auth.verificationCode.MIN_LENGTH,

@@ -1,4 +1,5 @@
 import config from "@/config";
+import authUrls from "./urls/auth";
 import profileUrls from "./urls/profile";
 import chatsUrls from "./urls/chats";
 import notificationsUrls from "./urls/notifications";
@@ -13,6 +14,8 @@ export default Object.freeze({
     /** Api URLs and resources */
     urls: {
         BASE: config.api.BASE_URL,
+        /** Contains all auth resources urls */
+        auth: authUrls,
         /** Contains all profile resources urls */
         profile: profileUrls,
         /** Contains all chats resources urls */
@@ -28,6 +31,13 @@ export default Object.freeze({
     },
     /** API validation related constants */
     validation: {
+        /** Api authentication and authorization management endpoints related constants */
+        auth: {
+            /** Minimum length for passwords  */
+            PASS_MIN_LENGTH: 8,
+            /** Maximum length for passwords  */
+            PASS_MAX_LENGTH: 32,
+        },
         /** Api chats management endpoints related constants */
         chats: {
             /** Minimum amount of files to be uploaded for a chat */

@@ -5,12 +5,12 @@ import {
 } from "react-router-dom";
 import {
     ErrorRouter,
+    AuthRouter,
     NotFoundRouter,
     ChatsRouter,
     NotificationsRouter,
 } from "@/routers";
 import { ErrorHandler } from "@/routers/utils";
-// TODO Move this usage to the routers layer to follow architecture
 import Public from "@/pages/auth/layouts/Public";
 import Private from "@/pages/auth/layouts/Private";
 import { routes } from "@/utils/constants";
@@ -28,7 +28,7 @@ const router = createBrowserRouter([
             /** Public routes */
             {
                 element: <Public />,
-                children: [{ path: routes.auth.LOGIN, element: <p>Login</p> }],
+                children: [AuthRouter],
             },
             /** Private routes */
             {
