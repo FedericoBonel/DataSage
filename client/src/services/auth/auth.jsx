@@ -1,6 +1,6 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import authAPI from "@/apis/auth/authAPI";
-import cookies from "@/utils/cookies/auth";
+import authCookies from "@/utils/cookies/auth";
 import profilesCache from "../caches/profiles";
 
 /** It creates and provides the state to login a user. */
@@ -9,7 +9,7 @@ const useLogin = () => {
     const queryState = useMutation({
         mutationFn: ({ email, password }) => authAPI.login({ email, password }),
         onSuccess: (response) => {
-            cookies.setAccessToken(response?.data?.token);
+            authCookies.setAccessToken(response?.data?.token);
             // Invalidate profile query
             queryClient.invalidateQueries({
                 queryKey: profilesCache.profile(),

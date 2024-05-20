@@ -3,7 +3,7 @@ import { useQueryClient } from "@tanstack/react-query";
 import { Unstable_Grid2 as Grid, Typography, Link, Box } from "@mui/material";
 import error from "@/assets/error.png";
 import { messages, routes } from "@/utils/constants";
-import cookies from "@/utils/cookies/auth"
+import authCookies from "@/utils/cookies/auth"
 import {
     GridItemStyles,
     ErrorImageContainerStyles,
@@ -28,7 +28,7 @@ const ErrorPage = () => {
 
     // If the error was an anauthorized it means the user logged off send them to log in page
     if (code === "401") {
-        cookies.removeAccessToken();
+        authCookies.removeAccessToken();
         queryClient.cancelQueries();
         queryClient.clear();
         return <Navigate to={`/${routes.auth.AUTH}/${routes.auth.LOGIN}`} replace={true} />;

@@ -1,7 +1,7 @@
 import axios from "axios";
 import authAPI from "@/apis/auth/authAPI";
 import { api } from "@/utils/constants";
-import cookies from "@/utils/cookies/auth";
+import authCookies from "@/utils/cookies/auth";
 
 // Instace to be used in each request
 const apiInstance = axios.create({
@@ -15,7 +15,7 @@ const apiInstance = axios.create({
 // In every request append the access token when available and not already appended
 apiInstance.interceptors.request.use((config) => {
     if (!config.headers.Authorization) {
-        const accessCookie = cookies.getAccessToken();
+        const accessCookie = authCookies.getAccessToken();
         if (accessCookie) {
             config.headers.Authorization = `Bearer ${accessCookie.token || ""}`;
         }
@@ -32,7 +32,7 @@ apiInstance.interceptors.response.use(
     (res) => res,
     async (error) => {
         const prevReq = error?.config;
-        const accessCookie = cookies.getAccessToken();
+        const accessCookie = authCookies.getAccessToken();
         if (error?.response?.status === 401 && !prevReq?.sent && accessCookie) {
             // Avoid infinite loops
             prevReq.sent = true;
@@ -43,7 +43,7 @@ apiInstance.interceptors.response.use(
                     .refreshAccessToken()
                     // If everything went well then set the access token cookie
                     .then((response) => {
-                        cookies.setAccessToken(response?.data?.token);
+                        authCookies.setAccessToken(response?.data?.token);
                         return response;
                     })
                     // Whenever you finish reset the token promise, even if an error happened
