@@ -22,4 +22,25 @@ const useLogin = () => {
     return queryState;
 };
 
-export default { useLogin };
+/** It creates and provides the state to logout a user. */
+const useLogout = () => {
+    const queryClient = useQueryClient();
+    const queryState = useMutation({
+        mutationFn: () => authAPI.logout(),
+        onSuccess: () => {
+            authCookies.removeAccessToken();
+            const cancelValue = queryClient.cancelQueries();
+            queryClient.clear();
+            // Invalidate profile query
+            queryClient.resetQueries({
+                queryKey: profilesCache.profile(),
+            });
+            return cancelValue;
+        },
+        throwOnError: (error) => Boolean(error),
+    });
+
+    return queryState;
+};
+
+export default { useLogin, useLogout };

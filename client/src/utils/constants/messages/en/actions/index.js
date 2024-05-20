@@ -15,6 +15,8 @@ const decisionMessages = {
     SIGNUP: "Sign Up",
     /** Contains the message to be shown to the user to describe the action of signing in to the application */
     SIGNIN: "Sign In",
+    /** Contains the message to be shown to the user to describe the action of signing out of the application */
+    SIGNOUT: "Sign Out",
 };
 
 export default Object.freeze({

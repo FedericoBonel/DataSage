@@ -15,6 +15,17 @@ const login = async (credentials) => {
 };
 
 /**
+ * Function that logs out a user and removes its HTTP Only credentials from the server
+ * @returns The response with the HTTP Only cookie removal header for the access token.
+ */
+const logout = async () => {
+    return makeRequest({
+        url: api.urls.auth.LOGOUT,
+        method: "post",
+    });
+};
+
+/**
  * Function that refreshes the access token using the HTTP Only refresh token saved in the browser cookies
  * @returns The response from the refresh token back end resource
  */
@@ -25,4 +36,4 @@ const refreshAccessToken = () =>
         })
         .then((response) => response.data);
 
-export default { refreshAccessToken, login };
+export default { refreshAccessToken, login, logout };
