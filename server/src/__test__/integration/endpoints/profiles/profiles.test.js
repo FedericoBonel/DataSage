@@ -6,13 +6,13 @@ import { routes } from "../../../../utils/constants/index.js";
 import { connect, disconnect } from "../../../../utils/db/inMemory.js";
 import { createCommonAuthHeaders } from "../../utils/headers/index.js";
 import createTestingData from "../../utils/testData/createTestingData.js";
-import users from "../../utils/testData/users.js";
+import { nonEncryptedUsers } from "../../utils/testData/users.js";
 import { profileDTOCheck } from "../../utils/dtos/profiles.js";
 
 // Tested modules
 const app = await import("../../../../../app.js");
 
-const loggedInUser = users[0];
+const loggedInUser = nonEncryptedUsers[0];
 
 describe("Integration tests for chat participations management endpoints API", () => {
     const appInstance = app.default;
@@ -51,10 +51,13 @@ describe("Integration tests for chat participations management endpoints API", (
     describe("Integration tests for PATCH /profile", () => {
         const profileRoute = `${config.server.urls.api}/${routes.profiles.PROFILE}`;
         const updates = {
-            email: "email@email.com",
             names: "example names",
             lastnames: "example lastnames",
-            password: "tEst@aaa1",
+            credentials: {
+                password: loggedInUser.password.content,
+                newEmail: "email@email.com",
+                newPassword: "tEst@aaa1",
+            },
         };
         it("Checks that a user can update their profile information", async () => {
             // When
@@ -64,19 +67,29 @@ describe("Integration tests for chat participations management endpoints API", (
             expect(response.status).toBe(StatusCodes.OK);
             expect(response.body.data).toEqual(profileDTOCheck);
             expect(response.body.data._id).toEqual(loggedInUser._id);
-            expect(response.body.data.email).toEqual(updates.email);
+            expect(response.body.data.email).toEqual(updates.credentials.newEmail);
             expect(response.body.data.names).toEqual(updates.names);
             expect(response.body.data.lastnames).toEqual(updates.lastnames);
         });
         it("Checks that a user cant update their profile with invalid information", async () => {
             // Given
             const invalidUpdates = [
-                { email: "emailemail.com", names: "example names", lastnames: "example lastnames" },
+                { credentials: { newEmail: "emailemail.com" }, names: "example names", lastnames: "example lastnames" },
                 { names: "", lastnames: "valid" },
                 { names: "valid", lastnames: 1 },
                 { lastnames: { $set: { names: "myown" } } },
-                { password: "weakpassword" },
+                { credentials: { newPassword: "weakpassword", password: loggedInUser.password.content } },
                 { names: "real names", isAdmin: true },
+                { credentials: { newEmail: "valid_but_no_pass@email.com" } },
+                { credentials: { newPassword: "validPass@!102NoOld_pass" } },
+                {
+                    credentials: {
+                        $set: { password: "myown" },
+                        newEmail: "valid@email.com",
+                        password: loggedInUser.password.content,
+                    },
+                },
+                { credentials: {} },
             ];
             for (let i = 0; i < invalidUpdates.length; i += 1) {
                 const invalidUpdate = invalidUpdates[i];

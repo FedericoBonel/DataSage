@@ -49,6 +49,8 @@ export default Object.freeze({
     },
     /** Errors related to authentication */
     auth: {
+        /** Error to be shown when a request is providing an invalid password */
+        INVALID_PASSWORD: "Sorry, your password was incorrect. Please double-check your password and try again.",
         /** Error to be shown when a request is providing invalid email or password */
         INVALID_CREDENTIALS: "Sorry, your password or email was incorrect. Please double-check your password and email and try again.",
         /** Error to be shown when an authentication request is requesting login for a non verified user */

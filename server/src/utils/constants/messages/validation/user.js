@@ -24,4 +24,8 @@ export default Object.freeze({
         /** Message to be shown when a user verification code is invalid */
         INVALID: `The user verification code must be a string with a length between ${authValues.verificationCode.MIN_LENGTH} and ${authValues.verificationCode.MAX_LENGTH} characters`,
     },
+    credentialsUpdate: {
+        /** Message to be shown when the user sends a request to update credentials but they dont send the old password. */
+        INVALID_PASSWORD: "You need to provide a valid current password to change credentials",
+    },
 });

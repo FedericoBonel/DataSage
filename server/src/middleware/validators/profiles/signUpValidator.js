@@ -1,6 +1,74 @@
 import expressValidator from "express-validator";
 import { validation, messages } from "../../../utils/constants/index.js";
-import createInputBodyValidator from "./createInputBodyValidator.js";
+import checkValidator from "../utils/checkValidation.js";
+
+const bodyValidator = expressValidator.checkExact(
+    expressValidator.checkSchema({
+        names: {
+            optional: false,
+            isString: {
+                errorMessage: messages.errors.validation.user.names.INVALID_LENGTH,
+                bail: true,
+            },
+            isLength: {
+                options: {
+                    min: validation.user.names.MIN_LENGTH,
+                    max: validation.user.names.MAX_LENGTH,
+                },
+                errorMessage: messages.errors.validation.user.names.INVALID_LENGTH,
+                bail: true,
+            },
+            toLowerCase: true,
+        },
+        lastnames: {
+            optional: false,
+            isString: {
+                errorMessage: messages.errors.validation.user.lastnames.INVALID_LENGTH,
+                bail: true,
+            },
+            isLength: {
+                options: {
+                    min: validation.user.lastnames.MIN_LENGTH,
+                    max: validation.user.lastnames.MAX_LENGTH,
+                },
+                errorMessage: messages.errors.validation.user.lastnames.INVALID_LENGTH,
+                bail: true,
+            },
+            toLowerCase: true,
+        },
+        email: {
+            optional: false,
+            isEmail: {
+                errorMessage: messages.errors.validation.user.email.INVALID,
+                bail: true,
+            },
+            normalizeEmail: true,
+            isLength: {
+                options: {
+                    min: validation.user.email.MIN_LENGTH,
+                    max: validation.user.email.MAX_LENGTH,
+                },
+                errorMessage: messages.errors.validation.user.email.INVALID,
+                bail: true,
+            },
+            toLowerCase: true,
+        },
+        password: {
+            optional: false,
+            isStrongPassword: {
+                bail: true,
+                errorMessage: messages.errors.validation.user.password.INVALID,
+            },
+            isLength: {
+                options: {
+                    max: validation.user.password.MAX_LENGTH,
+                },
+                errorMessage: messages.errors.validation.user.password.INVALID,
+                bail: true,
+            },
+        },
+    })
+);
 
 /**
  * @openapi
@@ -59,7 +127,8 @@ const signUpValidator = [
             ["query"]
         )
     ),
-    ...createInputBodyValidator(),
+    bodyValidator,
+    checkValidator,
 ];
 
 export default signUpValidator;
