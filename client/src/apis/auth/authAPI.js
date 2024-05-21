@@ -1,5 +1,6 @@
 import { getStatic, makeRequest } from "@/lib/axios";
 import { api } from "@/utils/constants";
+import config from "@/config";
 
 /**
  * Function that logs in a user with an email and a password
@@ -11,6 +12,24 @@ const login = async (credentials) => {
         url: api.urls.auth.LOGIN,
         method: "post",
         data: credentials,
+    });
+};
+
+/**
+ * Function that logs in a user with an email and a password
+ * @param {{email: string,
+ *          password: string,
+ *          names: string,
+ *          lastnames: string}} newAccount The object with the information of the new account to be registered
+ * @returns The response with the public information of the new account. NO TOKEN IS RETURNED, you should ask the user to check their email.
+ */
+const signUp = async (newAccount) => {
+    const params = { verificationLink: config.api.VERIFICATION_LINK };
+    return makeRequest({
+        url: api.urls.auth.SIGNUP,
+        method: "post",
+        data: newAccount,
+        params,
     });
 };
 
@@ -36,4 +55,4 @@ const refreshAccessToken = () =>
         })
         .then((response) => response.data);
 
-export default { refreshAccessToken, login, logout };
+export default { refreshAccessToken, login, logout, signUp };

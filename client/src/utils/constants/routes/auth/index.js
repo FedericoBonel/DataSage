@@ -5,4 +5,8 @@ export default {
     LOGIN: "login",
     /** Route to registration page */
     SIGNUP: "signup",
+    /** Route to the successfull user signup page */
+    SENT: "sent",
+    /** Route to the account verification page */
+    VERIFY: "verify",
 };

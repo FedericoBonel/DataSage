@@ -7,7 +7,7 @@ import { FieldStyles, PasswordFieldsStyles } from "./UserAccessForm.styles";
 
 /**
  * Component that renders the User Access section in profile related forms for registration.
- * It asks for user email, new password, confirm password and, optionally, current fields.
+ * It asks for user email, new password, confirm password and, optionally, current password.
  */
 const UserAccessForm = ({
     emailField,

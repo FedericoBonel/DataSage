@@ -22,6 +22,17 @@ const useLogin = () => {
     return queryState;
 };
 
+/** It creates and provides the state to sign up a new user in the application. */
+const useSignUp = () => {
+    const queryState = useMutation({
+        mutationFn: ({ email, password, names, lastnames }) =>
+            authAPI.signUp({ email, password, names, lastnames }),
+        throwOnError: (error) => error?.response?.status !== 400,
+    });
+
+    return queryState;
+};
+
 /** It creates and provides the state to logout a user. */
 const useLogout = () => {
     const queryClient = useQueryClient();
@@ -43,4 +54,4 @@ const useLogout = () => {
     return queryState;
 };
 
-export default { useLogin, useLogout };
+export default { useLogin, useLogout, useSignUp };

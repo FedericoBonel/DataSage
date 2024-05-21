@@ -3,7 +3,7 @@ export default {
     form: {
         /** The title of the form */
         TITLE: "Welcome Back!",
-        /** The subtitle of the chat creation form */
+        /** The subtitle of the login form */
         SUB_TITLE: "Sign in to gain access to your chats and begin solving problems with your Sage!",
         /** The email field label */
         EMAIL: "Email",

@@ -1,8 +1,8 @@
 import { Unstable_Grid2 as Grid } from "@mui/material";
-import LoginForm from "@/features/auth/LoginForm";
+import SignUpForm from "@/features/auth/SignUpForm";
 
-/** Renders the application Login page */
-const Login = () => {
+/** Renders the page that allows users to sign up to the system to start using it. */
+const SignUp = () => {
     return (
         <Grid
             container
@@ -12,10 +12,10 @@ const Login = () => {
             minHeight="100vh"
         >
             <Grid>
-                <LoginForm />
+                <SignUpForm />
             </Grid>
         </Grid>
     );
 };
 
-export default Login;
+export default SignUp;

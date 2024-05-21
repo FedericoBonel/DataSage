@@ -86,7 +86,6 @@ const LoginForm = () => {
                         passwordField={{
                             onChange,
                             value: credentials.password,
-                            hideConfirmPassword: true,
                         }}
                         isSubmitting={loginQuery.isPending}
                     />

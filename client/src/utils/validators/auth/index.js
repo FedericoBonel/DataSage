@@ -1,4 +1,5 @@
 import { isEmail, isLength } from "validator";
+import accountValidator from "../accounts";
 import api from "../../constants/api";
 
 export default Object.freeze({
@@ -12,4 +13,20 @@ export default Object.freeze({
             min: api.validation.auth.PASS_MIN_LENGTH,
             max: api.validation.auth.PASS_MAX_LENGTH,
         }),
+    /**
+     * Validates contents of a signup request.
+     * @returns True if valid, false otherwise
+     */
+    signup: ({ names, lastnames, email, newPassword, confirmPassword }) =>
+        isLength(names, {
+            min: api.validation.accounts.NAMES_MIN_LENGTH,
+            max: api.validation.accounts.NAMES_MAX_LENGTH,
+        }) &&
+        isLength(lastnames, {
+            min: api.validation.accounts.LASTNAMES_MIN_LENGTH,
+            max: api.validation.accounts.LASTNAMES_MAX_LENGTH,
+        }) &&
+        isEmail(email) &&
+        accountValidator.isStrongPass(newPassword) &&
+        newPassword === confirmPassword,
 });
