@@ -34,10 +34,10 @@ const updateById = async (updates, userId) => {
 
             if (userWithSameEmail && userWithSameEmail._id.toString() !== userId) {
                 // If the user is verified, throw error, otherwise delete it to override it
-                if (foundUser.verified) {
+                if (userWithSameEmail.verified) {
                     throw new BadRequestError(messages.errors.validation.user.email.INVALID);
                 } else {
-                    await usersRepository.deleteById(foundUser._id);
+                    await usersRepository.deleteById(userWithSameEmail._id);
                 }
             }
 
