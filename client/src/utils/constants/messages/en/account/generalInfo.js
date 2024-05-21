@@ -5,7 +5,7 @@ export default {
         form: {
             /** Messages to be shown as the title of the user information update form */
             TITLE: "User Information",
-            /** Messages to be shown as the title of the user information update form */
+            /** Messages to be shown as the subtitle of the user information update form */
             SUB_TITLE: "Manage how you are seen.",
             /** Messages to be shown as the names field label */
             NAMES_FIELD_LABEL: "Names",

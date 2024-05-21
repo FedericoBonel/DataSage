@@ -9,4 +9,6 @@ export default {
     GET: `${config.api.BASE_URL}/${PROFILE_RESOURCE}`,
     /** Endpoint to update the logged in user profile information */
     UPDATE: `${config.api.BASE_URL}/${PROFILE_RESOURCE}`,
+    /** Endpoint to delete the logged in user and its profile from the system */
+    DELETE: `${config.api.BASE_URL}/${PROFILE_RESOURCE}`,
 };

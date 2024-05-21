@@ -22,6 +22,26 @@ const useAccountData = () => {
     return queryState;
 };
 
+/** It creates and returns the state to delete a user account completly from the back end. */
+const useDeleteAccount = () => {
+    const queryClient = useQueryClient();
+    const queryState = useMutation({
+        mutationFn: () => accountsAPI.deleteAccount(),
+        onSuccess: () => {
+            /** Log out the user since it does not exist any longer */
+            authCookies.removeAccessToken();
+            queryClient.cancelQueries();
+            queryClient.clear();
+            return queryClient.resetQueries({
+                queryKey: profilesCache.profile(),
+            });
+        },
+        throwOnError: (error) => Boolean(error),
+    });
+
+    return queryState;
+};
+
 /** It creates and returns the state to update user account information in the back end. */
 const useUpdateAccount = () => {
     const queryClient = useQueryClient();
@@ -65,4 +85,4 @@ const useUpdateAccount = () => {
     return queryState;
 };
 
-export default { useAccountData, useUpdateAccount };
+export default { useAccountData, useUpdateAccount, useDeleteAccount };
