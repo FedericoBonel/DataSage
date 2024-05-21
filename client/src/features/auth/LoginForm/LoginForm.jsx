@@ -14,7 +14,7 @@ import Logo from "@/assets/logo.svg";
 import authServices from "@/services/auth";
 import Form from "@/components/forms/Form";
 import FormAlert from "@/components/forms/FormAlert";
-import UserAccessForm from "@/features/auth/components/UserAccessForm";
+import UserCredentialsForm from "@/features/auth/components/UserCredentialsForm";
 import { authValidator } from "@/utils/validators";
 import { routes, messages } from "@/utils/constants";
 import {
@@ -81,7 +81,7 @@ const LoginForm = () => {
                     subheader={messages.auth.login.form.SUB_TITLE}
                 />
                 <CardContent>
-                    <UserAccessForm
+                    <UserCredentialsForm
                         emailField={{ onChange, value: credentials.email }}
                         passwordField={{
                             onChange,

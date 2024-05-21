@@ -1,5 +1,15 @@
-import { isLength } from "validator";
+import { isLength, isStrongPassword, isEmail } from "validator";
 import api from "../../constants/api";
+
+/**
+ * Validates contents for a password. It checks that is strong and follows overall restrictions for it.
+ * @returns True if valid, false otherwise
+ */
+const isStrongPass = (password) =>
+    isLength(password, {
+        min: api.validation.auth.PASS_MIN_LENGTH,
+        max: api.validation.auth.PASS_MAX_LENGTH,
+    }) && isStrongPassword(password);
 
 export default Object.freeze({
     /**
@@ -15,4 +25,35 @@ export default Object.freeze({
             min: api.validation.accounts.LASTNAMES_MIN_LENGTH,
             max: api.validation.accounts.LASTNAMES_MAX_LENGTH,
         }),
+    /**
+     * Validates contents of an update for a user access credentials update.
+     * @returns True if valid, false otherwise
+     */
+    updateAccess: ({ email, password, newPassword, confirmPassword }) => {
+        const validPassword = isStrongPass(password);
+
+        let allIsValid = validPassword;
+        // If the password is changing make sure to check all of the password fields
+        if (newPassword || confirmPassword) {
+            const validNew = isStrongPass(newPassword);
+            const validConfirmation = confirmPassword === newPassword;
+
+            allIsValid = allIsValid && validNew && validConfirmation;
+        }
+        if (email) {
+            allIsValid = allIsValid && isEmail(email);
+        }
+
+        return allIsValid;
+    },
+    /**
+     * Validates contents for a password. It checks that is strong and follows overall restrictions for it.
+     * @returns True if valid, false otherwise
+     */
+    isStrongPass,
+    /**
+     * Validates contents for an email. It checks that is a valid email and follows overall restrictions for it.
+     * @returns True if valid, false otherwise
+     */
+    isEmail,
 });

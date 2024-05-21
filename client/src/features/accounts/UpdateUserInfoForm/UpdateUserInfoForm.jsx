@@ -71,8 +71,8 @@ const UpdateUserInfoForm = () => {
                 onCancel={resetForm}
                 isSubmitting={updateAccountQuery.isPending}
                 buttonsLabels={{
-                    submit: messages.chats.update.form.buttons.ACCEPT,
-                    cancel: messages.chats.update.form.buttons.CANCEL,
+                    submit: messages.account.generalInfo.update.form.buttons.SUBMIT,
+                    cancel: messages.account.generalInfo.update.form.buttons.CANCEL,
                 }}
             >
                 <CardHeader

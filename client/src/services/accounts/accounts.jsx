@@ -1,5 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import accountsAPI from "@/apis/accounts/accountsAPI";
+import authCookies from "@/utils/cookies/auth";
 import { utilsCache } from "../caches";
 import profilesCache from "../caches/profiles";
 
@@ -25,19 +26,40 @@ const useAccountData = () => {
 const useUpdateAccount = () => {
     const queryClient = useQueryClient();
     const queryState = useMutation({
-        mutationFn: ({ names, lastnames, email, password }) =>
+        mutationFn: ({ names, lastnames, credentials }) =>
             accountsAPI.updateAccountInformation({
                 names,
                 lastnames,
-                email,
-                password,
+                credentials: credentials
+                    ? {
+                          password: credentials.password,
+                          newEmail: credentials.newEmail
+                              ? credentials.newEmail
+                              : undefined,
+                          newPassword: credentials.newPassword
+                              ? credentials.newPassword
+                              : undefined,
+                      }
+                    : undefined,
             }),
-        onSuccess: (response) =>
-            queryClient.setQueryData(
+        onSuccess: (response, variables) => {
+            /** If password was changed log out the user */
+            if (variables?.credentials?.newPassword) {
+                authCookies.removeAccessToken();
+                queryClient.cancelQueries();
+                queryClient.clear();
+                // Invalidate profile query
+                return queryClient.resetQueries({
+                    queryKey: profilesCache.profile(),
+                });
+            }
+            return queryClient.setQueryData(
                 profilesCache.profile(),
                 utilsCache.mockSuccessfulRes(response?.data)
-            ),
-        throwOnError: (error) => error?.response?.status !== 400,
+            );
+        },
+        throwOnError: (error) =>
+            error?.response?.status !== 400 && error?.response?.status !== 401,
     });
 
     return queryState;

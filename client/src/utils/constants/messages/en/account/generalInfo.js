@@ -15,6 +15,12 @@ export default {
             LASTNAMES_FIELD_LABEL: "Last Names",
             /** Messages to be shown as the last names field helper text */
             LASTNAMES_FIELD_HELPER_TEXT: "Your last names",
+            buttons: {
+                /** The label to be shown in the submit button of the form */
+                SUBMIT: "Save Changes",
+                /** The label to be shown in the cancel button of the form */
+                CANCEL: "Reset Changes",
+            },
         },
     },
 };

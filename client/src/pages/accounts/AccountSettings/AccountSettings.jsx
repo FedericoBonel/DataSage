@@ -1,5 +1,6 @@
 import { Unstable_Grid2 as Grid, Typography } from "@mui/material";
 import UpdateUserInfoForm from "@/features/accounts/UpdateUserInfoForm";
+import UpdateAccessForm from "@/features/accounts/UpdateAccessForm";
 import { messages } from "@/utils/constants";
 import { AccountSettingsPageStyles } from "./AccountSettings.styles";
 
@@ -14,6 +15,9 @@ const AccountSettings = () => {
             </Grid>
             <Grid sm={12}>
                 <UpdateUserInfoForm />
+            </Grid>
+            <Grid sm={12}>
+                <UpdateAccessForm />
             </Grid>
         </Grid>
     );
