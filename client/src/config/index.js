@@ -19,6 +19,9 @@ isDefined(BACK_END_BASE_URL, "VITE_BACK_END_BASE_URL");
 const VERIFICATION_LINK = import.meta.env.VITE_VERIFICATION_LINK;
 isDefined(VERIFICATION_LINK, "VITE_VERIFICATION_LINK");
 
+const VERIFICATION_CODE_KEY = import.meta.env.VITE_VERIFICATION_CODE_KEY;
+isDefined(VERIFICATION_CODE_KEY, "VITE_VERIFICATION_CODE_KEY");
+
 // PDF Worker Parser configuration
 const WORKER_PDF_URL = import.meta.env.VITE_WORKER_PDF_URL;
 isDefined(BACK_END_BASE_URL, "VITE_WORKER_PDF_URL");
@@ -30,6 +33,8 @@ export default Object.freeze({
         BASE_URL: BACK_END_BASE_URL,
         /** The verification link to send to the user when registering a new account in the application. */
         VERIFICATION_LINK: VERIFICATION_LINK,
+        /** The verification code variable name the back end appends in the verification link as a query parameter. */
+        VERIFICATION_CODE_KEY: VERIFICATION_CODE_KEY,
     },
     /** Variables related to PDF Parsers configuration. */
     pdf: {

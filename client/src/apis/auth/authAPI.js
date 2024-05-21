@@ -16,7 +16,7 @@ const login = async (credentials) => {
 };
 
 /**
- * Function that logs in a user with an email and a password
+ * Function that signs up a user to the appplication
  * @param {{email: string,
  *          password: string,
  *          names: string,
@@ -29,6 +29,20 @@ const signUp = async (newAccount) => {
         url: api.urls.auth.SIGNUP,
         method: "post",
         data: newAccount,
+        params,
+    });
+};
+
+/**
+ * Function that verifies a user account by verification code
+ * @param {{verificationCode: string}} code The object with the verification code of the user
+ * @returns The response with the public information of the verified account. NO TOKEN IS RETURNED, you should ask the user to sign in using their credentials.
+ */
+const verifyAccount = async (code) => {
+    const params = { verificationCode: code.verificationCode };
+    return makeRequest({
+        url: api.urls.auth.VERIFY,
+        method: "post",
         params,
     });
 };
@@ -55,4 +69,4 @@ const refreshAccessToken = () =>
         })
         .then((response) => response.data);
 
-export default { refreshAccessToken, login, logout, signUp };
+export default { refreshAccessToken, login, logout, signUp, verifyAccount };

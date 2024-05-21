@@ -33,6 +33,17 @@ const useSignUp = () => {
     return queryState;
 };
 
+/** It creates and provides the state to verify a user's account in the application. */
+const useVerifyAccount = () => {
+    const queryState = useMutation({
+        mutationFn: ({ verificationCode }) =>
+            authAPI.verifyAccount({ verificationCode }),
+        throwOnError: (error) => Boolean(error),
+    });
+
+    return queryState;
+};
+
 /** It creates and provides the state to logout a user. */
 const useLogout = () => {
     const queryClient = useQueryClient();
@@ -54,4 +65,4 @@ const useLogout = () => {
     return queryState;
 };
 
-export default { useLogin, useLogout, useSignUp };
+export default { useLogin, useLogout, useSignUp, useVerifyAccount };
