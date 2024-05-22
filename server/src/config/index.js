@@ -219,6 +219,6 @@ export default Object.freeze({
     /** Account recovery related variables */
     accountRecovery: {
         /** The duration time in minutes for account recovery codes */
-        durationMins: RECOVERY_CODE_EXPIRES_MIN,
+        durationMins: Number(RECOVERY_CODE_EXPIRES_MIN),
     },
 });

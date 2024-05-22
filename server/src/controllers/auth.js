@@ -75,4 +75,14 @@ const recover = async (req, res) => {
     return res.status(StatusCodes.OK).json(new SuccessPayload());
 };
 
-export default { login, logout, refresh, signup, verify, recover };
+/** Controller that handles all requests that ask to reset user credentials from a recovery code */
+const resetCredentials = async (req, res) => {
+    const { recoveryCode } = req.query;
+    const { password } = req.body;
+
+    await authServices.resetAccountPassword(password, recoveryCode);
+
+    return res.status(StatusCodes.OK).json(new SuccessPayload());
+};
+
+export default { login, logout, refresh, signup, verify, recover, resetCredentials };

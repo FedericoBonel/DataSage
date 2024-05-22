@@ -13,6 +13,10 @@ export const nonEncryptedUsers = [
         createdAt: new Date("2024-04-25T03:10:39.273Z"),
         updatedAt: new Date("2024-04-25T03:10:39.273Z"),
         verified: true,
+        recoveryCode: {
+            content: "6814d3f3-f617-4bbf-ac2f-3ae45cabd3c7",
+            createdAt: new Date(),
+        },
     },
     {
         _id: "6629c9afb2066717d74c3ec7",
@@ -24,6 +28,10 @@ export const nonEncryptedUsers = [
         createdAt: new Date("2024-04-25T03:10:39.273Z"),
         updatedAt: new Date("2024-04-25T03:10:39.273Z"),
         verified: true,
+        recoveryCode: {
+            content: "6814d3f3-f617-4bbf-ac2f-3ae45cabd3c7",
+            createdAt: new Date(Date.now() - 60 * 60 * 1000),
+        },
     },
     {
         _id: "664451b0c4bd45751bc41030",

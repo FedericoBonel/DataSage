@@ -33,7 +33,7 @@ const recoverAccountValidator = [
                     },
                     isLength: {
                         options: {
-                            max: validation.auth.verificationUrl.MAX_LENGTH,
+                            max: validation.auth.recoveryUrl.MAX_LENGTH,
                         },
                         errorMessage: messages.errors.validation.INVALID_URL,
                         bail: true,

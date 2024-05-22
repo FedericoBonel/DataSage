@@ -27,3 +27,13 @@ export const minutesToSeconds = (minutes) => {
     if (!minutes || typeof minutes !== "number") return null;
     return minutes * 60;
 };
+
+/**
+ * Transforms the minutes into miliseconds
+ * @param {Number} minutes The number of minutes to be transformed into miliseconds
+ * @returns The number of miliseconds in the minutes
+ */
+export const minutesToMiliseconds = (minutes) => {
+    if (!minutes || typeof minutes !== "number") return null;
+    return minutes * 60 * 1000;
+};

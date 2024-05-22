@@ -14,4 +14,6 @@ export default Object.freeze({
     VERIFY: "verify",
     /** Route to the account recovering resource */
     RECOVER: "recover",
+    /** Route to the account recovering credentials resource used to reset user credentials from a recovery code */
+    CREDENTIALS: "credentials",
 });

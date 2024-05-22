@@ -241,7 +241,7 @@ authRouter
      *             $ref: '#/components/schemas/RecoverAccountSchema'
      *     responses:
      *       200:
-     *         description: The request has been processed successfully and IF a user with that email exists an email will be sent to them. 
+     *         description: The request has been processed successfully and IF a user with that email exists an email will be sent to them.
      *                      <br />If a user with that email does not exist, then an email won't be sent and the response will still be 200. This is done this way to avoid exposing credentials to attackers.
      *         content:
      *           application/json:
@@ -251,5 +251,46 @@ authRouter
      *         $ref: '#/components/responses/400Response'
      */
     .post(authValidators.recoverAccountValidator, authController.recover);
+
+authRouter
+    .route(`/${routes.auth.RECOVER}/${routes.auth.CREDENTIALS}`)
+    /**
+     * @openapi
+     * /auth/recover/credentials:
+     *   post:
+     *     tags: [User Authentication and Authorization]
+     *     security: []
+     *     summary: Resets a user password from a recovery code previously generated in the recover endpoint exposed in this API.
+     *     description: Resets a user password from a recovery code previously generated in the recover endpoint exposed in this API.
+     *                  This endpoint should be used in a client to allow a user, that previously invoked the recover endpoint, to use the "recoveryCode" sent to their email as link to reset their password and recover access to their account.
+     *                  Therefore, in your client's password resetting page where you would use this endpoint, you should get the "recoveryCode" query parameter and send it together with the new password.
+     *                  <br />Completing this action will invalidate all the previously generated access and refresh tokens for that user and require re authentication with the new password.
+     *     parameters:
+     *       - in: query
+     *         name: recoveryCode
+     *         required: true
+     *         description: The recovery code the user received in their email. You should extract this code from the query parameter "recoveryCode" appended to whatever link you provided in the recover resource and send it here.
+     *         schema:
+     *           type: string
+     *           example: $0!-rAndom_C0de1231
+     *     requestBody:
+     *       required: true
+     *       content:
+     *         application/json:
+     *           schema:
+     *             $ref: '#/components/schemas/ResetCredentialsSchema'
+     *     responses:
+     *       200:
+     *         description: The user password has been updated successfully and all previously generated tokens are now invalid.
+     *         content:
+     *           application/json:
+     *             schema:
+     *               $ref: '#/components/schemas/SuccessApiPayload'
+     *       400:
+     *         $ref: '#/components/responses/400Response'
+     *       404:
+     *         $ref: '#/components/responses/404Response'
+     */
+    .post(authValidators.resetCredentialsValidator, authController.resetCredentials);
 
 export default authRouter;

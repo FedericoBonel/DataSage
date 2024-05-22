@@ -21,6 +21,11 @@ const app = await import("../../../../../app.js");
 const userToLogin = nonEncryptedUsers[0];
 const anotherUser = nonEncryptedUsers[1];
 const nonVerifiedUser = nonEncryptedUsers.find((user) => !user.verified);
+const expRecoveryCodeUser = nonEncryptedUsers.find(
+    (user) =>
+        user.recoveryCode &&
+        Date.now() - user.recoveryCode.createdAt.getTime() < config.accountRecovery.durationMins * 60 * 1000
+);
 
 describe("Integration tests for user authentication and authorizations endpoints API", () => {
     const appInstance = app.default;
@@ -411,6 +416,61 @@ describe("Integration tests for user authentication and authorizations endpoints
                 { noemail: "nonexistentprotcol://example.com" },
                 { email: "" },
                 { email: { $set: { email: "myown@gmail.com" } } },
+            ];
+            for (let i = 0; i < invalidPayloads.length; i += 1) {
+                const invalidPayload = invalidPayloads[i];
+                // When
+                const response = await request(appInstance).post(recoverRoute).send(invalidPayload);
+                // Then
+                expect(response.status).toBe(StatusCodes.BAD_REQUEST);
+                expect(response.headers["content-type"]).toEqual(expect.stringContaining("json"));
+                expect(response.body.errorMsg).toEqual(expect.any(String));
+                expect(emailsRepository.default.saveRecoveryEmail).not.toHaveBeenCalled();
+            }
+        });
+    });
+
+    describe("Integration tests for POST /auth/recover/credentials", () => {
+        const recoveryCode = userToLogin.recoveryCode.content;
+        const newPassword = { password: "newPass@1" };
+        const recoverRoute = `${config.server.urls.api}/${routes.auth.AUTH}/${routes.auth.RECOVER}/${routes.auth.CREDENTIALS}?recoveryCode=${recoveryCode}`;
+        it("Checks that a user can reset their credentials by providing a recovery code", async () => {
+            // When
+            const response = await request(appInstance).post(recoverRoute).send(newPassword);
+            // Then
+            expect(response.status).toBe(StatusCodes.OK);
+            expect(response.headers["content-type"]).toEqual(expect.stringContaining("json"));
+            expect(response.body.data).not.toBeDefined();
+        });
+        it("Checks that a user can not reset their credentials by providing a non existent recovery code", async () => {
+            // Given
+            const nonExisentCode = "neverexists";
+            const nonExistant = `${config.server.urls.api}/${routes.auth.AUTH}/${routes.auth.RECOVER}/${routes.auth.CREDENTIALS}?recoveryCode=${nonExisentCode}`;
+            // When
+            const response = await request(appInstance).post(nonExistant).send(newPassword);
+            // Then
+            expect(response.status).toBe(StatusCodes.NOT_FOUND);
+            expect(response.headers["content-type"]).toEqual(expect.stringContaining("json"));
+            expect(response.body.errorMsg).toEqual(expect.any(String));
+        });
+        it("Checks that a user can not reset their credentials when providing an expired recovery code", async () => {
+            // Given
+            const expiredCode = expRecoveryCodeUser.recoveryCode.content;
+            const expiredRoute = `${config.server.urls.api}/${routes.auth.AUTH}/${routes.auth.RECOVER}/${routes.auth.CREDENTIALS}?recoveryCode=${expiredCode}`;
+            // When
+            const response = await request(appInstance).post(expiredRoute).send(newPassword);
+            // Then
+            expect(response.status).toBe(StatusCodes.NOT_FOUND);
+            expect(response.headers["content-type"]).toEqual(expect.stringContaining("json"));
+            expect(response.body.errorMsg).toEqual(expect.any(String));
+        });
+        it("Checks that a user can not reset their credentials when providing an invalid request payload", async () => {
+            const invalidPayloads = [
+                { password: "weakpassword" },
+                { password: "weak$password1" },
+                { nopassword: "" },
+                { password: { $set: { email: "myown@gmail.com" } } },
+                {},
             ];
             for (let i = 0; i < invalidPayloads.length; i += 1) {
                 const invalidPayload = invalidPayloads[i];

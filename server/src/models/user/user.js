@@ -8,6 +8,8 @@ const recoveryCodeSchema = new Schema(
         content: {
             type: String,
             required: true,
+            minlength: validation.auth.recoveryCode.MIN_LENGTH,
+            maxlength: validation.auth.recoveryCode.MAX_LENGTH,
             unique: true,
             sparse: true,
         },
@@ -65,6 +67,8 @@ const userSchema = new Schema(
         verificationCode: {
             type: String,
             required: false,
+            minlength: validation.auth.verificationCode.MIN_LENGTH,
+            maxlength: validation.auth.verificationCode.MAX_LENGTH,
             unique: true,
             sparse: true,
         },

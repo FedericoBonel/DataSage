@@ -9,9 +9,11 @@ import config from "../../config/index.js";
 import { BadRequestError, ForbiddenError, NotFoundError, UnauthorizedError } from "../../utils/errors/index.js";
 import { messages } from "../../utils/constants/index.js";
 import verifyPermissions from "../../utils/permissions/verifyChatPermissions.js";
-import { daysToSeconds, minutesToSeconds } from "../../utils/time/converters.js";
+import { daysToSeconds, minutesToSeconds, minutesToMiliseconds } from "../../utils/time/converters.js";
 import generateOTP from "../../utils/crypt/generateOTP.js";
 import { verifyUserJWT } from "./utils/index.js";
+
+const DURATION_RECOVERY_CODE = minutesToMiliseconds(config.accountRecovery.durationMins);
 
 /**
  * Registers a new user and sends their verification email.
@@ -167,6 +169,35 @@ const sendRecoveryEmail = async (email, recoveryLink) => {
 };
 
 /**
+ * Resets an account password from a recovery code.
+ * @param {string} password The new password to be set in the user with the provided recovery code.
+ * @param {string} recoveryCode The recovery code by which set the new password.
+ * @returns The updated user as it should be exposed in the web
+ */
+const resetAccountPassword = async (password, recoveryCode) => {
+    const user = await usersRepository.getByRecoveryCode(recoveryCode);
+
+    // Check if the user exists
+    if (!user) {
+        throw new NotFoundError(messages.errors.ROUTE_NOT_FOUND);
+    }
+
+    // If a user with that code exists remove the code
+    await usersRepository.removeRecoveryCodeById(user._id);
+
+    // Check if the code expired
+    if (Date.now() - new Date(user.recoveryCode.createdAt).getTime() > DURATION_RECOVERY_CODE) {
+        throw new NotFoundError(messages.errors.ROUTE_NOT_FOUND);
+    }
+
+    // Update the user password
+    const updates = { password: await bcrypt.hash(password, config.bcrypt.saltRounds) };
+
+    const savedUser = await usersRepository.updateById(profilesDTO.toUserModel(updates), user._id);
+    return profilesDTO.toProfileDTO(savedUser);
+};
+
+/**
  * Authorizes a user to do some action in a chat
  *
  * NOTE: If the user is the owner of the chat then no actions are checked. They are allowed full access.
@@ -205,5 +236,6 @@ export default {
     validateAccessToken,
     verifyUser,
     sendRecoveryEmail,
+    resetAccountPassword,
     authorizeCollaboratorToChat,
 };

@@ -51,7 +51,7 @@ const updateById = async (updates, userId) => {
     }
 
     // Update the user
-    const oldUser = await user.findByIdAndUpdate(userId, formattedUpdates).lean();
+    const oldUser = await user.findByIdAndUpdate(userId, formattedUpdates, { runValidators: true }).lean();
 
     if (!oldUser) {
         return oldUser;
@@ -132,6 +132,28 @@ const getByVerificationCode = async (verificationCode) => {
 };
 
 /**
+ * Gets a user by their recovery code
+ * @param {String} recoveryCode The recovery code assigned to the user
+ * @returns The user with that recovery code or null if not found
+ */
+const getByRecoveryCode = async (recoveryCode) => {
+    if (!recoveryCode) throw new Error("Missing params");
+
+    return user.findOne({ "recoveryCode.content": recoveryCode }).lean();
+};
+
+/**
+ * Removes the recovery code from a user by id
+ * @param {String} userId The id of the user to be updated
+ * @returns The updated user if a user with that id was found or null otherwise.
+ */
+const removeRecoveryCodeById = async (userId) => {
+    if (!userId) throw new Error("Missing params");
+
+    return user.findByIdAndUpdate(userId, { $unset: { recoveryCode: "" } }, { new: true, runValidators: true }).lean();
+};
+
+/**
  * Deletes a user by id and all its information from the system (chats, collaborators, etc.).
  * This includes denormalized data.
  * @param {String} userId Id of the user being deleted
@@ -182,4 +204,13 @@ const deleteById = async (userId) => {
     return deletedUser;
 };
 
-export default { getById, getByEmail, updateById, save, getByVerificationCode, deleteById };
+export default {
+    getById,
+    getByEmail,
+    updateById,
+    save,
+    getByVerificationCode,
+    deleteById,
+    getByRecoveryCode,
+    removeRecoveryCodeById,
+};
