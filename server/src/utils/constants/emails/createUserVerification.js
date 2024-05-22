@@ -1,8 +1,9 @@
+import config from "../../../config/index.js";
 import { capitalizeEveryWord } from "../../strings/capitalization.js";
 
 /** Creates the user verification email content object */
 export default (receiverEmail, receiverNames, verificationLink, verificationCode) => ({
-    from: `"DataSage 🌿" ${process.env.EMAIL_USER}`,
+    from: `"DataSage 🌿" ${config.mail.auth.user}`,
     to: receiverEmail,
     subject: "DataSage Account Verification",
     html: `

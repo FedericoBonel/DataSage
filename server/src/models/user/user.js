@@ -3,7 +3,7 @@ import { validation, messages } from "../../utils/constants/index.js";
 
 const MODEL_NAME = "User";
 
-const recoverCodeSchema = new Schema(
+const recoveryCodeSchema = new Schema(
     {
         content: {
             type: String,
@@ -68,8 +68,8 @@ const userSchema = new Schema(
             unique: true,
             sparse: true,
         },
-        recoverCode: {
-            type: recoverCodeSchema,
+        recoveryCode: {
+            type: recoveryCodeSchema,
             required: false,
         },
     },

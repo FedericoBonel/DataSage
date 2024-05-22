@@ -360,4 +360,68 @@ describe("Integration tests for user authentication and authorizations endpoints
             expect(response.body.errorMsg).toEqual(expect.any(String));
         });
     });
+
+    describe("Integration tests for POST /auth/recover", () => {
+        const recoveryLink = "http://example.com/auth/recover";
+        const userEmail = { email: userToLogin.email };
+        const recoverRoute = `${config.server.urls.api}/${routes.auth.AUTH}/${routes.auth.RECOVER}?recoveryLink=${recoveryLink}`;
+        it("Checks that a user can generate a recovery email", async () => {
+            // When
+            const response = await request(appInstance).post(recoverRoute).send(userEmail);
+            // Then
+            expect(response.status).toBe(StatusCodes.OK);
+            expect(response.headers["content-type"]).toEqual(expect.stringContaining("json"));
+            expect(response.body.data).not.toBeDefined();
+            expect(emailsRepository.default.saveRecoveryEmail).toHaveBeenCalledTimes(1);
+        });
+        it("Checks that a non existant email does not throw error when generating recovery emails", async () => {
+            // Given
+            const nonExistentMail = { email: "nonexistent@example.com" };
+            // When
+            const response = await request(appInstance).post(recoverRoute).send(nonExistentMail);
+            // Then
+            expect(response.status).toBe(StatusCodes.OK);
+            expect(response.headers["content-type"]).toEqual(expect.stringContaining("json"));
+            expect(response.body.data).not.toBeDefined();
+            expect(emailsRepository.default.saveRecoveryEmail).not.toHaveBeenCalled();
+        });
+        it("Checks that a user can not send a recovery account email when providing an invalid recovery link", async () => {
+            // Given
+            const invalidLinks = [
+                "noprotocol.com",
+                "nonexistentprotcol://example.com",
+                "justdomain",
+                "http://givesqueryparams.com?query=isDefined",
+            ];
+            for (let i = 0; i < invalidLinks.length; i += 1) {
+                const invalidCode = invalidLinks[i];
+                const invalidRoute = `${config.server.urls.api}/${routes.auth.AUTH}/${routes.auth.RECOVER}?recoveryLink=${invalidCode}`;
+                // When
+                const response = await request(appInstance).post(invalidRoute).send(userEmail);
+                // Then
+                expect(response.status).toBe(StatusCodes.BAD_REQUEST);
+                expect(response.headers["content-type"]).toEqual(expect.stringContaining("json"));
+                expect(response.body.errorMsg).toEqual(expect.any(String));
+                expect(emailsRepository.default.saveRecoveryEmail).not.toHaveBeenCalled();
+            }
+        });
+        it("Checks that a user can not send a recovery email when providing an invalid request payload", async () => {
+            const invalidPayloads = [
+                { email: "invalid.c" },
+                { noemail: "nonexistentprotcol://example.com" },
+                { email: "" },
+                { email: { $set: { email: "myown@gmail.com" } } },
+            ];
+            for (let i = 0; i < invalidPayloads.length; i += 1) {
+                const invalidPayload = invalidPayloads[i];
+                // When
+                const response = await request(appInstance).post(recoverRoute).send(invalidPayload);
+                // Then
+                expect(response.status).toBe(StatusCodes.BAD_REQUEST);
+                expect(response.headers["content-type"]).toEqual(expect.stringContaining("json"));
+                expect(response.body.errorMsg).toEqual(expect.any(String));
+                expect(emailsRepository.default.saveRecoveryEmail).not.toHaveBeenCalled();
+            }
+        });
+    });
 });

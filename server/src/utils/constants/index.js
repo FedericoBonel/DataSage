@@ -28,6 +28,7 @@ import notificationRelatedEntities from "./notifications/relatedEntities.js";
 import loggingFormatting from "./logging/formatting.js";
 import loggingPrivateKeys from "./logging/privateBodyKeys.js";
 import createUserVerification from "./emails/createUserVerification.js";
+import createUserRecoveryAccount from "./emails/createUserRecoveryAccount.js";
 
 /** Object with all messages to be shown to the user */
 export const messages = Object.freeze({
@@ -98,4 +99,12 @@ export const email = Object.freeze({
      * @param {String} verifiationLink The verification link to be sent to the receiver with the verification code
      */
     createUserVerification,
+    /**
+     * The function that creates and formats the contents for a user recovery account email
+     * @param {String} receiverEmail The email of the receiver
+     * @param {String} receiverNames The first and middle names of the receiver
+     * @param {String} verificationCode The recovery code to be sent to the receiver
+     * @param {String} verifiationLink The recovery link to be sent to the receiver with the recovery code
+     */
+    createUserRecoveryAccount,
 });

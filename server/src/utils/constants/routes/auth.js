@@ -12,4 +12,6 @@ export default Object.freeze({
     SIGNUP: "signup",
     /** Route to the account verification resource */
     VERIFY: "verify",
+    /** Route to the account recovering resource */
+    RECOVER: "recover",
 });

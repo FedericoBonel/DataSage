@@ -65,4 +65,14 @@ const verify = async (req, res) => {
     return res.status(StatusCodes.OK).json(new SuccessPayload(verifiedUser));
 };
 
-export default { login, logout, refresh, signup, verify };
+/** Controller that handles all requests that ask to generate an account recovery email for a user */
+const recover = async (req, res) => {
+    const { recoveryLink } = req.query;
+    const { email } = req.body;
+
+    await authServices.sendRecoveryEmail(email, recoveryLink);
+
+    return res.status(StatusCodes.OK).json(new SuccessPayload());
+};
+
+export default { login, logout, refresh, signup, verify, recover };

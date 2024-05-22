@@ -1,7 +1,7 @@
 import { toProfileDTO } from "./ProfileDTO/index.js";
 
 /**
- * Transforms a profile information as it is exposed in the api for to how it should be stored in the database.
+ * Transforms a profile information as it is exposed in the api to how it should be stored in the database.
  *
  * IMPORTANT NOTE: This function does not encrypt the password, if provided you should encrypt it before hand
  * @param {*} inputDTO The profile as it is exposed
@@ -24,6 +24,10 @@ const toUserModel = (inputDTO) => {
     if (inputDTO.verificationCode) {
         update.verificationCode = inputDTO.verificationCode;
     }
+    if (inputDTO.recoveryCode) {
+        update.recoveryCode = { content: inputDTO.recoveryCode };
+    }
+
     return update;
 };
 

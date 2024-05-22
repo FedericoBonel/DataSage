@@ -144,6 +144,29 @@ const verifyUser = async (verificationCode) => {
 };
 
 /**
+ * Generates an account recovery code and sends it in a recovery account email.
+ * The email will be sent with the recovery link provided to a user by their registered email address.
+ *
+ * NOTE: If a user with the provided email does not exist, nothing will be thrown.
+ * @param {string} email The email of the user to which send the account recovery email
+ * @param {string} recoveryLink The link to which append the recovery code and send in the email to the user.
+ */
+const sendRecoveryEmail = async (email, recoveryLink) => {
+    const user = await usersRepository.getByEmail(email);
+
+    // Check if the user exists or if its not verified
+    if (!user || !user.verified) {
+        return;
+    }
+    // Generate the recovery code;
+    const updates = { recoveryCode: generateOTP() };
+
+    // Send the account recovery email
+    const savedUser = await usersRepository.updateById(profilesDTO.toUserModel(updates), user._id);
+    emailsRepository.saveRecoveryEmail(recoveryLink, savedUser, updates.recoveryCode);
+};
+
+/**
  * Authorizes a user to do some action in a chat
  *
  * NOTE: If the user is the owner of the chat then no actions are checked. They are allowed full access.
@@ -181,5 +204,6 @@ export default {
     refreshToken,
     validateAccessToken,
     verifyUser,
+    sendRecoveryEmail,
     authorizeCollaboratorToChat,
 };

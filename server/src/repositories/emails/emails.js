@@ -43,4 +43,34 @@ const saveVerificationEmail = async (verificationLink, user, verificationCode) =
     });
 };
 
-export default { saveVerificationEmail };
+/**
+ * Generates and sends an account recovery email with the verification code to the provided user
+ */
+const saveRecoveryEmail = async (recoveryLink, user, recoveryCode) => {
+    if (!recoveryCode || !user || !recoveryLink) throw new Error("Missing params");
+
+    const emailContent = email.createUserRecoveryAccount(user.email, user.names, recoveryLink, recoveryCode);
+
+    emailSender.sendMail(emailContent, (err, info) => {
+        if (err) {
+            // If an error happened register a log with it for future debugging
+            loggingRepository.create({
+                level: validation.logs.levels.ERROR,
+                message: messages.errors.REQUEST_FAILURE,
+                meta: {
+                    error: err,
+                    req: {
+                        user,
+                    },
+                    appInfo: {
+                        appVersion: config.server.version,
+                        environment: config.node_environment,
+                        processId: config.process.id,
+                    },
+                },
+            });
+        }
+    });
+};
+
+export default { saveVerificationEmail, saveRecoveryEmail };

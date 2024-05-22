@@ -144,7 +144,7 @@ authRouter
      *                      <br />The link you provide should link the user to the verification page in your client where you will extract the "verificationCode" and request the verification endpoint exposed in this API with it.
      *         schema:
      *           type: string
-     *           example: https://myclient.com/auth/verify.
+     *           example: https://myclient.com/auth/verify
      *     requestBody:
      *       required: true
      *       content:
@@ -181,7 +181,7 @@ authRouter
      *     summary: Verifies a user account and returns its public information.
      *     description: Verifies a user account and returns its public information.
      *                  When a user signs up using the sign up resource exposed in this API they will receive an email with a link to the verification link you have provided to the sign up resource.
-     *                  The link you provide will get injected a query parameter called "verificationCode", you should extract this parameter in the page you link in the sign up resource and provide it to this endpoint to verify the users account. 
+     *                  The link you provide will get injected a query parameter called "verificationCode", you should extract this parameter in the page you link in the sign up resource and provide it to this endpoint to verify the users account.
      *                  <br />Therefore this endpoint should be used in the verification page you link the user to from the signup resource.
      *     parameters:
      *       - in: query
@@ -211,5 +211,45 @@ authRouter
      *         $ref: '#/components/responses/400Response'
      */
     .post(authValidators.userVerificationValidator, authController.verify);
+
+authRouter
+    .route(`/${routes.auth.RECOVER}`)
+    /**
+     * @openapi
+     * /auth/recover:
+     *   post:
+     *     tags: [User Authentication and Authorization]
+     *     security: []
+     *     summary: Generates an account recovery email for the user and sends it to their registered email so that they can recover access to their account.
+     *     description: Generates an account recovery email for the user and sends it to their registered email so that they can recover access to their account.
+     *                  The user, could forget their password, and if they do you could provide the user a page so that they can invoke this resource and receive a password recovery email.
+     *                  <br />This resource will generate a user recovery code and append it to the link you provide. Therefore, you should extract it in the page you are linking to and send it to the password reset endpoint exposed in this API.
+     *     parameters:
+     *       - in: query
+     *         name: recoveryLink
+     *         required: true
+     *         description: The link to be sent to the user in the recovery email. This link will get appended a query param with the name "recoveryCode" that will contain the account recovery code to be sent to the password reset endpoint exposed in this API.
+     *                      <br />The link you provide should link the user to the password resetting page in your client where you will extract the "recoveryCode" and request the password reset endpoint exposed in this API with it.
+     *         schema:
+     *           type: string
+     *           example: https://myclient.com/auth/recover
+     *     requestBody:
+     *       required: true
+     *       content:
+     *         application/json:
+     *           schema:
+     *             $ref: '#/components/schemas/RecoverAccountSchema'
+     *     responses:
+     *       200:
+     *         description: The request has been processed successfully and IF a user with that email exists an email will be sent to them. 
+     *                      <br />If a user with that email does not exist, then an email won't be sent and the response will still be 200. This is done this way to avoid exposing credentials to attackers.
+     *         content:
+     *           application/json:
+     *             schema:
+     *               $ref: '#/components/schemas/SuccessApiPayload'
+     *       400:
+     *         $ref: '#/components/responses/400Response'
+     */
+    .post(authValidators.recoverAccountValidator, authController.recover);
 
 export default authRouter;

@@ -110,12 +110,16 @@ isDefined(EMAIL_USER, "EMAIL_USER");
 const EMAIL_PASSWORD = process.env.EMAIL_PASSWORD;
 isDefined(EMAIL_PASSWORD, "EMAIL_PASSWORD");
 
+// Account recovery configuration
+const RECOVERY_CODE_EXPIRES_MIN = process.env.RECOVERY_CODE_EXPIRES_MIN;
+isDefined(RECOVERY_CODE_EXPIRES_MIN, "RECOVERY_CODE_EXPIRES_MIN");
+
 /** Object with all configuration environment variables */
 export default Object.freeze({
     /** Process related variables */
     process: {
         /** PID of the server process */
-        id: process.pid
+        id: process.pid,
     },
     /** Current node environment (production || development) */
     node_environment: process.env.NODE_ENV,
@@ -211,5 +215,10 @@ export default Object.freeze({
             /** The email password credential */
             pass: EMAIL_PASSWORD,
         },
+    },
+    /** Account recovery related variables */
+    accountRecovery: {
+        /** The duration time in minutes for account recovery codes */
+        durationMins: RECOVERY_CODE_EXPIRES_MIN,
     },
 });
