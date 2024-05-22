@@ -51,13 +51,12 @@ const useLogout = () => {
         mutationFn: () => authAPI.logout(),
         onSuccess: () => {
             authCookies.removeAccessToken();
-            const cancelValue = queryClient.cancelQueries();
+            queryClient.cancelQueries();
             queryClient.clear();
             // Invalidate profile query
-            queryClient.resetQueries({
+            return queryClient.resetQueries({
                 queryKey: profilesCache.profile(),
             });
-            return cancelValue;
         },
         throwOnError: (error) => Boolean(error),
     });

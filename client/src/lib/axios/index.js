@@ -46,6 +46,13 @@ apiInstance.interceptors.response.use(
                         authCookies.setAccessToken(response?.data?.token);
                         return response;
                     })
+                    // If the refresh token expired remove it and bubble up error
+                    .catch((err) => {
+                        if (err?.response?.status === 401) {
+                            authCookies.removeAccessToken();
+                        }
+                        return Promise.reject(err);
+                    })
                     // Whenever you finish reset the token promise, even if an error happened
                     .finally(() => {
                         refreshingToken = null;
