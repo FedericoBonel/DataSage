@@ -3,6 +3,18 @@ import { validation, messages } from "../../utils/constants/index.js";
 
 const MODEL_NAME = "User";
 
+const recoverCodeSchema = new Schema(
+    {
+        content: {
+            type: String,
+            required: true,
+            unique: true,
+            sparse: true,
+        },
+    },
+    { timestamps: { createdAt: true, updatedAt: false } }
+);
+
 const passwordSchema = new Schema(
     {
         content: {
@@ -52,6 +64,12 @@ const userSchema = new Schema(
         },
         verificationCode: {
             type: String,
+            required: false,
+            unique: true,
+            sparse: true,
+        },
+        recoverCode: {
+            type: recoverCodeSchema,
             required: false,
         },
     },

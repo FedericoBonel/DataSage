@@ -1,4 +1,3 @@
-import { v4 as uuid } from "uuid";
 import bcrypt from "bcrypt";
 import jwtUtils from "jsonwebtoken";
 import usersRepository from "../../repositories/users/users.js";
@@ -11,6 +10,7 @@ import { BadRequestError, ForbiddenError, NotFoundError, UnauthorizedError } fro
 import { messages } from "../../utils/constants/index.js";
 import verifyPermissions from "../../utils/permissions/verifyChatPermissions.js";
 import { daysToSeconds, minutesToSeconds } from "../../utils/time/converters.js";
+import generateOTP from "../../utils/crypt/generateOTP.js";
 import { verifyUserJWT } from "./utils/index.js";
 
 /**
@@ -34,7 +34,7 @@ const register = async (newUser, verificationLink) => {
     // Encrypt the password and generate the verification code
     const userToSave = { ...newUser };
     userToSave.password = await bcrypt.hash(newUser.password, config.bcrypt.saltRounds);
-    userToSave.verificationCode = uuid();
+    userToSave.verificationCode = generateOTP();
 
     // Send the verification email
     const savedUser = await usersRepository.save(profilesDTO.toUserModel(userToSave));
