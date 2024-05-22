@@ -24,7 +24,7 @@ const nonVerifiedUser = nonEncryptedUsers.find((user) => !user.verified);
 const expRecoveryCodeUser = nonEncryptedUsers.find(
     (user) =>
         user.recoveryCode &&
-        Date.now() - user.recoveryCode.createdAt.getTime() < config.accountRecovery.durationMins * 60 * 1000
+        Date.now() - user.recoveryCode.createdAt.getTime() > config.accountRecovery.durationMins * 60 * 1000
 );
 
 describe("Integration tests for user authentication and authorizations endpoints API", () => {

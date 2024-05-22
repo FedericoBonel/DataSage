@@ -29,7 +29,7 @@ export const nonEncryptedUsers = [
         updatedAt: new Date("2024-04-25T03:10:39.273Z"),
         verified: true,
         recoveryCode: {
-            content: "6814d3f3-f617-4bbf-ac2f-3ae45cabd3c7",
+            content: "6814d3f3-f617-4bbf-ac2f-3ae45abcd3c7",
             createdAt: new Date(Date.now() - 60 * 60 * 1000),
         },
     },
