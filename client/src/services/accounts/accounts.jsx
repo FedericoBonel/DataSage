@@ -1,6 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import accountsAPI from "@/apis/accounts/accountsAPI";
-import authCookies from "@/utils/cookies/auth";
+import useLogout from "@/utils/hooks/useLogout";
 import { utilsCache } from "../caches";
 import profilesCache from "../caches/profiles";
 
@@ -24,18 +24,11 @@ const useAccountData = () => {
 
 /** It creates and returns the state to delete a user account completly from the back end. */
 const useDeleteAccount = () => {
-    const queryClient = useQueryClient();
+    const logout = useLogout();
     const queryState = useMutation({
         mutationFn: () => accountsAPI.deleteAccount(),
-        onSuccess: () => {
-            /** Log out the user since it does not exist any longer */
-            authCookies.removeAccessToken();
-            queryClient.cancelQueries();
-            queryClient.clear();
-            return queryClient.resetQueries({
-                queryKey: profilesCache.profile(),
-            });
-        },
+        /** Log out the user since it does not exist any longer */
+        onSuccess: () => logout(),
         throwOnError: (error) => Boolean(error),
     });
 
@@ -44,6 +37,7 @@ const useDeleteAccount = () => {
 
 /** It creates and returns the state to update user account information in the back end. */
 const useUpdateAccount = () => {
+    const logout = useLogout();
     const queryClient = useQueryClient();
     const queryState = useMutation({
         mutationFn: ({ names, lastnames, credentials }) =>
@@ -65,13 +59,8 @@ const useUpdateAccount = () => {
         onSuccess: (response, variables) => {
             /** If password was changed log out the user */
             if (variables?.credentials?.newPassword) {
-                authCookies.removeAccessToken();
-                queryClient.cancelQueries();
-                queryClient.clear();
-                // Invalidate profile query
-                return queryClient.resetQueries({
-                    queryKey: profilesCache.profile(),
-                });
+                logout();
+                return;
             }
             return queryClient.setQueryData(
                 profilesCache.profile(),

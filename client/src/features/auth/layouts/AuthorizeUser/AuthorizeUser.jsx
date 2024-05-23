@@ -1,6 +1,8 @@
 import { Outlet, Navigate } from "react-router-dom";
+import { useEffect } from "react";
 import ShowLoader from "@/components/informational/ShowLoader";
 import accountsServices from "@/services/accounts";
+import useLogout from "@/utils/hooks/useLogout";
 import propTypes from "./AuthorizeUser.props";
 
 /**
@@ -25,10 +27,20 @@ import propTypes from "./AuthorizeUser.props";
  */
 const AuthorizeUser = ({ requiresUser, onFailedRedirectTo }) => {
     const accountQuery = accountsServices.useAccountData();
+    const logout = useLogout();
 
     const hasAccess = requiresUser
         ? accountQuery.isSuccess
         : accountQuery.isError;
+
+    useEffect(() => {
+        // If the user accessed a private route and the profile request failed
+        // it means the user does not have valid credentials any longer, 
+        // log them out before redirecting them
+        if (requiresUser && accountQuery.isError) {
+            logout();
+        }
+    }, [requiresUser, accountQuery.isError, logout]);
 
     return (
         <ShowLoader isLoading={accountQuery.isLoading}>

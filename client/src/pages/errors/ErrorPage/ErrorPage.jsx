@@ -1,9 +1,8 @@
 import { useParams, Link as RRLink, Navigate } from "react-router-dom";
-import { useQueryClient } from "@tanstack/react-query";
 import { Unstable_Grid2 as Grid, Typography, Link, Box } from "@mui/material";
 import error from "@/assets/error.png";
 import { messages, routes } from "@/utils/constants";
-import authCookies from "@/utils/cookies/auth"
+import useLogout from "@/utils/hooks/useLogout";
 import {
     GridItemStyles,
     ErrorImageContainerStyles,
@@ -23,16 +22,18 @@ const link = {
 /** Error page component */
 const ErrorPage = () => {
     const { code } = useParams();
-    
-    const queryClient = useQueryClient();
 
-    // If the error was an anauthorized it means the user logged off send them to log in page
+    const logout = useLogout();
+
+    // If the error was an unauthorized it means the user logged off send them to log in page
     if (code === "401") {
-        authCookies.removeAccessToken();
-        queryClient.cancelQueries();
-        // TODO Maybe migrate this usage to removeQueries, it seems it could work
-        queryClient.clear();
-        return <Navigate to={`/${routes.auth.AUTH}/${routes.auth.LOGIN}`} replace={true} />;
+        logout();
+        return (
+            <Navigate
+                to={`/${routes.auth.AUTH}/${routes.auth.LOGIN}`}
+                replace={true}
+            />
+        );
     }
 
     const errorMessage =

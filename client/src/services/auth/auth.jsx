@@ -1,6 +1,7 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import authAPI from "@/apis/auth/authAPI";
 import authCookies from "@/utils/cookies/auth";
+import useLogoutContext from "@/utils/hooks/useLogout";
 import profilesCache from "../caches/profiles";
 
 /** It creates and provides the state to login a user. */
@@ -68,18 +69,10 @@ const useResetPassword = () => {
 
 /** It creates and provides the state to logout a user. */
 const useLogout = () => {
-    const queryClient = useQueryClient();
+    const logout = useLogoutContext();
     const queryState = useMutation({
         mutationFn: () => authAPI.logout(),
-        onSuccess: () => {
-            authCookies.removeAccessToken();
-            queryClient.cancelQueries();
-            queryClient.clear();
-            // Invalidate profile query
-            return queryClient.resetQueries({
-                queryKey: profilesCache.profile(),
-            });
-        },
+        onSuccess: () => logout(),
         throwOnError: (error) => Boolean(error),
     });
 
