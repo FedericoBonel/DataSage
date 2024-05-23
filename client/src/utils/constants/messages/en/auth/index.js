@@ -5,6 +5,7 @@ import accountVerification from "./accountVerification";
 import accountRecovery from "./accountRecovery";
 import accountRecoveryEmailSent from "./accountRecoveryEmailSent";
 import resetPassword from "./resetPassword";
+import resetPasswordDone from "./resetPasswordDone";
 
 export default Object.freeze({
     /** Contains all messages related to login actions. */
@@ -21,4 +22,6 @@ export default Object.freeze({
     accountRecoveryEmailSent,
     /** Contains all messages related to the reset password pages. */
     resetPassword,
+    /** Contains all messages related to the reset password success confirmation pages. */
+    resetPasswordDone,
 });

@@ -8,6 +8,7 @@ const VerificationSent = lazy(() => import("@/pages/auth/VerificationSent"));
 const RecoverAccount = lazy(() => import("@/pages/auth/RecoverAccount"));
 const RecoveryEmailSent = lazy(() => import("@/pages/auth/RecoveryEmailSent"));
 const ResetPassword = lazy(() => import("@/pages/auth/ResetPassword"));
+const ResetPasswordDone = lazy(() => import("@/pages/auth/ResetPasswordDone"));
 import { routes } from "@/utils/constants";
 
 /** Router that routes all requests associated with authorization and authentication functionalities */
@@ -28,6 +29,7 @@ const AuthRouter = {
                 </Suspense>
             ),
         },
+        /** Sign up Pages */
         {
             path: routes.auth.SIGNUP,
             children: [
@@ -40,7 +42,7 @@ const AuthRouter = {
                         </Suspense>
                     ),
                 },
-                /** Sign up confirmation Page */
+                /** Sign Up confirmation Page */
                 {
                     path: routes.auth.SENT,
                     element: (
@@ -50,15 +52,6 @@ const AuthRouter = {
                     ),
                 },
             ],
-        },
-        /** Account verification confirmation Page */
-        {
-            path: routes.auth.SIGNUP,
-            element: (
-                <Suspense>
-                    <SignUp />
-                </Suspense>
-            ),
         },
         /** Account Verification Page */
         {
@@ -94,11 +87,24 @@ const AuthRouter = {
                 /** Account Recovery Reset Password Page */
                 {
                     path: routes.auth.RESET,
-                    element: (
-                        <Suspense>
-                            <ResetPassword />
-                        </Suspense>
-                    ),
+                    children: [
+                        {
+                            index: true,
+                            element: (
+                                <Suspense>
+                                    <ResetPassword />
+                                </Suspense>
+                            ),
+                        },
+                        {
+                            path: routes.auth.DONE,
+                            element: (
+                                <Suspense>
+                                    <ResetPasswordDone />
+                                </Suspense>
+                            ),
+                        },
+                    ],
                 },
             ],
         },
