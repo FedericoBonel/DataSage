@@ -63,7 +63,6 @@ const UpdateAccessForm = () => {
                 },
             },
             {
-                // TODO Extract the logout beheavior (invalidate queries and navigate to login) to its own custom hook for ease of dev
                 onSuccess: () =>
                     accessInfo.password &&
                     accessInfo.newPassword &&

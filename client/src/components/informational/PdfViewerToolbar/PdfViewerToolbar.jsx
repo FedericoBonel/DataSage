@@ -30,7 +30,10 @@ const PdfViewerToolbar = (Toolbar) => (
                 <Box sx={PageNavigationStyles}>
                     <GoToPreviousPage>
                         {({ onClick }) => (
-                            <IconButton onClick={onClick}>
+                            <IconButton
+                                onClick={onClick}
+                                aria-label={"previous-page"}
+                            >
                                 <KeyboardArrowUp />
                             </IconButton>
                         )}
@@ -39,7 +42,10 @@ const PdfViewerToolbar = (Toolbar) => (
                     <NumberOfPages />
                     <GoToNextPage>
                         {({ onClick }) => (
-                            <IconButton onClick={onClick}>
+                            <IconButton
+                                onClick={onClick}
+                                aria-label={"next-page"}
+                            >
                                 <KeyboardArrowDown />
                             </IconButton>
                         )}
@@ -48,7 +54,10 @@ const PdfViewerToolbar = (Toolbar) => (
                 <Box sx={ZoomControlStyles}>
                     <ZoomOut>
                         {({ onClick }) => (
-                            <IconButton onClick={onClick}>
+                            <IconButton
+                                onClick={onClick}
+                                aria-label={"page-zoom-out"}
+                            >
                                 <ZoomOutIcon />
                             </IconButton>
                         )}
@@ -56,14 +65,20 @@ const PdfViewerToolbar = (Toolbar) => (
                     <CurrentScale></CurrentScale>
                     <ZoomIn>
                         {({ onClick }) => (
-                            <IconButton onClick={onClick}>
+                            <IconButton
+                                onClick={onClick}
+                                aria-label={"page-zoom-in"}
+                            >
                                 <ZoomInIcon />
                             </IconButton>
                         )}
                     </ZoomIn>
                     <EnterFullScreen>
                         {({ onClick }) => (
-                            <IconButton onClick={onClick}>
+                            <IconButton
+                                onClick={onClick}
+                                aria-label={"enter-full-screen"}
+                            >
                                 <Fullscreen />
                             </IconButton>
                         )}

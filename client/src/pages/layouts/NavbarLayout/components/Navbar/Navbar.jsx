@@ -20,7 +20,7 @@ const Navbar = ({ selectedMenu, children }) => {
             <Box
                 component={"img"}
                 src={logo}
-                alt={messages.NAVBAR_LOGO_ALT}
+                alt={messages.navbar.NAVBAR_LOGO_ALT}
                 loading="lazy"
                 padding={1}
             />

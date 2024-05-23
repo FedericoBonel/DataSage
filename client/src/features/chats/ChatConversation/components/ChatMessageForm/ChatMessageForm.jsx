@@ -42,6 +42,7 @@ const ChatMessageForm = ({ onSend, disabled }) => {
                 <IconButton
                     onClick={onPressSend}
                     disabled={disabled || message.length < 1}
+                    aria-label={"send-message"}
                 >
                     <Send />
                 </IconButton>
