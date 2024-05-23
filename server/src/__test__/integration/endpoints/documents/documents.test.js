@@ -7,6 +7,7 @@ import { routes, permissions } from "../../../../utils/constants/index.js";
 import { connect, disconnect } from "../../../../utils/db/inMemory.js";
 import { createCommonAuthHeaders } from "../../utils/headers/index.js";
 import amazonS3Mock from "../../utils/mocks/lib/amazonS3.js";
+import vectorStoreMock from "../../utils/mocks/repositories/pages/utils/vectorStore.js";
 import createTestingData from "../../utils/testData/createTestingData.js";
 import chats from "../../utils/testData/chats.js";
 import users from "../../utils/testData/users.js";
@@ -16,6 +17,8 @@ import { documentDTOCheck, documentDeleteDTOCheck } from "../../utils/dtos/docum
 // Mocked modules
 jest.unstable_mockModule("../../../../lib/amazonS3.js", () => amazonS3Mock);
 const { saveFilesInS3, deleteFileInS3 } = await import("../../../../lib/amazonS3.js");
+jest.unstable_mockModule("../../../../repositories/pages/utils/vectorStore.js", () => vectorStoreMock);
+const { insertPagesIntoVectorStore } = await import("../../../../repositories/pages/utils/vectorStore.js");
 
 // Tested modules
 const app = await import("../../../../../app.js");
@@ -132,6 +135,7 @@ describe("Integration tests for chat documents management endpoints API", () => 
             expect(response.body.data).toBeInstanceOf(Array);
             expect(response.body.data.length).toBeGreaterThanOrEqual(0);
             expect(saveFilesInS3).toHaveBeenCalledTimes(2);
+            expect(insertPagesIntoVectorStore).toHaveBeenCalledTimes(1);
             response.body.data.forEach((doc) => expect(doc).toEqual(documentDTOCheck));
         });
         it("Checks that a document is NOT uploaded and returned when requesting POST to an invalid id", async () => {
@@ -145,6 +149,7 @@ describe("Integration tests for chat documents management endpoints API", () => 
             expect(response.body.errorMsg).toEqual(expect.any(String));
             expect(response.body.errors).toEqual(expect.any(Array));
             expect(saveFilesInS3).not.toHaveBeenCalled();
+            expect(insertPagesIntoVectorStore).not.toHaveBeenCalled();
         });
         it("Checks that a document is NOT uploaded and returned when requesting POST with invalid documents", async () => {
             // Given
@@ -161,6 +166,7 @@ describe("Integration tests for chat documents management endpoints API", () => 
                 expect(response.status).toBe(StatusCodes.BAD_REQUEST);
                 expect(response.body.errorMsg).toEqual(expect.any(String));
                 expect(saveFilesInS3).not.toHaveBeenCalled();
+                expect(insertPagesIntoVectorStore).not.toHaveBeenCalled();
             }
         });
         it("Checks that a document is NOT uploaded and returned when requesting POST to a chat where the user does not have the required permissions", async () => {
@@ -173,6 +179,7 @@ describe("Integration tests for chat documents management endpoints API", () => 
             expect(response.status).toBe(StatusCodes.FORBIDDEN);
             expect(response.body.errorMsg).toEqual(expect.any(String));
             expect(saveFilesInS3).not.toHaveBeenCalled();
+            expect(insertPagesIntoVectorStore).not.toHaveBeenCalled();
         });
         it("Checks that a document is NOT uploaded and returned when requesting POST to a chat that does not exist", async () => {
             const invalidRoute = `${config.server.urls.api}/${routes.chats.CHATS}/6639f9c6458c53338c05c38c/${routes.documents.DOCUMENTS}`;
@@ -183,6 +190,7 @@ describe("Integration tests for chat documents management endpoints API", () => 
             expect(response.status).toBe(StatusCodes.NOT_FOUND);
             expect(response.body.errorMsg).toEqual(expect.any(String));
             expect(saveFilesInS3).not.toHaveBeenCalled();
+            expect(insertPagesIntoVectorStore).not.toHaveBeenCalled();
         });
         it("Checks that a document is NOT uploaded and returned when requesting POST to a chat that the user wasn't invited to", async () => {
             const invalidRoute = `${config.server.urls.api}/${routes.chats.CHATS}/${nonInvitedChats[0].chat._id}/${routes.documents.DOCUMENTS}`;
@@ -193,6 +201,7 @@ describe("Integration tests for chat documents management endpoints API", () => 
             expect(response.status).toBe(StatusCodes.NOT_FOUND);
             expect(response.body.errorMsg).toEqual(expect.any(String));
             expect(saveFilesInS3).not.toHaveBeenCalled();
+            expect(insertPagesIntoVectorStore).not.toHaveBeenCalled();
         });
     });
 

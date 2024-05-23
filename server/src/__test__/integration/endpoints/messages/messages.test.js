@@ -6,6 +6,7 @@ import { routes, permissions } from "../../../../utils/constants/index.js";
 import { connect, disconnect } from "../../../../utils/db/inMemory.js";
 import { createCommonAuthHeaders } from "../../utils/headers/index.js";
 import amazonS3Mock from "../../utils/mocks/lib/amazonS3.js";
+import vectorStoreMock from "../../utils/mocks/repositories/pages/utils/vectorStore.js";
 import { getQAChainDefaultMock, qAChainObjectMock } from "../../utils/mocks/services/messages/utils/getQAChain.js";
 import createTestingData from "../../utils/testData/createTestingData.js";
 import chats from "../../utils/testData/chats.js";
@@ -18,6 +19,8 @@ jest.unstable_mockModule("../../../../lib/amazonS3.js", () => amazonS3Mock);
 await import("../../../../lib/amazonS3.js");
 jest.unstable_mockModule("../../../../services/messages/utils/getQAChain.js", () => getQAChainDefaultMock);
 const qaChainMock = await import("../../../../services/messages/utils/getQAChain.js");
+jest.unstable_mockModule("../../../../repositories/pages/utils/vectorStore.js", () => vectorStoreMock);
+const { getPagesVectorStore } = await import("../../../../repositories/pages/utils/vectorStore.js");
 
 // Tested modules
 const app = await import("../../../../../app.js");
@@ -137,6 +140,7 @@ describe("Integration tests for chat messages management endpoints API", () => {
             response.body.data.sources.forEach((msg) => expect(msg).toEqual(messageSourceDTOCheck));
             expect(qaChainMock.default).toHaveBeenCalledTimes(1);
             expect(qAChainObjectMock.invoke).toHaveBeenCalledTimes(1);
+            expect(getPagesVectorStore.asRetriever).toHaveBeenCalledTimes(1);
         });
         it("Checks that a message is NOT sent to a non existent chat", async () => {
             // Given
@@ -149,6 +153,7 @@ describe("Integration tests for chat messages management endpoints API", () => {
             expect(response.body.errorMsg).toEqual(expect.any(String));
             expect(qaChainMock.default).not.toHaveBeenCalled();
             expect(qAChainObjectMock.invoke).not.toHaveBeenCalled();
+            expect(getPagesVectorStore.asRetriever).not.toHaveBeenCalled();
         });
         it("Checks that a message is NOT sent to an invalid chat id", async () => {
             // Given
@@ -161,6 +166,7 @@ describe("Integration tests for chat messages management endpoints API", () => {
             expect(response.body.errorMsg).toEqual(expect.any(String));
             expect(qaChainMock.default).not.toHaveBeenCalled();
             expect(qAChainObjectMock.invoke).not.toHaveBeenCalled();
+            expect(getPagesVectorStore.asRetriever).not.toHaveBeenCalled();
         });
         it("Checks that a message is NOT sent to a chat the user was not invited to", async () => {
             // Given
@@ -173,6 +179,7 @@ describe("Integration tests for chat messages management endpoints API", () => {
             expect(response.body.errorMsg).toEqual(expect.any(String));
             expect(qaChainMock.default).not.toHaveBeenCalled();
             expect(qAChainObjectMock.invoke).not.toHaveBeenCalled();
+            expect(getPagesVectorStore.asRetriever).not.toHaveBeenCalled();
         });
         it("Checks that a chat message with sources is NOT returned when requesting POST to a chat without permission to read documents", async () => {
             // Given
@@ -186,6 +193,7 @@ describe("Integration tests for chat messages management endpoints API", () => {
             expect(response.body.sources).not.toBeDefined();
             expect(qaChainMock.default).toHaveBeenCalledTimes(1);
             expect(qAChainObjectMock.invoke).toHaveBeenCalledTimes(1);
+            expect(getPagesVectorStore.asRetriever).toHaveBeenCalledTimes(1);
         });
         it("Checks that a chat message is NOT sent when requesting POST to a chat with an invalid payload", async () => {
             // Given
@@ -199,6 +207,7 @@ describe("Integration tests for chat messages management endpoints API", () => {
                 expect(response.body.errorMsg).toEqual(expect.any(String));
                 expect(qaChainMock.default).not.toHaveBeenCalled();
                 expect(qAChainObjectMock.invoke).not.toHaveBeenCalled();
+                expect(getPagesVectorStore.asRetriever).not.toHaveBeenCalled();
             }
         });
     });

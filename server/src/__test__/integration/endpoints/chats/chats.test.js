@@ -8,14 +8,16 @@ import { routes } from "../../../../utils/constants/index.js";
 import { connect, disconnect } from "../../../../utils/db/inMemory.js";
 import { createCommonAuthHeaders } from "../../utils/headers/index.js";
 import amazonS3Mock from "../../utils/mocks/lib/amazonS3.js";
+import vectorStoreMock from "../../utils/mocks/repositories/pages/utils/vectorStore.js";
 import createTestingData from "../../utils/testData/createTestingData.js";
 import chats from "../../utils/testData/chats.js";
 import users from "../../utils/testData/users.js";
 
 // Mocked modules
 jest.unstable_mockModule("../../../../lib/amazonS3.js", () => amazonS3Mock);
-// TODO Add mock of langchain to avoid using OpenAI's API in tests
 const { saveFilesInS3 } = await import("../../../../lib/amazonS3.js");
+jest.unstable_mockModule("../../../../repositories/pages/utils/vectorStore.js", () => vectorStoreMock);
+const { insertPagesIntoVectorStore } = await import("../../../../repositories/pages/utils/vectorStore.js");
 
 // Tested modules
 const app = await import("../../../../../app.js");
@@ -128,6 +130,7 @@ describe("Integration tests for chat management endpoints API", () => {
             expect(response.status).toBe(StatusCodes.CREATED);
             expect(response.body.data).toEqual(chatDetailDTOCheck);
             expect(saveFilesInS3).toHaveBeenCalledTimes(2);
+            expect(insertPagesIntoVectorStore).toHaveBeenCalledTimes(1);
         });
         it("Checks that a chat is NOT created after sending an incorrect POST request to /chats", async () => {
             // Given
@@ -147,6 +150,7 @@ describe("Integration tests for chat management endpoints API", () => {
                 expect(response.status).toBe(StatusCodes.BAD_REQUEST);
                 expect(response.body.errorMsg).toEqual(expect.any(String));
                 expect(saveFilesInS3).not.toHaveBeenCalled();
+                expect(insertPagesIntoVectorStore).not.toHaveBeenCalled();
             }
         });
     });
