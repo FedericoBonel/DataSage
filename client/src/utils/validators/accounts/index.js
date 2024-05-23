@@ -3,6 +3,7 @@ import api from "../../constants/api";
 
 /**
  * Validates contents for a password. It checks that is strong and follows overall restrictions for it.
+ * @param {string} password The password to be verified.
  * @returns True if valid, false otherwise
  */
 const isStrongPass = (password) =>
@@ -14,6 +15,8 @@ const isStrongPass = (password) =>
 export default Object.freeze({
     /**
      * Validates contents of a general user information update.
+     * @param {{names: string,
+     *          lastnames: string}} update The update form contents
      * @returns True if valid, false otherwise
      */
     updateUserInfo: ({ names, lastnames }) =>
@@ -27,6 +30,10 @@ export default Object.freeze({
         }),
     /**
      * Validates contents of an update for a user access credentials update.
+     * @param {{email: string,
+     *          password: string,
+     *          newPassword: string,
+     *          confirmPassword: string}} update The update form contents
      * @returns True if valid, false otherwise
      */
     updateAccess: ({ email, password, newPassword, confirmPassword }) => {
@@ -48,11 +55,13 @@ export default Object.freeze({
     },
     /**
      * Validates contents for a password. It checks that is strong and follows overall restrictions for it.
+     * @param {string} password The password to be verified.
      * @returns True if valid, false otherwise
      */
     isStrongPass,
     /**
      * Validates contents for an email. It checks that is a valid email and follows overall restrictions for it.
+     * @param {string} email The email to be verified.
      * @returns True if valid, false otherwise
      */
     isEmail,
