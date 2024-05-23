@@ -62,7 +62,7 @@ isDefined(JWT_REFRESH_SECRET, "JWT_REFRESH_SECRET");
 const BCRYPT_SALT_ROUNDS = process.env.BCRYPT_SALT_ROUNDS;
 isDefined(BCRYPT_SALT_ROUNDS, "BCRYPT_SALT_ROUNDS");
 
-// OpenAI configuration
+// OpenAPI configuration
 const TEST_URL = process.env.OPEN_API_TEST_URL;
 isDefined(TEST_URL, "TEST_URL");
 
@@ -89,6 +89,8 @@ isDefined(S3_BUCKET, "S3_BUCKET");
 // LLM Model configuration
 const OPEN_AI_KEY = process.env.OPEN_AI_KEY;
 isDefined(OPEN_AI_KEY, "OPEN_AI_KEY");
+const OPEN_AI_LLM_TEMPERATURE = process.env.OPEN_AI_LLM_TEMPERATURE;
+isDefined(OPEN_AI_LLM_TEMPERATURE, "OPEN_AI_LLM_TEMPERATURE");
 
 // Logging configuration
 const LOGGING_DB_URL = process.env.LOGGING_DB_URL;
@@ -194,6 +196,8 @@ export default Object.freeze({
     llm: {
         /** Large language model API Key being used. (Currently OpenAI) */
         apiKey: OPEN_AI_KEY,
+        /** Large language model temperature value. */
+        temperature: Number(OPEN_AI_LLM_TEMPERATURE),
     },
     /** Logging related variables */
     logging: {

@@ -15,7 +15,7 @@ const CHAT_INPUT_KEY = "question";
 const CHAT_OUTPUT_KEY = "text";
 
 const embeddings = new OpenAIEmbeddings({ openAIApiKey: config.llm.apiKey });
-const chat = new ChatOpenAI({ openAIApiKey: config.llm.apiKey });
+const chat = new ChatOpenAI({ openAIApiKey: config.llm.apiKey, temperature: config.llm.temperature });
 
 /** Returns the embeddings instance to be used in the application */
 const getEmbeddings = () => embeddings;
