@@ -5,6 +5,9 @@ const Login = lazy(() => import("@/pages/auth/Login"));
 const SignUp = lazy(() => import("@/pages/auth/SignUp"));
 const Verification = lazy(() => import("@/pages/auth/Verification"));
 const VerificationSent = lazy(() => import("@/pages/auth/VerificationSent"));
+const RecoverAccount = lazy(() => import("@/pages/auth/RecoverAccount"));
+const RecoveryEmailSent = lazy(() => import("@/pages/auth/RecoveryEmailSent"));
+const ResetPassword = lazy(() => import("@/pages/auth/ResetPassword"));
 import { routes } from "@/utils/constants";
 
 /** Router that routes all requests associated with authorization and authentication functionalities */
@@ -65,6 +68,39 @@ const AuthRouter = {
                     <Verification />
                 </Suspense>
             ),
+        },
+        /** Account Recovery Pages */
+        {
+            path: routes.auth.RECOVER,
+            children: [
+                /** Account Recovery Page */
+                {
+                    index: true,
+                    element: (
+                        <Suspense>
+                            <RecoverAccount />
+                        </Suspense>
+                    ),
+                },
+                /** Account Recovery Confirmation Page */
+                {
+                    path: routes.auth.SENT,
+                    element: (
+                        <Suspense>
+                            <RecoveryEmailSent />
+                        </Suspense>
+                    ),
+                },
+                /** Account Recovery Reset Password Page */
+                {
+                    path: routes.auth.RESET,
+                    element: (
+                        <Suspense>
+                            <ResetPassword />
+                        </Suspense>
+                    ),
+                },
+            ],
         },
     ],
 };

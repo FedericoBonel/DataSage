@@ -29,4 +29,16 @@ export default Object.freeze({
         isEmail(email) &&
         accountValidator.isStrongPass(newPassword) &&
         newPassword === confirmPassword,
+    /**
+     * Validates contents of an account recovery request.
+     * @returns True if valid, false otherwise
+     */
+    recovery: (email) => isEmail(email),
+    /**
+     * Validates contents of a reset password request.
+     * @returns True if valid, false otherwise
+     */
+    resetPassword: ({ newPassword, confirmPassword }) =>
+        accountValidator.isStrongPass(newPassword) &&
+        newPassword === confirmPassword,
 });

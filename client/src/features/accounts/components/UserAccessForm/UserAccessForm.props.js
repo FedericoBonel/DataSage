@@ -31,6 +31,8 @@ export default {
     }),
     /** True if the form is being submitted, false otherwise. If true it disables the fields. */
     isSubmitting: propTypes.bool,
-    /** If true the current password field will be shown, if false it wont. Useful to re use this component in registration forms. */
+    /** If true the current password field will be shown, if false it wont. Useful to re use this component in registration forms. Defaults to false. */
     askForCurrentPassword: propTypes.bool,
+    /** If true the email field will be shown, if false it wont. Useful to re use this component in another forms. Defaults to true. */
+    askForEmail: propTypes.bool,
 };

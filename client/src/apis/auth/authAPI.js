@@ -48,6 +48,39 @@ const verifyAccount = async (code) => {
 };
 
 /**
+ * Function that sends an account recovery email to a user by email
+ *
+ * @param {{email: string}} email The object with the email of the user that needs to recover their account
+ * @returns The response with the success flag (No data is returned).
+ */
+const recoverAccount = async (email) => {
+    const params = { recoveryLink: config.api.RECOVERY_LINK };
+    return makeRequest({
+        url: api.urls.auth.RECOVER,
+        method: "post",
+        data: email,
+        params,
+    });
+};
+
+/**
+ * Function that resets a user password by recovery code
+ *
+ * @param {{password: string}} password The object with the new password.
+ * @param {string} recoveryCode The recovery code of the user that wishes to reset their password.
+ * @returns The response with the success flag (No data is returned).
+ */
+const resetPassword = async (password, recoveryCode) => {
+    const params = { recoveryCode };
+    return makeRequest({
+        url: api.urls.auth.RESET_PASSWORD,
+        method: "post",
+        data: password,
+        params,
+    });
+};
+
+/**
  * Function that logs out a user and removes its HTTP Only credentials from the server
  * @returns The response with the HTTP Only cookie removal header for the access token.
  */
@@ -69,4 +102,12 @@ const refreshAccessToken = () =>
         })
         .then((response) => response.data);
 
-export default { refreshAccessToken, login, logout, signUp, verifyAccount };
+export default {
+    refreshAccessToken,
+    login,
+    logout,
+    signUp,
+    verifyAccount,
+    recoverAccount,
+    resetPassword,
+};

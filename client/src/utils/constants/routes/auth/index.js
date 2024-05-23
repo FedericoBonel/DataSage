@@ -9,4 +9,10 @@ export default {
     SENT: "sent",
     /** Route to the account verification page */
     VERIFY: "verify",
+    /** Route to the account recovery page */
+    RECOVER: "recover",
+    /** Route to the reset password page */
+    RESET: "reset",
+    /** Route to the reset password completion confirmation page */
+    DONE: "done",
 };

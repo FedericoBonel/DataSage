@@ -44,14 +44,14 @@ export default Object.freeze({
         },
         /** Api authentication and authorization management endpoints related constants */
         auth: {
-            /** Minimum length for user's emails in the login form  */
+            /** Minimum length for user's emails in the auth forms  */
             EMAIL_MIN_LENGTH: 4,
-            /** Maximum length for user's emails in the login form  */
-            EMAIL_MAX_LENGTH: 32,
-            /** Minimum length for passwords in the login form */
+            /** Maximum length for user's emails in the auth forms  */
+            EMAIL_MAX_LENGTH: 254,
+            /** Minimum length for passwords in the auth forms */
             PASS_MIN_LENGTH: 8,
-            /** Maximum length for passwords in the login form */
-            PASS_MAX_LENGTH: 32,
+            /** Maximum length for passwords in the auth forms */
+            PASS_MAX_LENGTH: 64,
         },
         /** Api chats management endpoints related constants */
         chats: {

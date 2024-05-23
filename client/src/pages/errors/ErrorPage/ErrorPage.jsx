@@ -30,6 +30,7 @@ const ErrorPage = () => {
     if (code === "401") {
         authCookies.removeAccessToken();
         queryClient.cancelQueries();
+        // TODO Maybe migrate this usage to removeQueries, it seems it could work
         queryClient.clear();
         return <Navigate to={`/${routes.auth.AUTH}/${routes.auth.LOGIN}`} replace={true} />;
     }

@@ -6,8 +6,8 @@ import propTypes from "./UserAccessForm.props";
 import { FieldStyles, PasswordFieldsStyles } from "./UserAccessForm.styles";
 
 /**
- * Component that renders the User Access section in profile related forms for registration.
- * It asks for user email, new password, confirm password and, optionally, current password.
+ * Component that renders the User Access section in profile related forms for registration or update.
+ * It asks for a user new password, confirm password and, optionally, current password and email.
  */
 const UserAccessForm = ({
     emailField,
@@ -16,6 +16,7 @@ const UserAccessForm = ({
     confirmPasswordField,
     isSubmitting,
     askForCurrentPassword,
+    askForEmail = true,
 }) => {
     return (
         <>
@@ -46,29 +47,31 @@ const UserAccessForm = ({
                     variant="standard"
                 />
             )}
-            <Box sx={PasswordFieldsStyles}>
+            <Box sx={askForCurrentPassword ? PasswordFieldsStyles : undefined}>
                 {/* The new email */}
-                <TextField
-                    fullWidth
-                    showHelperText
-                    sx={FieldStyles}
-                    label={messages.account.accessInfo.update.form.EMAIL}
-                    type="email"
-                    name="email"
-                    onChange={emailField.onChange}
-                    value={emailField.value}
-                    helperText={
-                        messages.account.accessInfo.update.form
-                            .EMAIL_HELPER_TEXT
-                    }
-                    disabled={isSubmitting}
-                    inputProps={{
-                        minLength: api.validation.auth.EMAIL_MIN_LENGTH,
-                        maxLength: api.validation.auth.EMAIL_MAX_LENGTH,
-                    }}
-                    variant="standard"
-                    validator={accountsValidator.isEmail}
-                />
+                {askForEmail && (
+                    <TextField
+                        fullWidth
+                        showHelperText
+                        sx={FieldStyles}
+                        label={messages.account.accessInfo.update.form.EMAIL}
+                        type="email"
+                        name="email"
+                        onChange={emailField.onChange}
+                        value={emailField.value}
+                        helperText={
+                            messages.account.accessInfo.update.form
+                                .EMAIL_HELPER_TEXT
+                        }
+                        disabled={isSubmitting}
+                        inputProps={{
+                            minLength: api.validation.auth.EMAIL_MIN_LENGTH,
+                            maxLength: api.validation.auth.EMAIL_MAX_LENGTH,
+                        }}
+                        variant="standard"
+                        validator={accountsValidator.isEmail}
+                    />
+                )}
                 {/* The new password */}
                 <TextField
                     fullWidth

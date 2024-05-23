@@ -11,5 +11,7 @@ export default {
         PASSWORD: "Password",
         /** The sign up question */
         SIGNUP_QUESTION: "Don't have an account yet?",
+        /** The account recovery question */
+        RECOVER_QUESTION: "Forgot your password?",
     },
 };

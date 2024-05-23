@@ -92,12 +92,15 @@ const LoginForm = () => {
                 </CardContent>
             </Form>
             {errors}
-            <Box
-                textAlign="center"
-                flexDirection="column"
-                display="flex"
-                sx={SignUpLinkContainerStyles}
-            >
+            <Box sx={SignUpLinkContainerStyles}>
+                <MuiLink
+                    variant="body2"
+                    sx={SignUpLinkQuestionStyles}
+                    component={Link}
+                    to={`/${routes.auth.AUTH}/${routes.auth.RECOVER}`}
+                >
+                    {messages.auth.login.form.RECOVER_QUESTION}
+                </MuiLink>
                 <Typography
                     variant="body2"
                     color="text.secondary"

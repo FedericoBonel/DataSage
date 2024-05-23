@@ -4,6 +4,12 @@ export const LoginFormImgStyles = {
     objectFit: "contain",
     paddingTop: 4,
 };
-export const SignUpLinkContainerStyles = { paddingY: 2 };
+export const SignUpLinkContainerStyles = {
+    paddingY: 2,
+    textAlign: "center",
+    flexDirection: "column",
+    display: "flex",
+    gap: 2
+};
 export const SignUpLinkQuestionStyles = { fontWeight: 200 };
 export const SignUpLinkStyles = { marginLeft: 1 };

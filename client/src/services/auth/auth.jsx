@@ -44,6 +44,28 @@ const useVerifyAccount = () => {
     return queryState;
 };
 
+/** It creates and provides the state to send a recovery email to a user email to reset their password. */
+const useRecoverAccount = () => {
+    const queryState = useMutation({
+        mutationFn: ({ email }) => authAPI.recoverAccount({ email }),
+        throwOnError: (error) => Boolean(error),
+    });
+
+    return queryState;
+};
+
+/** It creates and provides the state to reset a user password by recovery code. */
+const useResetPassword = () => {
+    const queryState = useMutation({
+        mutationFn: ({ password, recoveryCode }) =>
+            authAPI.resetPassword({ password }, recoveryCode),
+        throwOnError: (error) =>
+            error?.response?.status !== 400 && error?.response?.status !== 404,
+    });
+
+    return queryState;
+};
+
 /** It creates and provides the state to logout a user. */
 const useLogout = () => {
     const queryClient = useQueryClient();
@@ -64,4 +86,11 @@ const useLogout = () => {
     return queryState;
 };
 
-export default { useLogin, useLogout, useSignUp, useVerifyAccount };
+export default {
+    useLogin,
+    useLogout,
+    useSignUp,
+    useVerifyAccount,
+    useRecoverAccount,
+    useResetPassword,
+};

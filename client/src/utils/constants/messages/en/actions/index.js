@@ -17,6 +17,8 @@ const decisionMessages = {
     SIGNIN: "Sign In",
     /** Contains the message to be shown to the user to describe the action of signing out of the application */
     SIGNOUT: "Sign Out",
+    /** Contains the message to be shown to the user to describe the action of recovering an account */
+    RECOVER: "Recover account",
 };
 
 export default Object.freeze({
