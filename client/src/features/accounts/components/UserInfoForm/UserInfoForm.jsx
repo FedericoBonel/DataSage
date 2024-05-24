@@ -1,7 +1,6 @@
-import { api } from "@/utils/constants";
 import TextField from "@/components/fields/TextField";
 import { FieldStyles } from "./UserInfoForm.styles";
-import { messages } from "@/utils/constants";
+import { messages, api } from "@/utils/constants";
 import propTypes from "./UserInfoForm.props";
 
 /**

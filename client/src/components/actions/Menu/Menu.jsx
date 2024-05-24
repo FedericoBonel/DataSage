@@ -70,9 +70,7 @@ const Menu = ({
                 }}
                 sx={{ maxWidth: 450 }}
                 anchorOrigin={
-                    position
-                        ? position
-                        : { vertical: "bottom", horizontal: "left" }
+                    position ?? { vertical: "bottom", horizontal: "left" }
                 }
                 keepMounted={keepMounted}
             >
