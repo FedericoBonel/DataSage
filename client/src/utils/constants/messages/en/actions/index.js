@@ -11,6 +11,14 @@ const decisionMessages = {
     ACCEPT: "Accept",
     /** Contains the message to be shown to the user to describe the action of joining something. */
     JOIN: "Join",
+    /** Contains the message to be shown to the user to describe the action of signing up to the application */
+    SIGNUP: "Sign Up",
+    /** Contains the message to be shown to the user to describe the action of signing in to the application */
+    SIGNIN: "Sign In",
+    /** Contains the message to be shown to the user to describe the action of signing out of the application */
+    SIGNOUT: "Sign Out",
+    /** Contains the message to be shown to the user to describe the action of recovering an account */
+    RECOVER: "Recover account",
 };
 
 export default Object.freeze({

@@ -21,6 +21,7 @@ const DocumentListItem = ({ documentItem, onClickDelete, showDelete }) => {
                 target="_blank"
                 rel="noopener noreferrer"
                 color="primary"
+                aria-label="open-in-new-tab"
             >
                 <OpenInNew />
             </IconButton>
@@ -28,6 +29,7 @@ const DocumentListItem = ({ documentItem, onClickDelete, showDelete }) => {
                 <IconButton
                     color="error"
                     onClick={() => onClickDelete(documentItem._id)}
+                    aria-label="delete"
                 >
                     <Delete />
                 </IconButton>

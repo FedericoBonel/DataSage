@@ -1,9 +1,9 @@
-import { jest } from "@jest/globals";
 import request from "supertest";
 import { StatusCodes } from "http-status-codes";
 import config from "../../../../config/index.js";
 import { routes, permissions } from "../../../../utils/constants/index.js";
 import { connect, disconnect } from "../../../../utils/db/inMemory.js";
+import { createCommonAuthHeaders } from "../../utils/headers/index.js";
 import createTestingData from "../../utils/testData/createTestingData.js";
 import chats from "../../utils/testData/chats.js";
 import users from "../../utils/testData/users.js";
@@ -37,6 +37,7 @@ const noReadPermissionChat = colaborator.find(
 
 describe("Integration tests for chat participants management endpoints API", () => {
     const appInstance = app.default;
+    let headers;
 
     beforeAll(async () => {
         // Connect to database
@@ -51,6 +52,8 @@ describe("Integration tests for chat participants management endpoints API", () 
     beforeEach(async () => {
         // Create dummy data and reset between tests
         await createTestingData();
+        // Log in the user
+        headers = createCommonAuthHeaders(loggedInUser);
     });
 
     describe("Integration tests for GET /chats/:chatId/participants", () => {
@@ -59,7 +62,9 @@ describe("Integration tests for chat participants management endpoints API", () 
         const participantsRoute = `${config.server.urls.api}/${routes.chats.CHATS}/${usersChat._id}/${routes.participants.PARTICIPANTS}`;
         it("Checks that a list of chat participants is returned when requesting GET a valid chat", async () => {
             // When
-            const response = await request(appInstance).get(`${participantsRoute}?limit=${limit}&page=${page}`);
+            const response = await request(appInstance)
+                .get(`${participantsRoute}?limit=${limit}&page=${page}`)
+                .set(headers);
             // Then
             expect(response.headers["content-type"]).toEqual(expect.stringContaining("json"));
             expect(response.status).toBe(StatusCodes.OK);
@@ -72,7 +77,7 @@ describe("Integration tests for chat participants management endpoints API", () 
             // Given
             const invalidRoute = `${config.server.urls.api}/${routes.chats.CHATS}/invalid/${routes.participants.PARTICIPANTS}`;
             // When
-            const response = await request(appInstance).get(invalidRoute);
+            const response = await request(appInstance).get(invalidRoute).set(headers);
             // Then
             expect(response.headers["content-type"]).toEqual(expect.stringContaining("json"));
             expect(response.status).toBe(StatusCodes.BAD_REQUEST);
@@ -82,7 +87,7 @@ describe("Integration tests for chat participants management endpoints API", () 
             // Given
             const invalidRoute = `${config.server.urls.api}/${routes.chats.CHATS}/6639f9c6458c53338c05c38c/${routes.participants.PARTICIPANTS}?limit=${limit}&page=${page}`;
             // When
-            const response = await request(appInstance).get(invalidRoute);
+            const response = await request(appInstance).get(invalidRoute).set(headers);
             // Then
             expect(response.headers["content-type"]).toEqual(expect.stringContaining("json"));
             expect(response.status).toBe(StatusCodes.NOT_FOUND);
@@ -92,7 +97,7 @@ describe("Integration tests for chat participants management endpoints API", () 
             // Given
             const invalidRoute = `${config.server.urls.api}/${routes.chats.CHATS}/${nonInvitedChats[0].chat._id}/${routes.participants.PARTICIPANTS}?limit=${limit}&page=${page}`;
             // When
-            const response = await request(appInstance).get(invalidRoute);
+            const response = await request(appInstance).get(invalidRoute).set(headers);
             // Then
             expect(response.headers["content-type"]).toEqual(expect.stringContaining("json"));
             expect(response.status).toBe(StatusCodes.NOT_FOUND);
@@ -102,7 +107,7 @@ describe("Integration tests for chat participants management endpoints API", () 
             // Given
             const invalidRoute = `${config.server.urls.api}/${routes.chats.CHATS}/${noReadPermissionChat._id}/${routes.participants.PARTICIPANTS}?limit=${limit}&page=${page}`;
             // When
-            const response = await request(appInstance).get(invalidRoute);
+            const response = await request(appInstance).get(invalidRoute).set(headers);
             // Then
             expect(response.headers["content-type"]).toEqual(expect.stringContaining("json"));
             expect(response.status).toBe(StatusCodes.NOT_FOUND);
@@ -115,7 +120,7 @@ describe("Integration tests for chat participants management endpoints API", () 
         const newParticipant = { email: anotherUser.email, permissions: [permissions.colaborator.readDocs] };
         it("Checks that a participant is added to an existant chat created by the user", async () => {
             // When
-            const response = await request(appInstance).post(participantsRoute).send(newParticipant);
+            const response = await request(appInstance).post(participantsRoute).set(headers).send(newParticipant);
             // Then
             expect(response.headers["content-type"]).toEqual(expect.stringContaining("json"));
             expect(response.status).toBe(StatusCodes.CREATED);
@@ -125,7 +130,7 @@ describe("Integration tests for chat participants management endpoints API", () 
             // Given
             const nonInvitedRoute = `${config.server.urls.api}/${routes.chats.CHATS}/${usersChat._id}/${routes.participants.PARTICIPANTS}`;
             // When
-            const response = await request(appInstance).post(nonInvitedRoute).send(newParticipant);
+            const response = await request(appInstance).post(nonInvitedRoute).set(headers).send(newParticipant);
             // Then
             expect(response.headers["content-type"]).toEqual(expect.stringContaining("json"));
             expect(response.status).toBe(StatusCodes.BAD_REQUEST);
@@ -143,7 +148,10 @@ describe("Integration tests for chat participants management endpoints API", () 
             for (let i = 0; i < invalidParticipants.length; i += 1) {
                 const invalidParticipant = invalidParticipants[i];
                 // When
-                const response = await request(appInstance).post(participantsRoute).send(invalidParticipant);
+                const response = await request(appInstance)
+                    .post(participantsRoute)
+                    .set(headers)
+                    .send(invalidParticipant);
                 // Then
                 expect(response.headers["content-type"]).toEqual(expect.stringContaining("json"));
                 expect(response.status).toBe(StatusCodes.BAD_REQUEST);
@@ -160,7 +168,10 @@ describe("Integration tests for chat participants management endpoints API", () 
             for (let i = 0; i < invalidParticipants.length; i += 1) {
                 const invalidParticipant = invalidParticipants[i];
                 // When
-                const response = await request(appInstance).post(participantsRoute).send(invalidParticipant);
+                const response = await request(appInstance)
+                    .post(participantsRoute)
+                    .set(headers)
+                    .send(invalidParticipant);
                 // Then
                 expect(response.headers["content-type"]).toEqual(expect.stringContaining("json"));
                 expect(response.status).toBe(StatusCodes.NOT_FOUND);
@@ -171,7 +182,7 @@ describe("Integration tests for chat participants management endpoints API", () 
             // Given
             const invalidRoute = `${config.server.urls.api}/${routes.chats.CHATS}/${noReadPermissionChat._id}/${routes.participants.PARTICIPANTS}`;
             // When
-            const response = await request(appInstance).post(invalidRoute).send(newParticipant);
+            const response = await request(appInstance).post(invalidRoute).set(headers).send(newParticipant);
             // Then
             expect(response.headers["content-type"]).toEqual(expect.stringContaining("json"));
             expect(response.status).toBe(StatusCodes.NOT_FOUND);
@@ -181,7 +192,7 @@ describe("Integration tests for chat participants management endpoints API", () 
             // Given
             const invalidRoute = `${config.server.urls.api}/${routes.chats.CHATS}/6639f9c6458c53338c05c38c/${routes.participants.PARTICIPANTS}`;
             // When
-            const response = await request(appInstance).post(invalidRoute).send(newParticipant);
+            const response = await request(appInstance).post(invalidRoute).set(headers).send(newParticipant);
             // Then
             expect(response.headers["content-type"]).toEqual(expect.stringContaining("json"));
             expect(response.status).toBe(StatusCodes.NOT_FOUND);
@@ -191,7 +202,7 @@ describe("Integration tests for chat participants management endpoints API", () 
             // Given
             const invalidRoute = `${config.server.urls.api}/${routes.chats.CHATS}/invalid/${routes.participants.PARTICIPANTS}`;
             // When
-            const response = await request(appInstance).post(invalidRoute).send(newParticipant);
+            const response = await request(appInstance).post(invalidRoute).set(headers).send(newParticipant);
             // Then
             expect(response.headers["content-type"]).toEqual(expect.stringContaining("json"));
             expect(response.status).toBe(StatusCodes.BAD_REQUEST);
@@ -201,7 +212,7 @@ describe("Integration tests for chat participants management endpoints API", () 
             // Given
             const invalidParticipant = { email: loggedInUser.email, permissions: [permissions.colaborator.readDocs] };
             // When
-            const response = await request(appInstance).post(participantsRoute).send(invalidParticipant);
+            const response = await request(appInstance).post(participantsRoute).set(headers).send(invalidParticipant);
             // Then
             expect(response.headers["content-type"]).toEqual(expect.stringContaining("json"));
             expect(response.status).toBe(StatusCodes.BAD_REQUEST);
@@ -213,7 +224,7 @@ describe("Integration tests for chat participants management endpoints API", () 
         const participantsRoute = `${config.server.urls.api}/${routes.chats.CHATS}/${usersChat._id}/${routes.participants.PARTICIPANTS}/${anotherUser._id}`;
         it("Checks that a chat participant is returned when requesting GET to a valid chat Id and participant Id", async () => {
             // When
-            const response = await request(appInstance).get(participantsRoute);
+            const response = await request(appInstance).get(participantsRoute).set(headers);
             // Then
             expect(response.headers["content-type"]).toEqual(expect.stringContaining("json"));
             expect(response.status).toBe(StatusCodes.OK);
@@ -224,8 +235,8 @@ describe("Integration tests for chat participants management endpoints API", () 
             const invalidChat = `${config.server.urls.api}/${routes.chats.CHATS}/invalid/${routes.participants.PARTICIPANTS}/${anotherUser._id}`;
             const invalidParticipant = `${config.server.urls.api}/${routes.chats.CHATS}/${usersChat._id}/${routes.participants.PARTICIPANTS}/invalid`;
             // When
-            const resInvalidChat = await request(appInstance).get(invalidChat);
-            const resInvalidParticipant = await request(appInstance).get(invalidParticipant);
+            const resInvalidChat = await request(appInstance).get(invalidChat).set(headers);
+            const resInvalidParticipant = await request(appInstance).get(invalidParticipant).set(headers);
             // Then
             expect(resInvalidChat.headers["content-type"]).toEqual(expect.stringContaining("json"));
             expect(resInvalidChat.status).toBe(StatusCodes.BAD_REQUEST);
@@ -239,8 +250,8 @@ describe("Integration tests for chat participants management endpoints API", () 
             const invalidChat = `${config.server.urls.api}/${routes.chats.CHATS}/6639f9c6458c53338c05c38c/${routes.participants.PARTICIPANTS}/${anotherUser._id}`;
             const invalidParticipant = `${config.server.urls.api}/${routes.chats.CHATS}/${usersChat._id}/${routes.participants.PARTICIPANTS}/6639f9c6458c53338c05c38c`;
             // When
-            const resInvalidChat = await request(appInstance).get(invalidChat);
-            const resInvalidParticipant = await request(appInstance).get(invalidParticipant);
+            const resInvalidChat = await request(appInstance).get(invalidChat).set(headers);
+            const resInvalidParticipant = await request(appInstance).get(invalidParticipant).set(headers);
             // Then
             expect(resInvalidChat.headers["content-type"]).toEqual(expect.stringContaining("json"));
             expect(resInvalidChat.status).toBe(StatusCodes.NOT_FOUND);
@@ -253,7 +264,7 @@ describe("Integration tests for chat participants management endpoints API", () 
             // Given
             const invalidRoute = `${config.server.urls.api}/${routes.chats.CHATS}/${nonInvitedChats[0].chat._id}/${routes.participants.PARTICIPANTS}/${loggedInUser._id}`;
             // When
-            const response = await request(appInstance).get(invalidRoute);
+            const response = await request(appInstance).get(invalidRoute).set(headers);
             // Then
             expect(response.headers["content-type"]).toEqual(expect.stringContaining("json"));
             expect(response.status).toBe(StatusCodes.NOT_FOUND);
@@ -263,7 +274,7 @@ describe("Integration tests for chat participants management endpoints API", () 
             // Given
             const invalidRoute = `${config.server.urls.api}/${routes.chats.CHATS}/${noReadPermissionChat._id}/${routes.participants.PARTICIPANTS}/${loggedInUser._id}`;
             // When
-            const response = await request(appInstance).get(invalidRoute);
+            const response = await request(appInstance).get(invalidRoute).set(headers);
             // Then
             expect(response.headers["content-type"]).toEqual(expect.stringContaining("json"));
             expect(response.status).toBe(StatusCodes.NOT_FOUND);
@@ -276,7 +287,7 @@ describe("Integration tests for chat participants management endpoints API", () 
         const updatedParticipant = { permissions: [permissions.colaborator.readDocs] };
         it("Checks that a participant is updated in a chat created by the user", async () => {
             // When
-            const response = await request(appInstance).put(participantsRoute).send(updatedParticipant);
+            const response = await request(appInstance).put(participantsRoute).set(headers).send(updatedParticipant);
             // Then
             expect(response.headers["content-type"]).toEqual(expect.stringContaining("json"));
             expect(response.status).toBe(StatusCodes.OK);
@@ -286,7 +297,7 @@ describe("Integration tests for chat participants management endpoints API", () 
             // Given
             const nonInvitedRoute = `${config.server.urls.api}/${routes.chats.CHATS}/${usersChatNoParticipants[0]._id}/${routes.participants.PARTICIPANTS}/${anotherUser._id}`;
             // When
-            const response = await request(appInstance).put(nonInvitedRoute).send(updatedParticipant);
+            const response = await request(appInstance).put(nonInvitedRoute).set(headers).send(updatedParticipant);
             // Then
             expect(response.headers["content-type"]).toEqual(expect.stringContaining("json"));
             expect(response.status).toBe(StatusCodes.NOT_FOUND);
@@ -314,7 +325,10 @@ describe("Integration tests for chat participants management endpoints API", () 
             for (let i = 0; i < invalidParticipants.length; i += 1) {
                 const invalidParticipant = invalidParticipants[i];
                 // When
-                const response = await request(appInstance).put(participantsRoute).send(invalidParticipant);
+                const response = await request(appInstance)
+                    .put(participantsRoute)
+                    .set(headers)
+                    .send(invalidParticipant);
                 // Then
                 expect(response.headers["content-type"]).toEqual(expect.stringContaining("json"));
                 expect(response.status).toBe(StatusCodes.BAD_REQUEST);
@@ -332,7 +346,10 @@ describe("Integration tests for chat participants management endpoints API", () 
             for (let i = 0; i < invalidParticipants.length; i += 1) {
                 const invalidParticipant = invalidParticipants[i];
                 // When
-                const response = await request(appInstance).put(participantsRoute).send(invalidParticipant);
+                const response = await request(appInstance)
+                    .put(participantsRoute)
+                    .set(headers)
+                    .send(invalidParticipant);
                 // Then
                 expect(response.headers["content-type"]).toEqual(expect.stringContaining("json"));
                 expect(response.status).toBe(StatusCodes.NOT_FOUND);
@@ -343,7 +360,7 @@ describe("Integration tests for chat participants management endpoints API", () 
             // Given
             const invalidRoute = `${config.server.urls.api}/${routes.chats.CHATS}/6639f9c6458c53338c05c38c/${routes.participants.PARTICIPANTS}/${anotherUser._id}`;
             // When
-            const response = await request(appInstance).put(invalidRoute).send(updatedParticipant);
+            const response = await request(appInstance).put(invalidRoute).set(headers).send(updatedParticipant);
             // Then
             expect(response.headers["content-type"]).toEqual(expect.stringContaining("json"));
             expect(response.status).toBe(StatusCodes.NOT_FOUND);
@@ -353,7 +370,7 @@ describe("Integration tests for chat participants management endpoints API", () 
             // Given
             const invalidRoute = `${config.server.urls.api}/${routes.chats.CHATS}/invalid/${routes.participants.PARTICIPANTS}/${anotherUser._id}`;
             // When
-            const response = await request(appInstance).put(invalidRoute).send(updatedParticipant);
+            const response = await request(appInstance).put(invalidRoute).set(headers).send(updatedParticipant);
             // Then
             expect(response.headers["content-type"]).toEqual(expect.stringContaining("json"));
             expect(response.status).toBe(StatusCodes.BAD_REQUEST);
@@ -364,7 +381,7 @@ describe("Integration tests for chat participants management endpoints API", () 
             const invalidRoute = `${config.server.urls.api}/${routes.chats.CHATS}/${usersChat._id}/${routes.participants.PARTICIPANTS}/${loggedInUser._id}`;
             const invalidParticipant = { permissions: [permissions.colaborator.readDocs] };
             // When
-            const response = await request(appInstance).put(invalidRoute).send(invalidParticipant);
+            const response = await request(appInstance).put(invalidRoute).set(headers).send(invalidParticipant);
             // Then
             expect(response.headers["content-type"]).toEqual(expect.stringContaining("json"));
             expect(response.status).toBe(StatusCodes.BAD_REQUEST);
@@ -375,7 +392,7 @@ describe("Integration tests for chat participants management endpoints API", () 
             const invalidRoute = `${config.server.urls.api}/${routes.chats.CHATS}/${noReadPermissionChat._id}/${routes.participants.PARTICIPANTS}/${anotherUser._id}`;
             const invalidParticipant = { permissions: [permissions.colaborator.readDocs] };
             // When
-            const response = await request(appInstance).put(invalidRoute).send(invalidParticipant);
+            const response = await request(appInstance).put(invalidRoute).set(headers).send(invalidParticipant);
             // Then
             expect(response.headers["content-type"]).toEqual(expect.stringContaining("json"));
             expect(response.status).toBe(StatusCodes.NOT_FOUND);
@@ -387,7 +404,7 @@ describe("Integration tests for chat participants management endpoints API", () 
         const participantsRoute = `${config.server.urls.api}/${routes.chats.CHATS}/${usersChat._id}/${routes.participants.PARTICIPANTS}/${anotherUser._id}`;
         it("Checks that a participant is deleted from a chat created by the user", async () => {
             // When
-            const response = await request(appInstance).delete(participantsRoute);
+            const response = await request(appInstance).delete(participantsRoute).set(headers);
             // Then
             expect(response.headers["content-type"]).toEqual(expect.stringContaining("json"));
             expect(response.status).toBe(StatusCodes.OK);
@@ -397,7 +414,7 @@ describe("Integration tests for chat participants management endpoints API", () 
             // Given
             const nonInvitedRoute = `${config.server.urls.api}/${routes.chats.CHATS}/${usersChatNoParticipants[0]._id}/${routes.participants.PARTICIPANTS}/${anotherUser._id}`;
             // When
-            const response = await request(appInstance).delete(nonInvitedRoute);
+            const response = await request(appInstance).delete(nonInvitedRoute).set(headers);
             // Then
             expect(response.headers["content-type"]).toEqual(expect.stringContaining("json"));
             expect(response.status).toBe(StatusCodes.NOT_FOUND);
@@ -407,7 +424,7 @@ describe("Integration tests for chat participants management endpoints API", () 
             // Given
             const invalidRoute = `${config.server.urls.api}/${routes.chats.CHATS}/${noReadPermissionChat._id}/${routes.participants.PARTICIPANTS}/${anotherUser._id}`;
             // When
-            const response = await request(appInstance).delete(invalidRoute);
+            const response = await request(appInstance).delete(invalidRoute).set(headers);
             // Then
             expect(response.headers["content-type"]).toEqual(expect.stringContaining("json"));
             expect(response.status).toBe(StatusCodes.NOT_FOUND);
@@ -417,7 +434,7 @@ describe("Integration tests for chat participants management endpoints API", () 
             // Given
             const invalidRoute = `${config.server.urls.api}/${routes.chats.CHATS}/6639f9c6458c53338c05c38c/${routes.participants.PARTICIPANTS}/${anotherUser._id}`;
             // When
-            const response = await request(appInstance).delete(invalidRoute);
+            const response = await request(appInstance).delete(invalidRoute).set(headers);
             // Then
             expect(response.headers["content-type"]).toEqual(expect.stringContaining("json"));
             expect(response.status).toBe(StatusCodes.NOT_FOUND);
@@ -427,7 +444,7 @@ describe("Integration tests for chat participants management endpoints API", () 
             // Given
             const invalidRoute = `${config.server.urls.api}/${routes.chats.CHATS}/invalid/${routes.participants.PARTICIPANTS}/${anotherUser._id}`;
             // When
-            const response = await request(appInstance).delete(invalidRoute);
+            const response = await request(appInstance).delete(invalidRoute).set(headers);
             // Then
             expect(response.headers["content-type"]).toEqual(expect.stringContaining("json"));
             expect(response.status).toBe(StatusCodes.BAD_REQUEST);
@@ -437,7 +454,7 @@ describe("Integration tests for chat participants management endpoints API", () 
             // Given
             const invalidRoute = `${config.server.urls.api}/${routes.chats.CHATS}/${usersChat._id}/${routes.participants.PARTICIPANTS}/${loggedInUser._id}`;
             // When
-            const response = await request(appInstance).put(invalidRoute).send(invalidRoute);
+            const response = await request(appInstance).put(invalidRoute).set(headers).send(invalidRoute);
             // Then
             expect(response.headers["content-type"]).toEqual(expect.stringContaining("json"));
             expect(response.status).toBe(StatusCodes.BAD_REQUEST);

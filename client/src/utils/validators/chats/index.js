@@ -4,6 +4,8 @@ import api from "../../constants/api";
 export default Object.freeze({
     /**
      * Validates contents of a new chat.
+     * @param {{name: string,
+     *          documents: Array.<File>}} newChat The new chat form contents
      * @returns True if valid, false otherwise
      */
     newChat: ({ name, documents }) =>
@@ -17,6 +19,7 @@ export default Object.freeze({
         }),
     /**
      * Validates contents of an update to a chat.
+     * @param {{name: string}} updates The chat update form contents
      * @returns True if valid, false otherwise
      */
     updateChat: ({ name }) =>
@@ -26,6 +29,7 @@ export default Object.freeze({
         }),
     /**
      * Validates contents of a document upload to a chat
+     * @param {{documents: Array.<File>}} docs The documents to be uploaded
      * @returns True if valid, false otherwise
      */
     uploadDocs: ({ documents }) =>
@@ -35,7 +39,7 @@ export default Object.freeze({
         }),
     /**
      * Validates if the user has reached the maximum amount of uploaded documents allowed in a chat.
-     * @param {Array.<*>} documents Array of saved documents
+     * @param {Array.<File>} documents Array of saved documents
      * @returns True if it has reached the doc limit, false otherwise.
      */
     isUnderDocsLimit: (documents) =>

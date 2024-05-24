@@ -5,4 +5,6 @@ export default Object.freeze({
     NOTIFICATIONS_OPTION: "Notifications",
     /** Message to be shown to the user as the label of the general settings (avatar icon) menu in the navbar. */
     SETTINGS_OPTION: "Settings",
+    /** Message to be shown as the navbar logo alt text */
+    NAVBAR_LOGO_ALT: "DataSage-logo"
 })

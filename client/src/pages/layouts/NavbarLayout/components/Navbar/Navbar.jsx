@@ -1,4 +1,4 @@
-import { Box, Drawer, Divider, Avatar } from "@mui/material";
+import { Box, Drawer, Divider } from "@mui/material";
 import { Chat } from "@mui/icons-material";
 import NavigationLink from "@/components/actions/NavigationLink";
 import { routes, messages } from "@/utils/constants";
@@ -20,7 +20,7 @@ const Navbar = ({ selectedMenu, children }) => {
             <Box
                 component={"img"}
                 src={logo}
-                alt={messages.NAVBAR_LOGO_ALT}
+                alt={messages.navbar.NAVBAR_LOGO_ALT}
                 loading="lazy"
                 padding={1}
             />
@@ -36,10 +36,6 @@ const Navbar = ({ selectedMenu, children }) => {
             <Divider />
             <NavbarLinks sx={NavbarDrawerListMenusStyles}>
                 {children}
-                <NavigationLink
-                    icon={<Avatar />}
-                    label={messages.navbar.SETTINGS_OPTION}
-                />
             </NavbarLinks>
         </Drawer>
     );

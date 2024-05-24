@@ -1,4 +1,4 @@
-import { getEmbeddings, VectorStore } from "../../../lib/langchain.js";
+import { getEmbeddings, VectorStore, getRerankerRetrieverFrom } from "../../../lib/langchain.js";
 import { page, vectorIndex } from "../../../models/page/page.js";
 
 /**
@@ -23,15 +23,35 @@ const insertPagesIntoVectorStore = async (pages) => {
     return vectorStore;
 };
 
-/** Gets the vector store for the pages of each document to make semantic searches. */
-const getPagesVectorStore = new VectorStore(
-    getEmbeddings(),
-    {
+/**
+ * Gets the retreiver to be used to retrieve the most relevant document pages from the vector store being used in the application
+ * from a MongoDB filter.
+ *
+ * Basically, it calls the function given by the vector store being used to get the most relevant documents
+ * based on the similarity function it provides (currently cosine similarity). 
+ * Passes them to an AI model that is trained on ranking contents based on semantic meaning, reordering the documents 
+ * from the vector store by relevance and returning only a top amount.
+ *
+ * This top most relevant documents can then be passed down to the LLM to generate a response or do whatever else. 
+ * Improving overall results.
+ * 
+ * @param {Number} topN The number of documents to be returned by the retriever when invoked.
+ * @param {{preFilter: Object.<string, *>}} filter The filter to be used in the mongodb vector search. Usefull to filter by documents id.
+ * @returns The retriever to be used to get the most relevant pages stored currently in the vector store (database).
+ */
+const getPagesRetrieverFor = (topN, filter) => {
+    const vectorStoreInstance = new VectorStore(getEmbeddings(), {
         collection: page.collection,
         indexName: vectorIndex.NAME,
         embeddingKey: vectorIndex.INDEXED_FIELD,
         textKey: vectorIndex.EMBEDDED_CONTENT_FIELD,
-    }
-);
+    });
 
-export { insertPagesIntoVectorStore, getPagesVectorStore };
+    const vectorStoreRetriever = vectorStoreInstance.asRetriever({
+        k: topN * 5,
+        filter,
+    });
+
+    return getRerankerRetrieverFrom(vectorStoreRetriever, topN);
+};
+export { insertPagesIntoVectorStore, getPagesRetrieverFor };

@@ -1,7 +1,7 @@
 import expressValidator from "express-validator";
 
 import { BadRequestError } from "../../../utils/errors/index.js";
-import { messages, validation } from "../../../utils/constants/index.js";
+import { messages } from "../../../utils/constants/index.js";
 
 /**
  * Verifies the validation executed by express-validator, if any error is detected a BadRequestError is thrown.

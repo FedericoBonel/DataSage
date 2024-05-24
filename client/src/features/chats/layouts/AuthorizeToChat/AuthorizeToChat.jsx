@@ -1,10 +1,10 @@
 import { Outlet, Navigate } from "react-router-dom";
+import { useCallback } from "react";
 import chatsServices from "@/services/chats";
 import ShowLoader from "@/components/informational/ShowLoader";
 import { routes } from "@/utils/constants";
 import verifyPermissions from "./verifyPermissions";
 import propTypes from "./AuthorizeToChat.props";
-import { useCallback } from "react";
 
 /**
  * Layout that verifies if the logged in user has access to a specific chat or not, if is its owner or if they have a specific set of permissions.

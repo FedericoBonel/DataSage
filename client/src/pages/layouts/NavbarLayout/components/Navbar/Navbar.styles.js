@@ -11,5 +11,8 @@ export const NavbarDrawerStyles = {
 
 export const NavbarDrawerListMenusStyles = {
     flex: 1,
-    alignContent: "flex-end",
+    alignItems: "center",
+    display: "flex",
+    flexDirection: "column",
+    justifyContent: "flex-end",
 };

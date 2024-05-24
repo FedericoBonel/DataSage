@@ -1,4 +1,5 @@
 import userValues from "../../validation/user.js";
+import authValues from "../../validation/auth.js";
 
 /** Contains all user validation error messages to be used in the application. */
 export default Object.freeze({
@@ -11,10 +12,24 @@ export default Object.freeze({
         INVALID_LENGTH: `The user last names must be a string between ${userValues.lastnames.MIN_LENGTH} and ${userValues.lastnames.MAX_LENGTH}`,
     },
     email: {
-        INVALID: `The email must be a valid email as a string with a maximum length of ${userValues.email.MAX_LENGTH}`,
+        INVALID: `The email must be a valid unique email with a maximum length of ${userValues.email.MAX_LENGTH}`,
     },
     password: {
-        /** Message to be shown when the user password is invalid */
-        INVALID: `The user password must be a strong password with a string with a length between ${userValues.password.MIN_LENGTH} and ${userValues.password.MAX_LENGTH} characters.`,
+        /** Message to be shown when the user password content is invalid */
+        INVALID: `The user password content must be a strong password with a string with a length between ${userValues.password.MIN_LENGTH} and ${userValues.password.MAX_LENGTH} characters that includes a minimum of: 1 lowercase character, 1 uppercase character, 1 number, and 1 symbol.`,
+        /** Message to be shown when the user password object is not provided */
+        INVALID_OBJECT: "You must provide a password for the user",
+    },
+    verificationCode: {
+        /** Message to be shown when a user verification code is invalid */
+        INVALID: `The user verification code must be a string with a length between ${authValues.verificationCode.MIN_LENGTH} and ${authValues.verificationCode.MAX_LENGTH} characters`,
+    },
+    recoveryCode: {
+        /** Message to be shown when a user recovery code content is invalid */
+        INVALID: `The user recovery code must be a string with a length between ${authValues.recoveryCode.MIN_LENGTH} and ${authValues.recoveryCode.MAX_LENGTH} characters`,
+    },
+    credentialsUpdate: {
+        /** Message to be shown when the user sends a request to update credentials but they dont send the old password. */
+        INVALID_PASSWORD: "You need to provide a valid current password to change credentials",
     },
 });

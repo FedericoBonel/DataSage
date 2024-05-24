@@ -3,6 +3,32 @@ import { validation, messages } from "../../utils/constants/index.js";
 
 const MODEL_NAME = "User";
 
+const recoveryCodeSchema = new Schema(
+    {
+        content: {
+            type: String,
+            required: true,
+            minlength: validation.auth.recoveryCode.MIN_LENGTH,
+            maxlength: validation.auth.recoveryCode.MAX_LENGTH,
+            unique: true,
+            sparse: true,
+        },
+    },
+    { timestamps: { createdAt: true, updatedAt: false } }
+);
+
+const passwordSchema = new Schema(
+    {
+        content: {
+            type: String,
+            minlength: validation.user.password.MIN_LENGTH,
+            maxlength: validation.user.password.MAX_LENGTH,
+            required: [true, messages.errors.validation.user.password.INVALID],
+        },
+    },
+    { timestamps: { updatedAt: true, createdAt: false } }
+);
+
 const userSchema = new Schema(
     {
         names: {
@@ -25,14 +51,29 @@ const userSchema = new Schema(
             required: [true, messages.errors.validation.user.email.INVALID],
         },
         password: {
-            type: String,
-            minlength: validation.user.password.MIN_LENGTH,
-            maxlength: validation.user.password.MAX_LENGTH,
+            type: passwordSchema,
             required: [true, messages.errors.validation.user.password.INVALID],
         },
         isAdmin: {
             type: Boolean,
             default: false,
+            required: false,
+        },
+        verified: {
+            type: Boolean,
+            default: false,
+            required: false,
+        },
+        verificationCode: {
+            type: String,
+            required: false,
+            minlength: validation.auth.verificationCode.MIN_LENGTH,
+            maxlength: validation.auth.verificationCode.MAX_LENGTH,
+            unique: true,
+            sparse: true,
+        },
+        recoveryCode: {
+            type: recoveryCodeSchema,
             required: false,
         },
     },

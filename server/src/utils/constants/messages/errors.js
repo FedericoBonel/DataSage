@@ -45,13 +45,25 @@ export default Object.freeze({
         ID_PROVIDED:
             "You have provided an '_id' field for a resource that does not accepts id fields. Please remove it and try again.",
         INVALID_ID: "You have provided an invalid id.",
+        INVALID_URL: "You have provided an invalid URL."
     },
     /** Errors related to authentication */
     auth: {
+        /** Error to be shown when a request is providing an invalid password */
+        INVALID_PASSWORD: "Sorry, your password was incorrect. Please double-check your password and try again.",
+        /** Error to be shown when a request is providing invalid email or password */
+        INVALID_CREDENTIALS: "Sorry, your password or email was incorrect. Please double-check your password and email and try again.",
+        /** Error to be shown when an authentication request is requesting login for a non verified user */
+        NON_VERIFIED: "Sorry, it seems your account is not verified, please check your email and follow the verification steps and try again.",
         /** Error to be shown when a request had an invalid token attached to it. */
-        INVALID_CREDENTIALS: "The token provided is invalid. Please authenticate and try again.",
+        INVALID_TOKEN: "The token provided is invalid. Please authenticate and try again.",
+        /** Error to be shown when a request did not have a refresh token attached to it. */
+        NO_REFRESH_TOKEN: "No refresh token was provided, you don't need to be logged out.",
+        /** Error to be shown when the user does not have the permissions to take an action */
         FORBIDDEN: "You do not have the permissions to take this action.",
     },
     /** Message to show when a request wasn't processed successfully */
     REQUEST_FAILURE: "Failure request",
+    /** Message to show when an email wasn't sent successfully */
+    EMAIL_FAILURE: "There was a problem sending an email to the user",
 });

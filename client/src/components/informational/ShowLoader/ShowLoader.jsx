@@ -13,22 +13,21 @@ const ShowLoader = ({
     variant,
     fallbackProps,
 }) => {
-    const fallbackToShow = fallback ? (
-        fallback
-    ) : variant === "dialog" ? (
-        <Backdrop
-            sx={{ zIndex: (theme) => theme.zIndex.drawer + 1 }}
-            {...fallbackProps}
-        >
-            <LoaderSpinner />
-        </Backdrop>
-    ) : (
-        <LoaderSpinner
-            {...fallbackProps}
-            disablePadding={disablePadding}
-            message={message}
-        />
-    );
+    const fallbackToShow =
+        fallback ?? variant === "dialog" ? (
+            <Backdrop
+                sx={{ zIndex: (theme) => theme.zIndex.drawer + 1 }}
+                {...fallbackProps}
+            >
+                <LoaderSpinner />
+            </Backdrop>
+        ) : (
+            <LoaderSpinner
+                {...fallbackProps}
+                disablePadding={disablePadding}
+                message={message}
+            />
+        );
 
     return isLoading ? fallbackToShow : children;
 };

@@ -12,8 +12,8 @@ const createInputBodyValidator = (
         isRead: false,
     }
 ) => [
-    expressValidator.checkSchema(
-        {
+    expressValidator.checkExact(
+        expressValidator.checkSchema({
             _id: {
                 exists: {
                     negated: true,
@@ -29,7 +29,7 @@ const createInputBodyValidator = (
                 },
                 toBoolean: true,
             },
-        },
+        }),
         ["body"]
     ),
     checkValidator,

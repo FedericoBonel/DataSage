@@ -24,12 +24,14 @@ const ParticipantListItem = ({ participant, onClickDelete, onClickEdit }) => {
                         <IconButton
                             color="primary"
                             onClick={() => onClickEdit(participant._id)}
+                            aria-label="edit"
                         >
                             <Edit />
                         </IconButton>
                         <IconButton
                             color="error"
                             onClick={() => onClickDelete(participant._id)}
+                            aria-label="delete"
                         >
                             <Delete />
                         </IconButton>

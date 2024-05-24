@@ -16,6 +16,8 @@ const Menu = ({
     variant = "button",
     icon,
     showLabel = true,
+    position,
+    keepMounted = false,
 }) => {
     // Will hold the element that will be used to control menu opening.
     const [anchorEl, setAnchorEl] = useState(null);
@@ -66,6 +68,11 @@ const Menu = ({
                 MenuListProps={{
                     "aria-labelledby": `menu-button-${label}`,
                 }}
+                sx={{ maxWidth: 450 }}
+                anchorOrigin={
+                    position ?? { vertical: "bottom", horizontal: "left" }
+                }
+                keepMounted={keepMounted}
             >
                 {children}
             </MUIMenu>

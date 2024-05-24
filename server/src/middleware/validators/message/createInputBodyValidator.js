@@ -12,30 +12,32 @@ const createInputBodyValidator = (
         content: false,
     }
 ) => [
-    expressValidator.checkSchema(
-        {
-            _id: {
-                exists: {
-                    negated: true,
-                    errorMessage: messages.errors.validation.ID_PROVIDED,
-                },
-            },
-            content: {
-                optional: optionalFields.content,
-                isString: {
-                    errorMessage: messages.errors.validation.message.INVALID_LENGTH,
-                    bail: true,
-                },
-                isLength: {
-                    options: {
-                        min: validation.messages.MIN_LENGTH,
-                        max: validation.messages.MAX_LENGTH,
+    expressValidator.checkExact(
+        expressValidator.checkSchema(
+            {
+                _id: {
+                    exists: {
+                        negated: true,
+                        errorMessage: messages.errors.validation.ID_PROVIDED,
                     },
-                    errorMessage: messages.errors.validation.message.INVALID_LENGTH,
+                },
+                content: {
+                    optional: optionalFields.content,
+                    isString: {
+                        errorMessage: messages.errors.validation.message.INVALID_LENGTH,
+                        bail: true,
+                    },
+                    isLength: {
+                        options: {
+                            min: validation.messages.MIN_LENGTH,
+                            max: validation.messages.MAX_LENGTH,
+                        },
+                        errorMessage: messages.errors.validation.message.INVALID_LENGTH,
+                    },
                 },
             },
-        },
-        ["body"]
+            ["body"]
+        )
     ),
     checkValidator,
 ];

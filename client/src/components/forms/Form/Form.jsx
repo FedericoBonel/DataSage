@@ -21,6 +21,10 @@ const Form = ({
         submit: "primary",
         cancel: "error",
     },
+    buttonsProps = {
+        submit: {},
+        cancel: {}
+    },
     onSubmit,
     isSubmitting,
     canSubmit,
@@ -46,6 +50,7 @@ const Form = ({
                     disabled={!canSubmit}
                     variant="text"
                     color={buttonsColor.submit}
+                    {...buttonsProps.submit}
                 >
                     {buttonsLabels.submit}
                 </Button>
@@ -55,6 +60,7 @@ const Form = ({
                         onClick={onCancel}
                         color={buttonsColor.cancel}
                         disabled={isSubmitting}
+                        {...buttonsProps.cancel}
                     >
                         {buttonsLabels.cancel}
                     </Button>

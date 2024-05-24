@@ -4,10 +4,13 @@ import warnings from "./messages/en/warnings";
 import info from "./messages/en/info";
 import actions from "./messages/en/actions";
 import navbar from "./messages/en/navbar";
+import account from "./messages/en/account";
+import auth from "./messages/en/auth";
 import chats from "./messages/en/chats";
 import notifications from "./messages/en/notifications";
 import chatsRoutes from "./routes/chats";
 import notificationsRoutes from "./routes/notifications";
+import accountsRoutes from "./routes/accounts";
 import authRoutes from "./routes/auth";
 import errorRoutes from "./routes/error";
 import apiConsts from "./api";
@@ -24,6 +27,10 @@ export const messages = Object.freeze({
     actions,
     /** Contains all messages to be shown in the navbar of the application. */
     navbar,
+    /** Contains all messages to be shown in the account management section of the application. */
+    account,
+    /** Contains all messages to be shown in the auth section of the application. */
+    auth,
     /** Contains all messages to be shown in the chats section of the application. */
     chats,
     /** Contains all messages to be shown in the notifications section of the application */
@@ -38,6 +45,8 @@ export const routes = Object.freeze({
     ERROR: "error",
     /** Route to settings */
     SETTINGS: "settings",
+    /** Contains all accounts related routes */
+    accounts: accountsRoutes,
     /** Contains all authentication or authorization related routes */
     auth: authRoutes,
     /** Contains all error related routes */

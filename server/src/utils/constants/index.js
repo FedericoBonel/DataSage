@@ -3,12 +3,15 @@ import infoMessages from "./messages/info.js";
 import errorMessages from "./messages/errors.js";
 import openapiMessages from "./messages/openapi.js";
 import swaggeruiRoutes from "./routes/swaggerui.js";
+import authRoutes from "./routes/auth.js";
+import profilesRoutes from "./routes/profiles.js";
 import chatsRoutes from "./routes/chats.js";
 import notificationsRoutes from "./routes/notifications.js";
 import docsRoutes from "./routes/documents.js";
 import messagesRoutes from "./routes/messages.js";
 import participantsRoutes from "./routes/participants.js";
 import participationRoutes from "./routes/participation.js";
+import authValidation from "./validation/auth.js";
 import chatValidation from "./validation/chat.js";
 import userValidation from "./validation/user.js";
 import documentValidation from "./validation/document.js";
@@ -24,6 +27,8 @@ import notificationTypes from "./notifications/notificationTypes.js";
 import notificationRelatedEntities from "./notifications/relatedEntities.js";
 import loggingFormatting from "./logging/formatting.js";
 import loggingPrivateKeys from "./logging/privateBodyKeys.js";
+import createUserVerification from "./emails/createUserVerification.js";
+import createUserRecoveryAccount from "./emails/createUserRecoveryAccount.js";
 
 /** Object with all messages to be shown to the user */
 export const messages = Object.freeze({
@@ -38,6 +43,8 @@ export const messages = Object.freeze({
 /** Object with all the routes used in the application without "/" (i.g. the route in the api "/entity" would be in routes.entity as "entity") */
 export const routes = Object.freeze({
     swaggerUi: swaggeruiRoutes,
+    auth: authRoutes,
+    profiles: profilesRoutes,
     chats: chatsRoutes,
     notifications: notificationsRoutes,
     documents: docsRoutes,
@@ -48,6 +55,7 @@ export const routes = Object.freeze({
 
 /** Object with all the validation values used in the application for each entity. */
 export const validation = Object.freeze({
+    auth: authValidation,
     chat: chatValidation,
     user: userValidation,
     document: documentValidation,
@@ -79,4 +87,24 @@ export const logging = Object.freeze({
     privateKeys: loggingPrivateKeys,
     /** Placeholder for redacted values */
     REDACTED_VALUE: "*****",
+});
+
+/** Exports all constants related to emails */
+export const email = Object.freeze({
+    /**
+     * The function that creates and formats the contents for a user verification email
+     * @param {String} receiverEmail The email of the receiver
+     * @param {String} receiverNames The first and middle names of the receiver
+     * @param {String} verificationCode The verification code to be sent to the receiver
+     * @param {String} verifiationLink The verification link to be sent to the receiver with the verification code
+     */
+    createUserVerification,
+    /**
+     * The function that creates and formats the contents for a user recovery account email
+     * @param {String} receiverEmail The email of the receiver
+     * @param {String} receiverNames The first and middle names of the receiver
+     * @param {String} verificationCode The recovery code to be sent to the receiver
+     * @param {String} verifiationLink The recovery link to be sent to the receiver with the recovery code
+     */
+    createUserRecoveryAccount,
 });

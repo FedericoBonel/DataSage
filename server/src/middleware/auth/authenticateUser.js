@@ -1,18 +1,26 @@
+import authServices from "../../services/auth/auth.js";
+import { UnauthorizedError } from "../../utils/errors/index.js";
+import { messages } from "../../utils/constants/index.js";
+
 /**
- * Validates the JWT received from the client and appends the user to req.user
+ * Validates the access token received from the client and appends the user to req.user
  *
- * If the JWT is valid, redirects request and response to the next middleware,
+ * If the access token is valid, redirects request and response to the next middleware,
  * otherwise throws an error.
  */
 const verifyToken = async (req, res, next) => {
-    // TODO Implement this when we have authentication
+    // Verify the token was provided and extract it
+    const header = req.headers.authorization;
+    if (!header?.startsWith("Bearer ")) {
+        throw new UnauthorizedError(messages.errors.auth.INVALID_TOKEN);
+    }
+    const token = header.substring(7);
 
-    req.user = {
-        _id: "661645f35333647769e601ac",
-        names: "Test names",
-        lastnames: "Test lastnames",
-        email: "test@mail.com",
-    };
+    // Validate the token content
+    const loggedInUser = await authServices.validateAccessToken(token);
+
+    // Append the logged in user to the request;
+    req.user = loggedInUser;
 
     next();
 };

@@ -40,12 +40,15 @@ const openAPIConfig = {
                 cookieAuth: {
                     type: "apiKey",
                     in: "cookie",
-                    name: "jwt",
+                    name: "refresh_token",
                 },
             },
         },
-        // TODO: Add security when implemented
-        security: [],
+        security: [
+            {
+                bearerAuth: [],
+            },
+        ],
     },
     // Files containing API Specs
     apis: [

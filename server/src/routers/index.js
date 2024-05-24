@@ -1,6 +1,8 @@
 import authenticateUser from "../middleware/auth/authenticateUser.js";
 import openapiRouter from "./openapi/index.js";
+import authRouter from "./auth.js";
 import chatsRouter from "./chats.js";
+import profilesRouter from "./profiles.js";
 import notificationsRouter from "./notifications.js";
 import { routes } from "../utils/constants/index.js";
 import config from "../config/index.js";
@@ -11,6 +13,8 @@ import config from "../config/index.js";
  */
 const configRoutes = (app) => {
     app.use(`/${routes.swaggerUi.DOCS_PAGE}`, openapiRouter);
+    app.use(`${config.server.urls.api}/${routes.auth.AUTH}`, authRouter);
+    app.use(`${config.server.urls.api}/${routes.profiles.PROFILE}`, authenticateUser, profilesRouter);
     app.use(`${config.server.urls.api}/${routes.chats.CHATS}`, authenticateUser, chatsRouter);
     app.use(`${config.server.urls.api}/${routes.notifications.NOTIFICATIONS}`, authenticateUser, notificationsRouter);
 };

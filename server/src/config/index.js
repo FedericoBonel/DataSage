@@ -44,10 +44,25 @@ const RATELIMIT_MAX_REQUESTS = process.env.RATELIMIT_MAX_REQUESTS;
 isDefined(RATELIMIT_MAX_REQUESTS, "RATELIMIT_MAX_REQUESTS");
 
 // Authorization configuration
-const JWT_SECRET = process.env.JWT_SECRET;
-isDefined(JWT_SECRET, "JWT_SECRET");
+const JWT_ACCESS_SECRET = process.env.JWT_ACCESS_SECRET;
+isDefined(JWT_ACCESS_SECRET, "JWT_ACCESS_SECRET");
 
-// OpenAI configuration
+const JWT_ACCESS_EXPIRES_MIN = process.env.JWT_ACCESS_EXPIRES_MIN;
+isDefined(JWT_ACCESS_EXPIRES_MIN, "JWT_ACCESS_EXPIRES_MIN");
+
+const JWT_REFRESH_NAME = process.env.JWT_REFRESH_NAME;
+isDefined(JWT_REFRESH_NAME, "JWT_REFRESH_NAME");
+
+const JWT_REFRESH_EXPIRES_DAYS = process.env.JWT_REFRESH_EXPIRES_DAYS;
+isDefined(JWT_REFRESH_EXPIRES_DAYS, "JWT_REFRESH_EXPIRES_DAYS");
+
+const JWT_REFRESH_SECRET = process.env.JWT_REFRESH_SECRET;
+isDefined(JWT_REFRESH_SECRET, "JWT_REFRESH_SECRET");
+
+const BCRYPT_SALT_ROUNDS = process.env.BCRYPT_SALT_ROUNDS;
+isDefined(BCRYPT_SALT_ROUNDS, "BCRYPT_SALT_ROUNDS");
+
+// OpenAPI configuration
 const TEST_URL = process.env.OPEN_API_TEST_URL;
 isDefined(TEST_URL, "TEST_URL");
 
@@ -75,6 +90,15 @@ isDefined(S3_BUCKET, "S3_BUCKET");
 const OPEN_AI_KEY = process.env.OPEN_AI_KEY;
 isDefined(OPEN_AI_KEY, "OPEN_AI_KEY");
 
+const COHERE_API_KEY = process.env.COHERE_API_KEY;
+isDefined(COHERE_API_KEY, "COHERE_API_KEY");
+
+const COHERE_RERANK_MODEL = process.env.COHERE_RERANK_MODEL;
+isDefined(COHERE_RERANK_MODEL, "COHERE_RERANK_MODEL");
+
+const OPEN_AI_LLM_TEMPERATURE = process.env.OPEN_AI_LLM_TEMPERATURE;
+isDefined(OPEN_AI_LLM_TEMPERATURE, "OPEN_AI_LLM_TEMPERATURE");
+
 // Logging configuration
 const LOGGING_DB_URL = process.env.LOGGING_DB_URL;
 isDefined(LOGGING_DB_URL, "LOGGING_DB_URL");
@@ -82,8 +106,30 @@ isDefined(LOGGING_DB_URL, "LOGGING_DB_URL");
 const LOGGING_DB_COLLECTION = process.env.LOGGING_DB_COLLECTION;
 isDefined(LOGGING_DB_COLLECTION, "LOGGING_DB_COLLECTION");
 
+// Email configuration
+const EMAIL_HOST = process.env.EMAIL_HOST;
+isDefined(EMAIL_HOST, "EMAIL_HOST");
+
+const EMAIL_PORT = process.env.EMAIL_PORT;
+isDefined(EMAIL_PORT, "EMAIL_PORT");
+
+const EMAIL_USER = process.env.EMAIL_USER;
+isDefined(EMAIL_USER, "EMAIL_USER");
+
+const EMAIL_PASSWORD = process.env.EMAIL_PASSWORD;
+isDefined(EMAIL_PASSWORD, "EMAIL_PASSWORD");
+
+// Account recovery configuration
+const RECOVERY_CODE_EXPIRES_MIN = process.env.RECOVERY_CODE_EXPIRES_MIN;
+isDefined(RECOVERY_CODE_EXPIRES_MIN, "RECOVERY_CODE_EXPIRES_MIN");
+
 /** Object with all configuration environment variables */
 export default Object.freeze({
+    /** Process related variables */
+    process: {
+        /** PID of the server process */
+        id: process.pid,
+    },
     /** Current node environment (production || development) */
     node_environment: process.env.NODE_ENV,
     /** Server configuration related variables */
@@ -118,10 +164,23 @@ export default Object.freeze({
             password: ADMIN_PASSWORD,
         },
     },
+    /** bcrypt related variables */
+    bcrypt: {
+        /** Number of rounds to use in the bcrypts algorithm */
+        saltRounds: Number(BCRYPT_SALT_ROUNDS),
+    },
     /** JSON Web Token related variables */
     jwt: {
-        /** JWT secret */
-        secret: JWT_SECRET,
+        /** The refresh token cookie name */
+        refreshTokenKey: JWT_REFRESH_NAME,
+        /** The refresh token duration in days */
+        refreshTokenDaysDuration: Number(JWT_REFRESH_EXPIRES_DAYS),
+        /** The refresh token cookie secret */
+        refreshTokenSecret: JWT_REFRESH_SECRET,
+        /** Access token secret */
+        accessTokenSecret: JWT_ACCESS_SECRET,
+        /** The access token duration in minutes */
+        accessTokenMinDuration: Number(JWT_ACCESS_EXPIRES_MIN),
     },
     /** Swagger UI configuration related variables */
     swagger: {
@@ -144,6 +203,12 @@ export default Object.freeze({
     llm: {
         /** Large language model API Key being used. (Currently OpenAI) */
         apiKey: OPEN_AI_KEY,
+        /** Large language model temperature value. */
+        temperature: Number(OPEN_AI_LLM_TEMPERATURE),
+        /** Reranker api key */
+        rerankerApiKey: COHERE_API_KEY,
+        /** Reranker model to be used */
+        rerankerModel: COHERE_RERANK_MODEL,
     },
     /** Logging related variables */
     logging: {
@@ -151,5 +216,24 @@ export default Object.freeze({
         dbUrl: LOGGING_DB_URL,
         /** Logs collection name to be used. */
         collectionName: LOGGING_DB_COLLECTION,
+    },
+    /** Email configuration related variables */
+    mail: {
+        /** Email service provider */
+        host: EMAIL_HOST,
+        /** The SMTP port to be used in the server */
+        port: Number(EMAIL_PORT),
+        /** The auth user for the host provided */
+        auth: {
+            /** The email user credential */
+            user: EMAIL_USER,
+            /** The email password credential */
+            pass: EMAIL_PASSWORD,
+        },
+    },
+    /** Account recovery related variables */
+    accountRecovery: {
+        /** The duration time in minutes for account recovery codes */
+        durationMins: Number(RECOVERY_CODE_EXPIRES_MIN),
     },
 });

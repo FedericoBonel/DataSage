@@ -3,6 +3,7 @@ import { Box } from "@mui/material";
 import NavbarNotificationLink from "@/features/notifications/NavbarNotificationLink";
 import { routes } from "@/utils/constants";
 import Navbar from "./components/Navbar/Navbar";
+import SessionMenu from "./components/SessionMenu"
 import {
     PageContainerStyles,
     ContentContainerStyle,
@@ -24,6 +25,7 @@ const NavbarLayout = () => {
                         selectedMenu === routes.notifications.NOTIFICATIONS
                     }
                 />
+                <SessionMenu />
             </Navbar>
             {/* Page content */}
             <Box sx={ContentContainerStyle}>

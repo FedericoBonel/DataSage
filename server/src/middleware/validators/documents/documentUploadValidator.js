@@ -28,7 +28,7 @@ const memoryStorage = multer.memoryStorage();
  */
 const filesExists = (fieldName) => async (req, res, next) => {
     // Check if any files were uploaded at all
-    if (!req.files || !req.files?.length) {
+    if (!req.files?.length) {
         throw new BadRequestError(messages.errors.validation.chat.documents.INVALID_AMOUNT, { errorField: fieldName });
     }
 

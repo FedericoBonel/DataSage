@@ -19,6 +19,13 @@ export default {
         /** Color to be applied to the cancel button */
         cancel: PropTypes.string,
     }),
+    /** Props to be passed down to the submit and cancel buttons. Can contain any of the {@link https://mui.com/material-ui/api/button/ button} props. */
+    buttonsProps: PropTypes.shape({
+        /** Props to be passed to the submit button */
+        submit: PropTypes.object,
+        /** Props to be passed to the cancel button */
+        cancel: PropTypes.object
+    }),
     /** Function to be executed on submition */
     onSubmit: PropTypes.func,
     /** True if the form is being submitted false otherwise */

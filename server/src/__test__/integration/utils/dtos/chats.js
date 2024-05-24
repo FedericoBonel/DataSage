@@ -22,4 +22,6 @@ export const chatDetailDTOCheck = expect.objectContaining({
         names: expect.any(String),
         lastnames: expect.any(String),
     },
+    hasJoined: expect.any(Boolean),
+    permissions: expect.any(Array),
 });

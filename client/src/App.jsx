@@ -5,12 +5,15 @@ import {
 } from "react-router-dom";
 import {
     ErrorRouter,
+    AccountRouter,
+    AuthRouter,
     NotFoundRouter,
     ChatsRouter,
     NotificationsRouter,
 } from "@/routers";
-import { Public, Private } from "@/routers/layouts";
 import { ErrorHandler } from "@/routers/utils";
+import Public from "@/pages/auth/layouts/Public";
+import Private from "@/pages/auth/layouts/Private";
 import { routes } from "@/utils/constants";
 
 /** Application provider, it routes all client side requests to diferent pages. */
@@ -26,12 +29,12 @@ const router = createBrowserRouter([
             /** Public routes */
             {
                 element: <Public />,
-                children: [{ path: routes.auth.LOGIN, element: <p>Login</p> }],
+                children: [AuthRouter],
             },
             /** Private routes */
             {
                 element: <Private />,
-                children: [ChatsRouter, NotificationsRouter],
+                children: [AccountRouter, ChatsRouter, NotificationsRouter],
             },
             /** Common routes */
             { path: routes.error.ERROR, children: [ErrorRouter] },

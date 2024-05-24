@@ -1,4 +1,6 @@
 import config from "@/config";
+import authUrls from "./urls/auth";
+import profileUrls from "./urls/profile";
 import chatsUrls from "./urls/chats";
 import notificationsUrls from "./urls/notifications";
 import documentsUrls from "./urls/documents";
@@ -12,6 +14,10 @@ export default Object.freeze({
     /** Api URLs and resources */
     urls: {
         BASE: config.api.BASE_URL,
+        /** Contains all auth resources urls */
+        auth: authUrls,
+        /** Contains all profile resources urls */
+        profile: profileUrls,
         /** Contains all chats resources urls */
         chats: chatsUrls,
         /** Contains all notifications resources urls */
@@ -25,6 +31,28 @@ export default Object.freeze({
     },
     /** API validation related constants */
     validation: {
+        /** Api account management endpoints related constants */
+        accounts: {
+            /** Minimum length for user's first and middle names  */
+            NAMES_MIN_LENGTH: 1,
+            /** Maximum length for user's first and middle names  */
+            NAMES_MAX_LENGTH: 64,
+            /** Minimum length for user's last names  */
+            LASTNAMES_MIN_LENGTH: 1,
+            /** Maximum length for user's last names  */
+            LASTNAMES_MAX_LENGTH: 64,
+        },
+        /** Api authentication and authorization management endpoints related constants */
+        auth: {
+            /** Minimum length for user's emails in the auth forms  */
+            EMAIL_MIN_LENGTH: 4,
+            /** Maximum length for user's emails in the auth forms  */
+            EMAIL_MAX_LENGTH: 254,
+            /** Minimum length for passwords in the auth forms */
+            PASS_MIN_LENGTH: 8,
+            /** Maximum length for passwords in the auth forms */
+            PASS_MAX_LENGTH: 64,
+        },
         /** Api chats management endpoints related constants */
         chats: {
             /** Minimum amount of files to be uploaded for a chat */

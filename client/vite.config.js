@@ -15,4 +15,14 @@ export default defineConfig({
             "@": path.resolve(__dirname, "./src"),
         },
     },
+    build: {
+        chunkSizeWarningLimit: 1024,
+        rollupOptions: {
+            output: {
+                manualChunks: {
+                    "pdfjs-dist": ["pdfjs-dist"],
+                },
+            },
+        },
+    },
 });

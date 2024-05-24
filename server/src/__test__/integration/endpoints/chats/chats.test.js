@@ -6,15 +6,18 @@ import { chatExcerptDTOCheck, chatDetailDTOCheck } from "../../utils/dtos/chats.
 import config from "../../../../config/index.js";
 import { routes } from "../../../../utils/constants/index.js";
 import { connect, disconnect } from "../../../../utils/db/inMemory.js";
+import { createCommonAuthHeaders } from "../../utils/headers/index.js";
 import amazonS3Mock from "../../utils/mocks/lib/amazonS3.js";
+import vectorStoreMock from "../../utils/mocks/repositories/pages/utils/vectorStore.js";
 import createTestingData from "../../utils/testData/createTestingData.js";
 import chats from "../../utils/testData/chats.js";
 import users from "../../utils/testData/users.js";
 
 // Mocked modules
 jest.unstable_mockModule("../../../../lib/amazonS3.js", () => amazonS3Mock);
-// TODO Add mock of langchain to avoid using OpenAI's API in tests
 const { saveFilesInS3 } = await import("../../../../lib/amazonS3.js");
+jest.unstable_mockModule("../../../../repositories/pages/utils/vectorStore.js", () => vectorStoreMock);
+const { insertPagesIntoVectorStore } = await import("../../../../repositories/pages/utils/vectorStore.js");
 
 // Tested modules
 const app = await import("../../../../../app.js");
@@ -27,6 +30,7 @@ const ownedChatAnother = chats.find((chat) => chat.owner._id === loggedInUser._i
 // Tests
 describe("Integration tests for chat management endpoints API", () => {
     const appInstance = app.default;
+    let headers;
 
     beforeAll(async () => {
         // Connect to database
@@ -41,6 +45,8 @@ describe("Integration tests for chat management endpoints API", () => {
     beforeEach(async () => {
         // Create dummy data and reset between tests
         await createTestingData();
+        // Log in the user
+        headers = createCommonAuthHeaders(loggedInUser);
     });
 
     describe("Integration tests for GET /chats", () => {
@@ -50,7 +56,7 @@ describe("Integration tests for chat management endpoints API", () => {
             const limit = 5;
             const chatRoute = `${config.server.urls.api}/${routes.chats.CHATS}?page=${page}&limit=${limit}`;
             // When
-            const response = await request(appInstance).get(chatRoute).send();
+            const response = await request(appInstance).get(chatRoute).set(headers).send();
             // Then
             expect(response.headers["content-type"]).toEqual(expect.stringContaining("json"));
             expect(response.status).toBe(StatusCodes.OK);
@@ -64,7 +70,7 @@ describe("Integration tests for chat management endpoints API", () => {
             // Given
             const chatRoute = `${config.server.urls.api}/${routes.chats.CHATS}`;
             // When
-            const response = await request(appInstance).get(chatRoute).send();
+            const response = await request(appInstance).get(chatRoute).set(headers).send();
             // Then
             expect(response.headers["content-type"]).toEqual(expect.stringContaining("json"));
             expect(response.status).toBe(StatusCodes.BAD_REQUEST);
@@ -77,7 +83,7 @@ describe("Integration tests for chat management endpoints API", () => {
             // Given
             const chatRoute = `${config.server.urls.api}/${routes.chats.CHATS}/${ownedChat._id}`;
             // When
-            const response = await request(appInstance).get(chatRoute);
+            const response = await request(appInstance).get(chatRoute).set(headers);
             // Then
             expect(response.headers["content-type"]).toEqual(expect.stringContaining("json"));
             expect(response.status).toBe(StatusCodes.OK);
@@ -87,7 +93,7 @@ describe("Integration tests for chat management endpoints API", () => {
             // Given
             const chatRoute = `${config.server.urls.api}/${routes.chats.CHATS}/invalid`;
             // When
-            const response = await request(appInstance).get(chatRoute);
+            const response = await request(appInstance).get(chatRoute).set(headers);
             // Then
             expect(response.headers["content-type"]).toEqual(expect.stringContaining("json"));
             expect(response.status).toBe(StatusCodes.BAD_REQUEST);
@@ -97,7 +103,7 @@ describe("Integration tests for chat management endpoints API", () => {
             // Given
             const chatRoute = `${config.server.urls.api}/${routes.chats.CHATS}/6639f9c6458c53338c05c38c`;
             // When
-            const response = await request(appInstance).get(chatRoute);
+            const response = await request(appInstance).get(chatRoute).set(headers);
             // Then
             expect(response.headers["content-type"]).toEqual(expect.stringContaining("json"));
             expect(response.status).toBe(StatusCodes.NOT_FOUND);
@@ -115,6 +121,7 @@ describe("Integration tests for chat management endpoints API", () => {
             // When
             const response = await request(appInstance)
                 .post(chatRoute)
+                .set(headers)
                 .field("name", chatName)
                 .attach("documents", document)
                 .attach("documents", document2);
@@ -123,6 +130,7 @@ describe("Integration tests for chat management endpoints API", () => {
             expect(response.status).toBe(StatusCodes.CREATED);
             expect(response.body.data).toEqual(chatDetailDTOCheck);
             expect(saveFilesInS3).toHaveBeenCalledTimes(2);
+            expect(insertPagesIntoVectorStore).toHaveBeenCalledTimes(1);
         });
         it("Checks that a chat is NOT created after sending an incorrect POST request to /chats", async () => {
             // Given
@@ -133,6 +141,7 @@ describe("Integration tests for chat management endpoints API", () => {
                 // When
                 const response = await request(appInstance)
                     .post(chatRoute)
+                    .set(headers)
                     .field("name", invalidChatName)
                     .attach("documents", document);
 
@@ -141,6 +150,7 @@ describe("Integration tests for chat management endpoints API", () => {
                 expect(response.status).toBe(StatusCodes.BAD_REQUEST);
                 expect(response.body.errorMsg).toEqual(expect.any(String));
                 expect(saveFilesInS3).not.toHaveBeenCalled();
+                expect(insertPagesIntoVectorStore).not.toHaveBeenCalled();
             }
         });
     });
@@ -151,7 +161,7 @@ describe("Integration tests for chat management endpoints API", () => {
             // Given
             const updatedChat = { name: "new name" };
             // When
-            const response = await request(appInstance).put(chatRoute).send(updatedChat);
+            const response = await request(appInstance).put(chatRoute).set(headers).send(updatedChat);
             // Then
             expect(response.headers["content-type"]).toEqual(expect.stringContaining("json"));
             expect(response.status).toBe(StatusCodes.OK);
@@ -167,7 +177,7 @@ describe("Integration tests for chat management endpoints API", () => {
             // When
             for (let i = 0; i < updatedChats.length; i += 1) {
                 const update = updatedChats[i];
-                const response = await request(appInstance).put(chatRoute).send(update);
+                const response = await request(appInstance).put(chatRoute).set(headers).send(update);
                 // Then
                 expect(response.headers["content-type"]).toEqual(expect.stringContaining("json"));
                 expect(response.status).toBe(StatusCodes.BAD_REQUEST);
@@ -178,7 +188,7 @@ describe("Integration tests for chat management endpoints API", () => {
             // Given
             const updatedChat = { name: ownedChatAnother.name };
             // When
-            const response = await request(appInstance).put(chatRoute).send(updatedChat);
+            const response = await request(appInstance).put(chatRoute).set(headers).send(updatedChat);
             // Then
             expect(response.headers["content-type"]).toEqual(expect.stringContaining("json"));
             expect(response.status).toBe(StatusCodes.BAD_REQUEST);
@@ -189,7 +199,7 @@ describe("Integration tests for chat management endpoints API", () => {
             const nonExistantChatRoute = `${config.server.urls.api}/${routes.chats.CHATS}/6639f9c6458c53338c05c38c`;
             const updatedChat = { name: "new name" };
             // When
-            const response = await request(appInstance).put(nonExistantChatRoute).send(updatedChat);
+            const response = await request(appInstance).put(nonExistantChatRoute).set(headers).send(updatedChat);
             // Then
             expect(response.headers["content-type"]).toEqual(expect.stringContaining("json"));
             expect(response.status).toBe(StatusCodes.NOT_FOUND);
@@ -201,7 +211,7 @@ describe("Integration tests for chat management endpoints API", () => {
         const chatRoute = `${config.server.urls.api}/${routes.chats.CHATS}/${ownedChat._id}`;
         it("Tests that the deleted chat is returned when a delete operation is correct", async () => {
             // When
-            const response = await request(appInstance).delete(chatRoute);
+            const response = await request(appInstance).delete(chatRoute).set(headers);
             // Then
             expect(response.headers["content-type"]).toEqual(expect.stringContaining("json"));
             expect(response.status).toBe(StatusCodes.OK);
@@ -211,7 +221,7 @@ describe("Integration tests for chat management endpoints API", () => {
             // Given
             const invalidChatRoute = `${config.server.urls.api}/${routes.chats.CHATS}/invalid`;
             // When
-            const response = await request(appInstance).delete(invalidChatRoute);
+            const response = await request(appInstance).delete(invalidChatRoute).set(headers);
             // Then
             expect(response.headers["content-type"]).toEqual(expect.stringContaining("json"));
             expect(response.status).toBe(StatusCodes.BAD_REQUEST);
@@ -221,7 +231,7 @@ describe("Integration tests for chat management endpoints API", () => {
             // Given
             const nonExistantChatRoute = `${config.server.urls.api}/${routes.chats.CHATS}/6639f9c6458c53338c05c38c`;
             // When
-            const response = await request(appInstance).delete(nonExistantChatRoute);
+            const response = await request(appInstance).delete(nonExistantChatRoute).set(headers);
             // Then
             expect(response.headers["content-type"]).toEqual(expect.stringContaining("json"));
             expect(response.status).toBe(StatusCodes.NOT_FOUND);
