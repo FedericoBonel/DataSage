@@ -157,7 +157,7 @@ const sendRecoveryEmail = async (email, recoveryLink) => {
     const user = await usersRepository.getByEmail(email);
 
     // Check if the user exists or if its not verified
-    if (!user || !user.verified) {
+    if (!user?.verified) {
         return;
     }
     // Generate the recovery code;

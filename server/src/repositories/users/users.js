@@ -166,7 +166,7 @@ const deleteById = async (userId) => {
     const deletedUser = await user.findByIdAndDelete(castedId);
 
     if (!deletedUser) {
-        return deletedUser;
+        return null;
     }
 
     // Get the documents from the chats the user owns

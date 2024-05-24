@@ -21,33 +21,33 @@ import { messages } from "../../utils/constants/index.js";
 const updateById = async (updates, userId) => {
     const { credentials, ...formattedData } = { ...updates };
 
+    // If credentials are changing verify the user password
     if (credentials?.newEmail || credentials?.newPassword) {
-        // If credentials are changing verify the user password
         const foundUser = await usersRepository.getById(userId);
         const passMatches =
             credentials.password && (await bcrypt.compare(credentials?.password, foundUser.password.content));
         if (!passMatches) throw new UnauthorizedError(messages.errors.auth.INVALID_PASSWORD);
+    }
 
-        // Check that a verified user with the same email does not exist
-        if (credentials?.newEmail) {
-            const userWithSameEmail = await usersRepository.getByEmail(credentials.newEmail);
+    // If there is a new email check that a verified user with the same email does not exist
+    if (credentials?.newEmail) {
+        const userWithSameEmail = await usersRepository.getByEmail(credentials.newEmail);
 
-            if (userWithSameEmail && userWithSameEmail._id.toString() !== userId) {
-                // If the user is verified, throw error, otherwise delete it to override it
-                if (userWithSameEmail.verified) {
-                    throw new BadRequestError(messages.errors.validation.user.email.INVALID);
-                } else {
-                    await usersRepository.deleteById(userWithSameEmail._id);
-                }
+        if (userWithSameEmail && userWithSameEmail._id.toString() !== userId) {
+            // If the user is verified, throw error, otherwise delete it to override it
+            if (userWithSameEmail.verified) {
+                throw new BadRequestError(messages.errors.validation.user.email.INVALID);
+            } else {
+                await usersRepository.deleteById(userWithSameEmail._id);
             }
-
-            formattedData.email = credentials.newEmail;
         }
 
-        // If the password is changing encrypt it
-        if (credentials?.newPassword)
-            formattedData.password = await bcrypt.hash(credentials.newPassword, config.bcrypt.saltRounds);
+        formattedData.email = credentials.newEmail;
     }
+
+    // If the password is changing encrypt it
+    if (credentials?.newPassword)
+        formattedData.password = await bcrypt.hash(credentials.newPassword, config.bcrypt.saltRounds);
 
     const updatedUser = await usersRepository.updateById(profilesDTO.toUserModel(formattedData), userId);
 
