@@ -1,7 +1,9 @@
 // eslint-disable-next-line import/extensions
 import { WebPDFLoader } from "langchain/document_loaders/web/pdf";
+import { ContextualCompressionRetriever } from "langchain/retrievers/contextual_compression";
 import { OpenAIEmbeddings, ChatOpenAI } from "@langchain/openai";
 import { MongoDBAtlasVectorSearch } from "@langchain/mongodb";
+import { CohereRerank } from "@langchain/cohere";
 // eslint-disable-next-line no-extraneous-dependencies
 import { HumanMessage, AIMessage } from "@langchain/core/messages";
 // eslint-disable-next-line import/extensions
@@ -55,10 +57,25 @@ const getAIMessage = (messageContent) => new AIMessage(messageContent);
 /** Gets the conversational retrieval qa chains class to create new chains to mantain conversations with retrievers. */
 const getConversationalRetrievalQAChain = () => ConversationalRetrievalQAChain;
 
+/**
+ * Gets the reranker retriever that recieves the results from a base retriever and reranks them by relevance using a specific model for it.
+ * This allows better results since sometimes vector retrievers may put relevant documents down in the ordering of their results.
+ *
+ * @param {*} baseRetriever The retriever that returns a number of documents (normally one that comes from a vector store using a vector search)
+ * @param {Number} topN The number of top documents to be returned after reranking.
+ * @returns The instance of the reranker that must be used to rerank all documents by relevance after vector searching.
+ */
+const getRerankerRetrieverFrom = (baseRetriever, topN) =>
+    new ContextualCompressionRetriever({
+        baseCompressor: new CohereRerank({ apiKey: config.llm.rerankerApiKey, model: config.llm.rerankerModel, topN }),
+        baseRetriever,
+    });
+
 export {
     parsePDFFromBuffer,
     getEmbeddings,
     getLLMChat,
+    getRerankerRetrieverFrom,
     VectorStore,
     getChatMemory,
     getHumanMessage,

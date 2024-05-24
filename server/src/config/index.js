@@ -89,6 +89,13 @@ isDefined(S3_BUCKET, "S3_BUCKET");
 // LLM Model configuration
 const OPEN_AI_KEY = process.env.OPEN_AI_KEY;
 isDefined(OPEN_AI_KEY, "OPEN_AI_KEY");
+
+const COHERE_API_KEY = process.env.COHERE_API_KEY;
+isDefined(COHERE_API_KEY, "COHERE_API_KEY");
+
+const COHERE_RERANK_MODEL = process.env.COHERE_RERANK_MODEL;
+isDefined(COHERE_RERANK_MODEL, "COHERE_RERANK_MODEL");
+
 const OPEN_AI_LLM_TEMPERATURE = process.env.OPEN_AI_LLM_TEMPERATURE;
 isDefined(OPEN_AI_LLM_TEMPERATURE, "OPEN_AI_LLM_TEMPERATURE");
 
@@ -198,6 +205,10 @@ export default Object.freeze({
         apiKey: OPEN_AI_KEY,
         /** Large language model temperature value. */
         temperature: Number(OPEN_AI_LLM_TEMPERATURE),
+        /** Reranker api key */
+        rerankerApiKey: COHERE_API_KEY,
+        /** Reranker model to be used */
+        rerankerModel: COHERE_RERANK_MODEL,
     },
     /** Logging related variables */
     logging: {

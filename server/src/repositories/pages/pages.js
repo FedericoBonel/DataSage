@@ -1,4 +1,4 @@
-import { insertPagesIntoVectorStore, getPagesVectorStore } from "./utils/vectorStore.js";
+import { insertPagesIntoVectorStore, getPagesRetrieverFor } from "./utils/vectorStore.js";
 import { validation } from "../../utils/constants/index.js";
 
 /**
@@ -20,9 +20,6 @@ const saveAll = async (pages) => insertPagesIntoVectorStore(pages);
  * @returns The pages retriever. This can be used in chains as context providers.
  */
 const getRetrieverByDocs = async (documents) =>
-    getPagesVectorStore.asRetriever({
-        k: validation.messages.sources.LIMIT,
-        filter: { preFilter: { documentStr: { $in: documents } } },
-    });
+    getPagesRetrieverFor(validation.messages.sources.LIMIT, { preFilter: { documentStr: { $in: documents } } });
 
 export default { saveAll, getRetrieverByDocs };
