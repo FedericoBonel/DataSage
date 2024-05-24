@@ -18,7 +18,7 @@ const NavigationLink = ({
     badgeContent,
     onClick,
 }) => {
-    const linkColor = color ? color : "primary";
+    const linkColor = color ?? "primary";
 
     return (
         <ListItem sx={NavigationLinkStyles}>

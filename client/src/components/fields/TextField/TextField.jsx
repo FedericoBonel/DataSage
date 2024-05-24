@@ -36,7 +36,7 @@ const TextField = ({
     );
 
     // End icon adornment
-    const element = endElement ? endElement : type === "search" && <SearchIcon />;
+    const element = endElement ?? (type === "search" && <SearchIcon />);
     const endAdornment = element && (
         <InputAdornment position="end">{element}</InputAdornment>
     );
@@ -53,7 +53,7 @@ const TextField = ({
             hiddenLabel={hiddenLabel}
             aria-label={hiddenLabel ? label : undefined}
             label={label && !hiddenLabel ? label : undefined}
-            id={label ? label : undefined}
+            id={label}
             type={type}
             InputProps={{
                 endAdornment,
