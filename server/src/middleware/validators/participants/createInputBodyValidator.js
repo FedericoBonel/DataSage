@@ -41,6 +41,7 @@ const createInputBodyValidator = (
                 },
                 errorMessage: messages.errors.validation.user.email.INVALID,
             },
+            normalizeEmail: true,
         };
     }
 
@@ -61,6 +62,9 @@ const createInputBodyValidator = (
                             permission.length <= validation.permissions.allowedActions.MAX_LENGTH
                     ),
                 errorMessage: messages.errors.validation.permissions.allowedAction.INVALID_LENGTH,
+            },
+            customSanitizer: {
+                options: (permissions) => permissions.map((permission) => String(permission)),
             },
         };
     }
