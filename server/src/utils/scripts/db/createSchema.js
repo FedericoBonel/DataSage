@@ -1,4 +1,3 @@
-import bcrypt from "bcrypt";
 import config from "../../../config/index.js";
 import connectToDB from "../../db/connect.js";
 import { user } from "../../../models/user/user.js";
@@ -11,26 +10,25 @@ import { relatedEntityType } from "../../../models/relatedEntityType/relatedEnti
 import { permission } from "../../../models/permission/permission.js";
 import { message } from "../../../models/message/message.js";
 import { permissions, notifications } from "../../constants/index.js";
-import dummyUsers from "./dummydata/users.js";
 import { logger } from "../../loggers/index.js";
 
-if (config.node_environment !== "development") {
-    logger.warn("The node environment is not set to development, exiting early.");
-    process.exit(); // Only run in development mode
-}
+/**
+ * This script initializes the database schema and initial data
+ */
+logger.info(`Initializing database schema in ${config.node_environment} environment`);
 
-logger.info("Initializing testing data - Connecting to database");
+logger.info("Initializing database schema - Connecting to database");
 let dbConnection;
 try {
     dbConnection = await connectToDB(config.db.url);
-    logger.info("Initializing testing data - Connected to database");
-} catch (error) {
-    logger.info("An error happened while connecting to database", error);
+} catch (err) {
+    logger.error("An error happened while connecting to database", err);
     process.exit(1);
 }
-logger.info("Initializing testing data - Connected to database");
+logger.info("Initializing database schema - Connected to database");
 
 // Create collections
+logger.info("Initializing database schema - Creating collections");
 await user.createCollection();
 await page.createCollection();
 await chat.createCollection();
@@ -40,68 +38,53 @@ await notificationType.createCollection();
 await relatedEntityType.createCollection();
 await permission.createCollection();
 await message.createCollection();
+logger.info("Initializing database schema - Collections created");
 
-logger.info("Initializing testing data - Collections created in database");
+// Add needed data
 try {
-    // Add user dummy data
-    const noAdminUsersExist = await user.findOne({ isAdmin: false }).lean();
-    if (!noAdminUsersExist) {
-        await user.insertMany(dummyUsers);
-        logger.info("Initializing testing data - Added no admin users");
-    }
-
-    // Check if there is an Admin already and create one for testing otherwise
-    const adminUserExists = await user.findOne({ isAdmin: true }).lean();
-    if (!adminUserExists) {
-        const hashedPass = await bcrypt.hash(config.server.admin.password, config.bcrypt.saltRounds);
-
-        await user.create({
-            names: "admin",
-            lastnames: "admin",
-            email: config.server.admin.email?.toLowerCase(),
-            password: {
-                content: hashedPass,
-            },
-            isAdmin: true,
-            verified: true,
-        });
-        logger.info("Initializing testing data - Added admin user with the provided email and password");
-    }
-
-    // Check if permissions have been created
+    // Create permissions
     const permissionsExist = await permission.find({
         allowedAction: { $in: [permissions.colaborator.readDocs, permissions.colaborator.writeDocs] },
     });
     if (!permissionsExist.length) {
+        logger.info("Initializing database schema - Creating permissions");
         await permission.insertMany(
             Object.keys(permissions.colaborator).map((key) => ({ allowedAction: permissions.colaborator[key] }))
         );
-        logger.info("Initializing testing data - Added permissions");
+        logger.info("Initializing database schema - Permissions created");
+    } else {
+        logger.info("Initializing database schema - Permissions were already created, skipping creation");
     }
 
-    // Check if related entity types have been created
+    // Create related entity types
     const relatedEntityTypesExist = await relatedEntityType.find({
         name: { $in: [notifications.relatedEntities.chat] },
     });
     if (!relatedEntityTypesExist.length) {
+        logger.info("Initializing database schema - Creating related entity types");
         await relatedEntityType.insertMany(
             Object.keys(notifications.relatedEntities).map((key) => ({ name: notifications.relatedEntities[key] }))
         );
-        logger.info("Initializing testing data - Added related entity types for notifications");
+        logger.info("Initializing database schema - Related entity types created");
+    } else {
+        logger.info("Initializing database schema - Related entity types were already created, skipping creation");
     }
 
-    // Check if notification types have been created
+    // Create notification types
     const notificationTypesExist = await notificationType.find({
         name: { $in: [notifications.types.names.chatInvitation] },
     });
     if (!notificationTypesExist.length) {
+        logger.info("Initializing database schema - Creating notification types");
         await notificationType.insertMany(
             Object.keys(notifications.types.names).map((key) => ({ name: notifications.types.names[key] }))
         );
-        logger.info("Initializing testing data - Added notification types");
+        logger.info("Initializing database schema - Notification types created");
+    } else {
+        logger.info("Initializing database schema - Notification types were already created, skipping creation");
     }
-} catch (error) {
-    logger.info("An error happened while initializing data", error);
+} catch (err) {
+    logger.error("An error happened during data initialization", err);
     process.exit(1);
 } finally {
     await dbConnection.disconnect();
