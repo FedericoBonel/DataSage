@@ -7,7 +7,7 @@ export default Object.freeze({
     /** Version of the application to be shown in OpenAPI spec */
     VERSION: config.server.version,
     /** Description of the application to be shown in OpenAPI spec */
-    DESC: "La siguiente RestAPI expone la lógica de negocio de la aplicación DataSage para crear chats donde se pueden mantener conversaciones con documentos en formatos PDF utilizando LLMs.",
+    DESC: "The following RestAPI exposes the business logic of the DataSage application to create chats where conversations can be held with documents in PDF format using LLMs.",
     /** License information of the application (e.g. "MIT", "Apache License 2.0") */
     license: {
         /** Name of the license */
@@ -27,6 +27,6 @@ export default Object.freeze({
     /** OpenAPI spec accessible servers */
     servers: {
         /** Description of test server */
-        TEST_DESC: "Servidor de pruebas"
+        TEST_DESC: "Testing server"
     }
 });

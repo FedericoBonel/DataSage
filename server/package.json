@@ -7,7 +7,9 @@
         "dev": "node ./src/utils/scripts/db/initializeTestingData && nodemon server.js",
         "start": "cross-env NODE_ENV=production node ./server.js",
         "lint": "eslint .",
-        "test": "cross-env NODE_OPTIONS=--experimental-vm-modules npx jest"
+        "test": "cross-env NODE_OPTIONS=--experimental-vm-modules npx jest",
+        "create-schema": "node ./src/utils/scripts/db/createSchema.js",
+        "create-admin": "node ./src/utils/scripts/db/createAdmin.js"
     },
     "author": "Federico Jorge Bonel Tozzi",
     "license": "ISC",
