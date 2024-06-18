@@ -7,7 +7,7 @@ import EntityDTO from "../../utils/EntityDTO.js";
  *     NotificationOutputDTO:
  *       description: This is how notifications data will be formatted and exposed to the web for you to use.
  *       allOf:
- *         - $ref: '#/components/schemas/EntityDTO'
+ *         - $ref: '#/components/schemas/EntityUpdatedAtDTO'
  *         - type: Object
  *           required:
  *             - from

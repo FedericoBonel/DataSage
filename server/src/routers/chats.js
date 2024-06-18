@@ -15,7 +15,7 @@ const chatsRouter = Router();
  * @openapi
  * tags:
  *   name: Chats
- *   description: API used to manage the systems chats
+ *   description: API used to manage the chats of the logged-in user
  */
 chatsRouter
     .route("/")
@@ -46,7 +46,7 @@ chatsRouter
      *                     data:
      *                       type: array
      *                       items:
-     *                         $ref: '#/components/schemas/ChatOutputDTO'
+     *                         $ref: '#/components/schemas/ChatExcerptOutputDTO'
      *       400:
      *         $ref: '#/components/responses/400Response'
      */

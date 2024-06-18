@@ -7,7 +7,7 @@ import EntityDTO from "../../utils/EntityDTO.js";
  *     DocumentOutputDTO:
  *       description: This is how document data will be formatted and exposed to the web for you to use.
  *       allOf:
- *         - $ref: '#/components/schemas/EntityDTO'
+ *         - $ref: '#/components/schemas/EntityCreatedAtDTO'
  *         - type: Object
  *           required:
  *             - name

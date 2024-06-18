@@ -7,13 +7,12 @@ import EntityDTO from "../../utils/EntityDTO.js"
  *     ProfileDTO:
  *       description: This is how a logged in user profile information is formatted and exposed for you to use.
  *       allOf:
- *         - $ref: '#/components/schemas/EntityDTO'
+ *         - $ref: '#/components/schemas/EntityUpdatedAtDTO'
  *         - type: Object
  *           required:
  *             - names
  *             - lastnames
  *             - email
- *             - updatedAt
  *           properties:
  *             names:
  *               type: string
@@ -27,10 +26,6 @@ import EntityDTO from "../../utils/EntityDTO.js"
  *               type: string
  *               description: The email of the logged in user.
  *               example: doe
- *             updatedAt:
- *               type: string
- *               format: date-time
- *               description: The timestamp of the last update in the user information.
  */
 
 /**

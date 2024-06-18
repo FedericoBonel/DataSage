@@ -4,10 +4,10 @@ import EntityDTO from "../../utils/EntityDTO.js";
  * @openapi
  * components:
  *   schemas:
- *     ChatOutputDTO:
- *       description: This is how chat data will be formatted and exposed to the web for you to use.
+ *     ChatExcerptOutputDTO:
+ *       description: This is how chat data will be formatted and exposed to the web for you to use in a summarized manner.
  *       allOf:
- *         - $ref: '#/components/schemas/EntityDTO'
+ *         - $ref: '#/components/schemas/EntityCreatedAtDTO'
  *         - type: Object
  *           required:
  *             - name

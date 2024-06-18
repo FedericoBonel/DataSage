@@ -8,7 +8,7 @@ const messagesRouter = Router({ mergeParams: true });
  * @openapi
  * tags:
  *   name: Chat Messages
- *   description: API used to have conversations with the AI and manage all chat messages.
+ *   description: API used to have conversations with a chat and manage all chat messages.
  */
 messagesRouter
     .route("/")

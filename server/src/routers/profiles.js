@@ -8,7 +8,7 @@ const profileRouter = Router();
  * @openapi
  * tags:
  *   name: User Profile
- *   description: API used to manage a logged in user profile information.
+ *   description: API used to manage the logged-in user's profile information.
  */
 profileRouter
     .route("")

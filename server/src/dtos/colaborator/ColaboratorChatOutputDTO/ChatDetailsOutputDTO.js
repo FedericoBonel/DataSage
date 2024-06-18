@@ -7,7 +7,7 @@ import EntityDTO from "../../utils/EntityDTO.js";
  *     ChatDetailsOutputDTO:
  *       description: This is how chat data will be formatted and exposed to the web for you to use in a detailed manner.
  *       allOf:
- *         - $ref: '#/components/schemas/EntityDTO'
+ *         - $ref: '#/components/schemas/EntityCreatedAtDTO'
  *         - type: Object
  *           required:
  *             - name

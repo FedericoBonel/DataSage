@@ -7,7 +7,7 @@ import EntityDTO from "../../utils/EntityDTO.js";
  *     ParticipantExcerptOutputDTO:
  *       description: This is how participant data will be formatted and exposed to the web for you to use in a summarized manner.
  *       allOf:
- *         - $ref: '#/components/schemas/EntityDTO'
+ *         - $ref: '#/components/schemas/EntityCreatedAtDTO'
  *         - type: Object
  *           required:
  *             - names
