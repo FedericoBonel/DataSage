@@ -17,6 +17,6 @@ export default Object.freeze({
     },
     generation: {
         /** Maximum number of messages to be considered as history by the AI when generating a response */
-        MAX_HISTORY: 20,
+        MAX_HISTORY: 10,
     }
 });

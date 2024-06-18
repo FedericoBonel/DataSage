@@ -61,6 +61,7 @@ describe("Integration tests for chat participations management endpoints API", (
             expect(response.headers["content-type"]).toEqual(expect.stringContaining("json"));
             expect(response.status).toBe(StatusCodes.CREATED);
             expect(response.body.data).toEqual(chatDetailDTOCheck);
+            expect(response.body.data._id).toBe(nonJoinedChat._id);
         });
         it("Checks that a user can not accept a chat invitation to a chat it has not been invited to", async () => {
             // Given
@@ -113,6 +114,7 @@ describe("Integration tests for chat participations management endpoints API", (
             expect(response.headers["content-type"]).toEqual(expect.stringContaining("json"));
             expect(response.status).toBe(StatusCodes.OK);
             expect(response.body.data).toEqual(chatDetailDTOCheck);
+            expect(response.body.data._id).toBe(joinedChat._id);
         });
         it("Checks that a user can not leave a chat it has been invited to but has not yet accessed", async () => {
             // Given

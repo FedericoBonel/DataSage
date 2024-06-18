@@ -44,7 +44,10 @@ describe("Integration tests for chat participations management endpoints API", (
             expect(response.headers["content-type"]).toEqual(expect.stringContaining("json"));
             expect(response.status).toBe(StatusCodes.OK);
             expect(response.body.data).toEqual(profileDTOCheck);
-            expect(response.body.data._id).toEqual(loggedInUser._id);
+            expect(response.body.data._id).toBe(loggedInUser._id);
+            expect(response.body.data.names).toBe(loggedInUser.names);
+            expect(response.body.data.lastnames).toBe(loggedInUser.lastnames);
+            expect(response.body.data.email).toBe(loggedInUser.email);
         });
     });
 
@@ -66,10 +69,10 @@ describe("Integration tests for chat participations management endpoints API", (
             expect(response.headers["content-type"]).toEqual(expect.stringContaining("json"));
             expect(response.status).toBe(StatusCodes.OK);
             expect(response.body.data).toEqual(profileDTOCheck);
-            expect(response.body.data._id).toEqual(loggedInUser._id);
-            expect(response.body.data.email).toEqual(updates.credentials.newEmail);
-            expect(response.body.data.names).toEqual(updates.names);
-            expect(response.body.data.lastnames).toEqual(updates.lastnames);
+            expect(response.body.data._id).toBe(loggedInUser._id);
+            expect(response.body.data.email).toBe(updates.credentials.newEmail);
+            expect(response.body.data.names).toBe(updates.names);
+            expect(response.body.data.lastnames).toBe(updates.lastnames);
         });
         it("Checks that a user cant update their profile with invalid information", async () => {
             // Given
@@ -112,10 +115,10 @@ describe("Integration tests for chat participations management endpoints API", (
             expect(response.headers["content-type"]).toEqual(expect.stringContaining("json"));
             expect(response.status).toBe(StatusCodes.OK);
             expect(response.body.data).toEqual(profileDTOCheck);
-            expect(response.body.data._id).toEqual(loggedInUser._id);
-            expect(response.body.data.email).toEqual(loggedInUser.email);
-            expect(response.body.data.names).toEqual(loggedInUser.names);
-            expect(response.body.data.lastnames).toEqual(loggedInUser.lastnames);
+            expect(response.body.data._id).toBe(loggedInUser._id);
+            expect(response.body.data.email).toBe(loggedInUser.email);
+            expect(response.body.data.names).toBe(loggedInUser.names);
+            expect(response.body.data.lastnames).toBe(loggedInUser.lastnames);
         });
         it("Checks that a user can not delete their account with an expired token", async () => {
             // Given
