@@ -131,7 +131,7 @@ describe("Integration tests for notifications management endpoints API", () => {
                 expect(response.headers["content-type"]).toEqual(expect.stringContaining("json"));
                 expect(response.status).toBe(StatusCodes.OK);
                 expect(response.body.data).toEqual(notificationDTOCheck);
-                expect(response.body.data._id).toEqual(notReadNotification._id);
+                expect(response.body.data._id).toBe(notReadNotification._id);
                 expect(response.body.data.isRead).toBe(update.isRead);
             }
         });
@@ -208,7 +208,7 @@ describe("Integration tests for notifications management endpoints API", () => {
             expect(response.headers["content-type"]).toEqual(expect.stringContaining("json"));
             expect(response.status).toBe(StatusCodes.OK);
             expect(response.body.data).toEqual(notificationDTOCheck);
-            expect(response.body.data._id).toEqual(notReadNotification._id);
+            expect(response.body.data._id).toBe(notReadNotification._id);
         });
         it("Checks that a user can not delete a non valid notification id", async () => {
             // Given
