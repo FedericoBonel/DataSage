@@ -214,6 +214,7 @@ describe("Integration tests for chat documents management endpoints API", () => 
             expect(response.headers["content-type"]).toEqual(expect.stringContaining("json"));
             expect(response.status).toBe(StatusCodes.OK);
             expect(response.body.data).toEqual(documentDeleteDTOCheck);
+            expect(response.body.data._id).toBe(usersChat.documents[0]._id);
             expect(deleteFileInS3).toHaveBeenCalledTimes(1);
         });
         it("Checks that a document is NOT deleted and returned when requesting DELETE to an invalid id", async () => {
