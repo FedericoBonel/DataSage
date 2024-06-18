@@ -88,6 +88,9 @@ describe("Integration tests for chat management endpoints API", () => {
             expect(response.headers["content-type"]).toEqual(expect.stringContaining("json"));
             expect(response.status).toBe(StatusCodes.OK);
             expect(response.body.data).toEqual(chatDetailDTOCheck);
+            expect(response.body.data._id).toBe(ownedChat._id);
+            expect(response.body.data.name).toBe(ownedChat.name);
+            expect(response.body.data.owner._id).toBe(loggedInUser._id);
         });
         it("Tests that a chat is returned when an invalid Id is requested", async () => {
             // Given
@@ -129,6 +132,8 @@ describe("Integration tests for chat management endpoints API", () => {
             expect(response.headers["content-type"]).toEqual(expect.stringContaining("json"));
             expect(response.status).toBe(StatusCodes.CREATED);
             expect(response.body.data).toEqual(chatDetailDTOCheck);
+            expect(response.body.data.name).toBe(chatName);
+            expect(response.body.data.isOwner).toBe(true);
             expect(saveFilesInS3).toHaveBeenCalledTimes(2);
             expect(insertPagesIntoVectorStore).toHaveBeenCalledTimes(1);
         });
@@ -166,6 +171,8 @@ describe("Integration tests for chat management endpoints API", () => {
             expect(response.headers["content-type"]).toEqual(expect.stringContaining("json"));
             expect(response.status).toBe(StatusCodes.OK);
             expect(response.body.data).toEqual(chatDetailDTOCheck);
+            expect(response.body.data._id).toBe(ownedChat._id);
+            expect(response.body.data.name).toBe(updatedChat.name);
         });
         it("Tests that the updated chat is NOT returned when an update is incorrect in its body", async () => {
             // Given
@@ -216,6 +223,7 @@ describe("Integration tests for chat management endpoints API", () => {
             expect(response.headers["content-type"]).toEqual(expect.stringContaining("json"));
             expect(response.status).toBe(StatusCodes.OK);
             expect(response.body.data).toEqual(chatDetailDTOCheck);
+            expect(response.body.data._id).toBe(ownedChat._id);
         });
         it("Tests that the deleted chat is NOT returned when a delete operation is sent to an invalid id", async () => {
             // Given
