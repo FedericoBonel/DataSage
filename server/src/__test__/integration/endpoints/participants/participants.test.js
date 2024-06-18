@@ -125,6 +125,10 @@ describe("Integration tests for chat participants management endpoints API", () 
             expect(response.headers["content-type"]).toEqual(expect.stringContaining("json"));
             expect(response.status).toBe(StatusCodes.CREATED);
             expect(response.body.data).toEqual(participantDTOCheck);
+            expect(response.body.data._id).toBe(anotherUser._id);
+            expect(response.body.data.names).toBe(anotherUser.names);
+            expect(response.body.data.lastnames).toBe(anotherUser.lastnames);
+            expect(response.body.data.email).toBe(anotherUser.email);
         });
         it("Checks that a participant is not added to a chat it already has been invited to", async () => {
             // Given
@@ -229,6 +233,10 @@ describe("Integration tests for chat participants management endpoints API", () 
             expect(response.headers["content-type"]).toEqual(expect.stringContaining("json"));
             expect(response.status).toBe(StatusCodes.OK);
             expect(response.body.data).toEqual(participantDTOCheck);
+            expect(response.body.data._id).toBe(anotherUser._id);
+            expect(response.body.data.names).toBe(anotherUser.names);
+            expect(response.body.data.lastnames).toBe(anotherUser.lastnames);
+            expect(response.body.data.email).toBe(anotherUser.email);
         });
         it("Checks that a chat participants is NOT returned when requesting GET to invalid ids", async () => {
             // Given
@@ -292,6 +300,8 @@ describe("Integration tests for chat participants management endpoints API", () 
             expect(response.headers["content-type"]).toEqual(expect.stringContaining("json"));
             expect(response.status).toBe(StatusCodes.OK);
             expect(response.body.data).toEqual(participantDTOCheck);
+            expect(response.body.data._id).toEqual(anotherUser._id);
+            expect(response.body.data.permissions.length).toBe(updatedParticipant.permissions.length);
         });
         it("Checks that a non existent participant is not updated", async () => {
             // Given
@@ -409,6 +419,7 @@ describe("Integration tests for chat participants management endpoints API", () 
             expect(response.headers["content-type"]).toEqual(expect.stringContaining("json"));
             expect(response.status).toBe(StatusCodes.OK);
             expect(response.body.data).toEqual(participantDTOCheck);
+            expect(response.body.data._id).toEqual(anotherUser._id);
         });
         it("Checks that a non existant participant is not deleted", async () => {
             // Given
