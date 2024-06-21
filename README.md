@@ -6,13 +6,13 @@
 This project is a prototype of a web application that provides answers to questions about presentations in PDF format using generative artificial intelligence and the retrieval-augmented generation (RAG) framework. The goal is to enable users without advanced knowledge in artificial intelligence or computer science to create chatbots that generate answers to questions about the textual content of PDF presentations. Unlike other similar solutions, the proposed prototype would allow permission-based sharing of the generated chats, making this system flexible enough for various use cases, from creating study assistants to developing chatbots that conceal the knowledge base for information points, as long as high-quality PDF presentation documents are provided.
 
 ## Table of Contents
-- [Introduction](##Introduction)
-- [Features](##Features)
-- [Installation and Execution Guide](##Installation-and-Execution-Guide)
-- [Main Technologies Used](##Main-Technologies-Used)
-- [Methodology](##Methodology)
-- [Limitations and Future Work](##Limitations-and-Future-Work)
-- [Contributing](##Contributing)
+- [Introduction](#Introduction)
+- [Features](#Features)
+- [Installation and Execution Guide](#Installation-and-Execution-Guide)
+- [Main Technologies Used](#Main-Technologies-Used)
+- [Methodology](#Methodology)
+- [Limitations and Future Work](#Limitations-and-Future-Work)
+- [Contributing](#Contributing)
 
 ## Introduction
 The explosive growth in research and technologies based on large language models (LLMs), along with the emergence of the RAG framework, has made implementing solutions to question answering (QA) problems more viable than ever since the 1960s. This project aims to develop a prototype web application that leverages these advancements to create chatbots capable of answering questions based on the contents of PDF presentations.
