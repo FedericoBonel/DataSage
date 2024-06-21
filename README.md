@@ -3,7 +3,7 @@
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=FedericoBonel_DataSage&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=FedericoBonel_DataSage)
 
 ## Your knowledge sharing assistant
-This project is a prototype of a web application that provides answers to questions about presentations in PDF format using generative artificial intelligence and the retrieval-augmented generation (RAG) framework. The goal is to enable users without advanced knowledge in artificial intelligence or computer science to create chatbots that generate answers to questions about the textual content of PDF presentations.
+This project is a prototype of a web application that provides answers to questions about presentations in PDF format using generative artificial intelligence and the retrieval-augmented generation (RAG) framework. The goal is to enable users without advanced knowledge in artificial intelligence or computer science to create chatbots that generate answers to questions about the textual content of PDF presentations. Unlike other similar solutions, the proposed prototype would allow permission-based sharing of the generated chats, making this system flexible enough for various use cases, from creating study assistants to developing chatbots that conceal the knowledge base for information points, as long as high-quality PDF presentation documents are provided.
 
 ## Table of Contents
 - [Introduction](##Introduction)
