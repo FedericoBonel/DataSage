@@ -37,7 +37,7 @@ const VectorStore = MongoDBAtlasVectorSearch;
 
 /**
  * Generates a new chat memory from a chat history IN MEMORY
- * @param {{messages: AIMessage | HumanMessage}} history The chat message history
+ * @param {{messages: Array.<AIMessage | HumanMessage>}} history The chat message history
  * @returns The generated chat memory to insert in a chain
  */
 const getChatMemory = ({ messages }) =>

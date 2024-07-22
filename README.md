@@ -23,6 +23,7 @@ The explosive growth in research and technologies based on large language models
 - Chat Creation from PDF Documents: Generate chatbots from uploaded PDF presentations.
 - Answer Generation: Use generative AI to provide answers to questions about the content of the PDFs.
 - Participant Management: Manage participants who can interact with the chatbots.
+- Knowledge Base Management: Control what already created chats know.
 - Controlled Sharing: Share chat sessions with other users based on permissions.
 - User Authentication and Authorization: Ensure the protection of registered users' data and allow new users to register and use the system.
   
