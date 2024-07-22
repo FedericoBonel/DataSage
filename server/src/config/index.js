@@ -90,6 +90,9 @@ isDefined(S3_BUCKET, "S3_BUCKET");
 const OPEN_AI_KEY = process.env.OPEN_AI_KEY;
 isDefined(OPEN_AI_KEY, "OPEN_AI_KEY");
 
+const OPEN_AI_GEN_MODEL = process.env.OPEN_AI_GEN_MODEL;
+isDefined(OPEN_AI_GEN_MODEL, "OPEN_AI_GEN_MODEL");
+
 const COHERE_API_KEY = process.env.COHERE_API_KEY;
 isDefined(COHERE_API_KEY, "COHERE_API_KEY");
 
@@ -209,6 +212,8 @@ export default Object.freeze({
         rerankerApiKey: COHERE_API_KEY,
         /** Reranker model to be used */
         rerankerModel: COHERE_RERANK_MODEL,
+        /** Generation model to be used */
+        generationModel: OPEN_AI_GEN_MODEL,
     },
     /** Logging related variables */
     logging: {
