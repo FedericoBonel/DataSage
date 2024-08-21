@@ -13,6 +13,7 @@ This project is a prototype of a web application that provides answers to questi
 - [Installation and Execution Guide](#Installation-and-Execution-Guide)
 - [Main Technologies Used](#Main-Technologies-Used)
 - [Methodology](#Methodology)
+- [Design](#Design)
 - [Limitations and Future Work](#Limitations-and-Future-Work)
 - [Contributing](#Contributing)
 
@@ -139,6 +140,21 @@ The prototype was developed following the agile Scrum methodology, with three it
 - Generation of answers to questions.
 - Management of participants and controlled sharing of chats.
 - User authentication and authorization to protect registered users' data.
+
+## Design
+The design process began with a high-level architecture and data model design during the planning and analysis stages, prior to executing the Scrum workflow itself. This was done to validate the understanding of the problem and user requirements:
+
+### High-level Architecture:
+![Architecture](https://github.com/FedericoBonel/demos/blob/main/DataSage-Architecture.png)
+
+### Data model (Using a custom extended Barker notation for NoSQL):
+![data model](https://github.com/FedericoBonel/demos/blob/main/DataSage-DataModel.svg)
+
+The design process for each sprint followed an iterative execution of the following steps for each user story (You can click each step to view the designs on the whimsical platform): 
+
+1. **[Research and IxD/UI Design](https://www.figma.com/proto/w6Lf1Nlh1c67xWKGQmW9CR/DataSage?node-id=463-8694&t=yA5cVAHbDpWuFcy3-1&scaling=scale-down&content-scaling=fixed&page-id=0%3A1&starting-point-node-id=463%3A8694)**: This step involved specifying how the user would derive value and interact with the product to achieve their objectives.
+2. **[REST API Design](https://whimsical.com/restapis-WXLEnL8yYrm82bR5kcx6uy)**: The data requirements from the UI design were used to determine what resources (data and processing) a client with that UI would need from a REST API and how it would interact with it.
+3. **[Architecture and Interaction Design](https://whimsical.com/diagramas-de-secuencia-Z9tadpt77JN7QxG6a1Yjb)**: After defining the UI (frontend) and REST API (backend), the next step was to specify how they would be implemented within each layer of the previously defined architecture.
 
 ## Limitations and Future Work
 The project achieved its primary objectives, but several limitations were noted:
